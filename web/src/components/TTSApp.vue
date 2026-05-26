@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { EMOTIONS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
+import { computed, ref, watch } from 'vue'
+import { EMOTION_LABELS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
 import type { HistoryItem } from '../composables/types'
 
 const {
@@ -31,6 +31,12 @@ const autoPlay = ref(true)
 const selectedVoiceInfo = computed(() => volcVoices.find((voice) => voice.id === selectedVoice.value) || volcVoices[0])
 const charCount = computed(() => text.value.length)
 const textOverflow = computed(() => charCount.value > MAX_TEXT_LENGTH)
+const availableEmotions = computed(() => {
+  return selectedVoiceInfo.value.emotions.map((value) => ({
+    value,
+    label: EMOTION_LABELS[value] || value,
+  }))
+})
 const groupedVoices = computed(() => {
   return volcVoices.reduce<Record<string, typeof volcVoices>>((groups, voice) => {
     groups[voice.scene] ||= []
@@ -41,6 +47,12 @@ const groupedVoices = computed(() => {
 
 const latestItem = computed(() => history.value[0] || null)
 const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value)
+
+watch(selectedVoiceInfo, (voice) => {
+  if (emotion.value && !voice.emotions.includes(emotion.value)) {
+    emotion.value = ''
+  }
+})
 
 async function handleGenerate() {
   if (!canGenerate.value) return
@@ -108,7 +120,9 @@ function active(item: HistoryItem) {
             ></textarea>
             <div class="border-t border-zinc-950/10 px-4 py-3">
               <p v-if="textOverflow" class="text-sm font-semibold text-red-600">文本超出接口限制。</p>
-              <p v-else class="text-sm text-zinc-500">当前音色：{{ selectedVoiceInfo.name }} · {{ selectedVoiceInfo.language }}</p>
+              <p v-else class="text-sm text-zinc-500">
+                当前音色：{{ selectedVoiceInfo.name }} · {{ selectedVoiceInfo.language }} · {{ selectedVoiceInfo.model }}
+              </p>
             </div>
           </div>
 
@@ -125,8 +139,9 @@ function active(item: HistoryItem) {
                   </option>
                 </optgroup>
               </select>
-              <div class="mt-2 rounded-md bg-zinc-50 p-2 text-xs font-medium leading-5 text-zinc-600">
-                {{ selectedVoiceInfo.id }}
+              <div class="mt-2 space-y-1 rounded-md bg-zinc-50 p-2 text-xs font-medium leading-5 text-zinc-600">
+                <p class="break-all">{{ selectedVoiceInfo.id }}</p>
+                <p>资源：{{ selectedVoiceInfo.resourceIds.join(' / ') }}</p>
               </div>
             </section>
 
@@ -164,9 +179,11 @@ function active(item: HistoryItem) {
                   <label class="text-sm font-bold text-zinc-900">情绪</label>
                   <select
                     v-model="emotion"
-                    class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-500/15"
+                    :disabled="availableEmotions.length === 0"
+                    class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold outline-none transition disabled:bg-zinc-100 disabled:text-zinc-400 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/15"
                   >
-                    <option v-for="item in EMOTIONS" :key="item.value" :value="item.value">{{ item.label }}</option>
+                    <option value="">默认</option>
+                    <option v-for="item in availableEmotions" :key="item.value" :value="item.value">{{ item.label }}</option>
                   </select>
                 </div>
                 <div>
@@ -181,6 +198,9 @@ function active(item: HistoryItem) {
                   />
                 </div>
               </div>
+              <p class="mt-2 text-xs font-medium leading-5 text-zinc-500">
+                {{ availableEmotions.length ? `该音色支持 ${availableEmotions.length} 种情绪。` : '官网未声明该音色支持情绪参数。' }}
+              </p>
               <label class="mt-3 flex cursor-pointer items-center gap-3 text-sm font-bold text-zinc-800">
                 <input v-model="autoPlay" type="checkbox" class="h-4 w-4 accent-zinc-950" />
                 生成后播放
@@ -250,6 +270,7 @@ function active(item: HistoryItem) {
             <div class="mt-4 flex flex-wrap items-center gap-2 text-xs font-bold text-zinc-500">
               <span class="rounded bg-zinc-100 px-2 py-1">{{ item.controls.speechRate.toFixed(1) }}x</span>
               <span class="rounded bg-zinc-100 px-2 py-1">pitch {{ item.controls.pitch }}</span>
+              <span v-if="item.controls.emotion" class="rounded bg-zinc-100 px-2 py-1">{{ EMOTION_LABELS[item.controls.emotion] || item.controls.emotion }}</span>
               <button class="ml-auto rounded-md px-2 py-1 text-zinc-800 transition hover:bg-zinc-100" @click="downloadAudio(item)">下载</button>
               <button class="rounded-md px-2 py-1 text-red-600 transition hover:bg-red-50" @click="removeHistoryItem(item.id)">删除</button>
             </div>

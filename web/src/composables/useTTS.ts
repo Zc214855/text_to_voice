@@ -1,34 +1,33 @@
 import { readonly, ref } from 'vue'
+import voices from '../data/voices.json'
 import type { HistoryItem, PopularVoice, SynthesizeParams, TTSConfig, UsageInfo } from './types'
 
 export const MAX_TEXT_LENGTH = 2000
 
-export const EMOTIONS = [
-  { value: '', label: '默认' },
-  { value: 'storytelling', label: '讲故事' },
-  { value: 'tender', label: '温柔' },
-  { value: 'happy', label: '开心' },
-  { value: 'sad', label: '悲伤' },
-  { value: 'news', label: '新闻' },
-  { value: 'neutral', label: '中性' },
-]
+export const EMOTION_LABELS: Record<string, string> = {
+  affectionate: '深情',
+  angry: '生气',
+  asmr: '低语',
+  chat: '对话 / 闲聊',
+  coldness: '冷漠',
+  comfort: '安慰鼓励',
+  depressed: '沮丧',
+  excited: '激动',
+  fear: '恐惧',
+  happy: '开心',
+  hate: '厌恶',
+  neutral: '中性',
+  radio: '情感电台',
+  sad: '悲伤',
+  storytelling: '讲故事',
+  surprised: '惊讶',
+  tender: '温柔',
+  warm: '温暖',
+}
+
+export const VOLC_VOICES = voices as PopularVoice[]
 
 const DEFAULT_ENDPOINT = '/volc-api/api/v3/tts/unidirectional'
-
-const VOLC_VOICES: PopularVoice[] = [
-  { id: 'zh_female_vv_uranus_bigtts', name: 'Vivi 2.0', scene: '通用', language: '中文 / 英语', model: '2.0' },
-  { id: 'zh_female_xiaohe_uranus_bigtts', name: '小何 2.0', scene: '通用', language: '中文', model: '2.0' },
-  { id: 'zh_male_m191_uranus_bigtts', name: '云舟 2.0', scene: '通用', language: '中文', model: '2.0' },
-  { id: 'zh_male_taocheng_uranus_bigtts', name: '小天 2.0', scene: '通用', language: '中文', model: '2.0' },
-  { id: 'zh_female_xueayi_saturn_bigtts', name: '儿童绘本', scene: '有声阅读', language: '中文', model: 'clone' },
-  { id: 'saturn_zh_female_keainvsheng_tob', name: '可爱女生', scene: '角色扮演', language: '中文', model: 'clone' },
-  { id: 'saturn_zh_female_tiaopigongzhu_tob', name: '调皮公主', scene: '角色扮演', language: '中文', model: 'clone' },
-  { id: 'saturn_zh_male_shuanglangshaonian_tob', name: '爽朗少年', scene: '角色扮演', language: '中文', model: 'clone' },
-  { id: 'saturn_zh_female_cancan_tob', name: '知性灿灿', scene: '角色扮演', language: '中文', model: 'clone' },
-  { id: 'zh_male_jieshuonansheng_mars_bigtts', name: '磁性解说男声', scene: '视频配音', language: '中文 / 英语', model: '1.0' },
-  { id: 'zh_female_qinqienvsheng_moon_bigtts', name: '亲切女声', scene: '客服口播', language: '中文', model: '1.0' },
-  { id: 'zh_male_changtianyi_mars_bigtts', name: '悬疑解说', scene: '有声阅读', language: '中文', model: '1.0' },
-]
 
 const history = ref<HistoryItem[]>([])
 const errorMsg = ref('')

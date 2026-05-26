@@ -12,7 +12,10 @@ export interface PopularVoice {
   name: string
   scene: string
   language: string
-  model: '2.0' | '1.0' | 'clone'
+  model: string
+  resourceIds: string[]
+  emotions: string[]
+  source: string
 }
 
 export interface TTSControls {

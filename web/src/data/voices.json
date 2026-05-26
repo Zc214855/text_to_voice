@@ -1,0 +1,342 @@
+[
+  {
+    "id": "zh_female_vv_uranus_bigtts",
+    "name": "Vivi 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文、英语",
+    "model": "语音合成2.0",
+    "resourceIds": ["seed-tts-2.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_xiaohe_uranus_bigtts",
+    "name": "小何 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": ["seed-tts-2.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_m191_uranus_bigtts",
+    "name": "云舟 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": ["seed-tts-2.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_taocheng_uranus_bigtts",
+    "name": "小天 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": ["seed-tts-2.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_xueayi_saturn_bigtts",
+    "name": "儿童绘本",
+    "scene": "精品克隆音色 / 有声阅读",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_dayi_saturn_bigtts",
+    "name": "大壹",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_mizai_saturn_bigtts",
+    "name": "黑猫侦探社咪",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_jitangnv_saturn_bigtts",
+    "name": "鸡汤女",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_meilinvyou_saturn_bigtts",
+    "name": "魅力女友",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_santongyongns_saturn_bigtts",
+    "name": "流畅女声",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_ruyayichen_saturn_bigtts",
+    "name": "儒雅逸辰",
+    "scene": "精品克隆音色 / 视频配音",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "saturn_zh_female_keainvsheng_tob",
+    "name": "可爱女生",
+    "scene": "精品克隆音色 / 角色扮演",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "saturn_zh_female_tiaopigongzhu_tob",
+    "name": "调皮公主",
+    "scene": "精品克隆音色 / 角色扮演",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "saturn_zh_male_shuanglangshaonian_tob",
+    "name": "爽朗少年",
+    "scene": "精品克隆音色 / 角色扮演",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "saturn_zh_male_tiancaitongzhuo_tob",
+    "name": "天才同桌",
+    "scene": "精品克隆音色 / 角色扮演",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "saturn_zh_female_cancan_tob",
+    "name": "知性灿灿",
+    "scene": "精品克隆音色 / 角色扮演",
+    "language": "中文",
+    "model": "精品克隆",
+    "resourceIds": ["seed-icl-2.0", "seed-icl-1.0"],
+    "emotions": [],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_lengkugege_emo_v2_mars_bigtts",
+    "name": "冷酷哥哥（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["angry", "coldness", "fear", "happy", "hate", "neutral", "sad", "depressed"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_tianxinxiaomei_emo_v2_mars_bigtts",
+    "name": "甜心小美（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["sad", "fear", "hate", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_gaolengyujie_emo_v2_mars_bigtts",
+    "name": "高冷御姐（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "surprised", "fear", "hate", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_aojiaobazong_emo_v2_mars_bigtts",
+    "name": "傲娇霸总（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["neutral", "happy", "angry", "hate"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_guangzhoudege_emo_mars_bigtts",
+    "name": "广州德哥（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["angry", "fear", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_jingqiangkanye_emo_mars_bigtts",
+    "name": "京腔侃爷（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "angry", "surprised", "hate", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_linjuayi_emo_v2_mars_bigtts",
+    "name": "邻居阿姨（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["neutral", "angry", "coldness", "depressed", "surprised"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_yourougongzi_emo_v2_mars_bigtts",
+    "name": "优柔公子（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "angry", "fear", "hate", "excited", "neutral", "depressed"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_ruyayichen_emo_v2_mars_bigtts",
+    "name": "儒雅男友（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "fear", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_junlangnanyou_emo_v2_mars_bigtts",
+    "name": "俊朗男友（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "surprised", "fear", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_beijingxiaoye_emo_v2_mars_bigtts",
+    "name": "北京小爷（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["angry", "surprised", "fear", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_roumeinvyou_emo_v2_mars_bigtts",
+    "name": "柔美女友（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "surprised", "fear", "hate", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_male_yangguangqingnian_emo_v2_mars_bigtts",
+    "name": "阳光青年（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "fear", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_meilinvyou_emo_v2_mars_bigtts",
+    "name": "魅力女友（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["sad", "fear", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "zh_female_shuangkuaisisi_emo_v2_mars_bigtts",
+    "name": "爽快思思（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文、英式英语",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["happy", "sad", "angry", "surprised", "excited", "coldness", "neutral"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "en_female_candice_emo_v2_mars_bigtts",
+    "name": "Candice（多情感）",
+    "scene": "语音合成1.0 / 多情感英语",
+    "language": "美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["affectionate", "angry", "asmr", "chat", "excited", "happy", "neutral", "warm"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "en_female_skye_emo_v2_mars_bigtts",
+    "name": "Serena（多情感）",
+    "scene": "语音合成1.0 / 多情感英语",
+    "language": "美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["affectionate", "angry", "asmr", "chat", "excited", "happy", "neutral", "sad", "warm"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  },
+  {
+    "id": "en_male_glen_emo_v2_mars_bigtts",
+    "name": "Glen（多情感）",
+    "scene": "语音合成1.0 / 多情感英语",
+    "language": "美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": ["seed-tts-1.0", "seed-tts-1.0-concurr"],
+    "emotions": ["affectionate", "angry", "asmr", "chat", "excited", "happy", "neutral", "sad", "warm"],
+    "source": "https://www.volcengine.com/docs/6561/1257544?lang=zh"
+  }
+]
