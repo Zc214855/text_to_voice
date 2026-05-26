@@ -11,6 +11,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/volc-api/, '')
       },
+      '/edge-api': {
+        target: 'http://localhost:5174',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/edge-api/, '/api/edge-tts'),
+        timeout: 120_000,
+      },
     },
   },
 })

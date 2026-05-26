@@ -14,7 +14,14 @@ if not exist "%WEB_DIR%\node_modules" (
 )
 
 echo.
-echo Starting FairyVoice (Vite :5173) ...
+echo Starting Edge TTS Server (:5174) ...
+cd /d "%WEB_DIR%"
+start "Edge-TTS Server" cmd /k "node server/index.js"
+
+timeout /t 2 /nobreak >nul
+
+echo.
+echo Starting FairyVoice Frontend (:5173) ...
 cd /d "%WEB_DIR%"
 start "FairyVoice Frontend" cmd /k "npm run dev"
 
@@ -23,10 +30,11 @@ timeout /t 3 /nobreak >nul
 echo.
 echo ======================================
 echo   FairyVoice started!
-echo   Frontend: http://localhost:5173
+echo   Frontend:  http://localhost:5173
+echo   Edge TTS:  http://localhost:5174
 echo ======================================
 echo.
-echo Close 'FairyVoice Frontend' window to stop.
+echo Close both windows to stop.
 echo.
 echo Press any key to open browser...
 pause >nul

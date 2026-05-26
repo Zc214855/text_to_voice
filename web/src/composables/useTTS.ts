@@ -1,8 +1,8 @@
 import { readonly, ref } from 'vue'
 import voices from '../data/voices.json'
 import { countTextUnits } from '../utils/textCleanup'
-import { clear as dbClear, loadAll, remove as dbRemove, save, type StoredItem } from '../utils/db'
-import type { HistoryItem, PopularVoice, SynthesizeParams, TTSConfig, UsageInfo } from './types'
+import { defaultItemName, useSharedHistory } from './useSharedHistory'
+import type { HistoryItem, PopularVoice, TTSConfig, UsageInfo, VolcSynthesizeParams } from './types'
 
 export const MAX_TEXT_LENGTH = 5000
 
@@ -27,17 +27,12 @@ export const VOLC_VOICES = voices as PopularVoice[]
 
 const DEFAULT_ENDPOINT = '/volc-api/api/v3/tts/unidirectional'
 
-const history = ref<HistoryItem[]>([])
 const errorMsg = ref('')
 const statusText = ref('就绪')
 const isGenerating = ref(false)
-const isPlaying = ref(false)
-const currentPlayingId = ref<string | null>(null)
 const currentResourceId = ref('')
 const availableResourceIds = ref<string[]>([])
 const lastUsage = ref<UsageInfo | null>(null)
-
-let audioInstance: HTMLAudioElement | null = null
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
@@ -92,7 +87,7 @@ function buildHeaders(config: TTSConfig, requestId: string) {
   return headers
 }
 
-function buildPayload(params: SynthesizeParams) {
+function buildPayload(params: Omit<VolcSynthesizeParams, 'engine'>) {
   const audioParams: Record<string, string | number> = {
     format: 'mp3',
     sample_rate: 24000,
@@ -241,28 +236,7 @@ async function collectAudioBase64(response: Response) {
 }
 
 export function useTTS() {
-  let loaded = false
-
-  async function restoreHistory() {
-    if (loaded) return
-    loaded = true
-    try {
-      const stored = await loadAll()
-      const items: HistoryItem[] = stored.map((s) => ({
-        id: s.id,
-        text: s.text,
-        voice: s.voice,
-        voiceName: s.voiceName,
-        audioUrl: URL.createObjectURL(s.audioBlob),
-        byteLength: s.byteLength,
-        requestId: s.requestId,
-        createdAt: new Date(s.createdAt),
-        controls: s.controls,
-      }))
-      items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      history.value = items
-    } catch { /* IndexedDB unavailable, start empty */ }
-  }
+  const shared = useSharedHistory()
 
   async function refreshConfig() {
     const config = await loadConfig()
@@ -271,7 +245,7 @@ export function useTTS() {
     return config
   }
 
-  async function synthesize(params: SynthesizeParams) {
+  async function synthesize(params: Omit<VolcSynthesizeParams, 'engine'>) {
     const text = params.text.trim()
 
     if (!text) {
@@ -328,6 +302,8 @@ export function useTTS() {
       const audioUrl = URL.createObjectURL(blob)
       const item: HistoryItem = {
         id: requestId,
+        engine: 'volc',
+        name: defaultItemName(text),
         text,
         voice: params.voice,
         voiceName: params.voiceName,
@@ -345,29 +321,9 @@ export function useTTS() {
         },
       }
 
-      history.value.unshift(item)
+      shared.addItem(item, blob)
       lastUsage.value = usage
       statusText.value = '完成'
-
-      save({
-        id: item.id,
-        text: item.text,
-        voice: item.voice,
-        voiceName: item.voiceName,
-        audioBlob: blob,
-        byteLength: blob.size,
-        requestId: item.requestId,
-        createdAt: item.createdAt.toISOString(),
-        controls: item.controls,
-      }).catch(() => undefined)
-
-      while (history.value.length > 100) {
-        const removed = history.value.pop()
-        if (removed) {
-          URL.revokeObjectURL(removed.audioUrl)
-          dbRemove(removed.id).catch(() => undefined)
-        }
-      }
 
       return item
     } catch (error: unknown) {
@@ -384,87 +340,25 @@ export function useTTS() {
     }
   }
 
-  async function playAudio(item: HistoryItem | null) {
-    if (!item) {
-      stopAudio()
-      return
-    }
-
-    if (currentPlayingId.value === item.id && isPlaying.value) {
-      stopAudio()
-      return
-    }
-
-    stopAudio()
-    audioInstance = new Audio(item.audioUrl)
-    audioInstance.onended = stopAudio
-    audioInstance.onerror = () => {
-      errorMsg.value = '音频播放失败'
-      stopAudio()
-    }
-
-    try {
-      await audioInstance.play()
-      isPlaying.value = true
-      currentPlayingId.value = item.id
-    } catch {
-      errorMsg.value = '浏览器阻止了音频播放'
-      stopAudio()
-    }
-  }
-
-  function stopAudio() {
-    if (audioInstance) {
-      audioInstance.pause()
-      audioInstance.currentTime = 0
-      audioInstance = null
-    }
-    isPlaying.value = false
-    currentPlayingId.value = null
-  }
-
-  function downloadAudio(item: HistoryItem) {
-    const anchor = document.createElement('a')
-    anchor.href = item.audioUrl
-    anchor.download = `${item.voiceName}_${item.createdAt.getTime()}.mp3`
-    anchor.click()
-  }
-
-  function removeHistoryItem(id: string) {
-    const index = history.value.findIndex((item) => item.id === id)
-    if (index < 0) return
-
-    URL.revokeObjectURL(history.value[index].audioUrl)
-    history.value.splice(index, 1)
-    if (currentPlayingId.value === id) stopAudio()
-    dbRemove(id).catch(() => undefined)
-  }
-
-  function clearHistory() {
-    stopAudio()
-    history.value.forEach((item) => URL.revokeObjectURL(item.audioUrl))
-    history.value = []
-    dbClear().catch(() => undefined)
-  }
-
   return {
     volcVoices: VOLC_VOICES,
-    history,
+    history: shared.history,
     errorMsg: readonly(errorMsg),
     statusText: readonly(statusText),
     isGenerating: readonly(isGenerating),
-    isPlaying: readonly(isPlaying),
-    currentPlayingId: readonly(currentPlayingId),
+    isPlaying: shared.isPlaying,
+    currentPlayingId: shared.currentPlayingId,
     currentResourceId: readonly(currentResourceId),
     availableResourceIds: readonly(availableResourceIds),
     lastUsage: readonly(lastUsage),
     refreshConfig,
-    restoreHistory,
+    restoreHistory: shared.restoreHistory,
     synthesize,
-    playAudio,
-    stopAudio,
-    downloadAudio,
-    removeHistoryItem,
-    clearHistory,
+    playAudio: shared.playAudio,
+    stopAudio: shared.stopAudio,
+    downloadAudio: shared.downloadAudio,
+    renameItem: shared.renameItem,
+    removeHistoryItem: shared.removeHistoryItem,
+    clearHistory: shared.clearHistory,
   }
 }
