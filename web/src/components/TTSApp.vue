@@ -16,6 +16,7 @@ const {
   availableResourceIds,
   lastUsage,
   refreshConfig,
+  restoreHistory,
   synthesize,
   playAudio,
   downloadAudio,
@@ -83,6 +84,7 @@ const latestItem = computed(() => history.value[0] || null)
 const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value)
 
 onMounted(() => {
+  restoreHistory()
   refreshConfig()
     .then(() => {
       selectedResourceId.value = currentResourceId.value
@@ -386,9 +388,12 @@ function active(item: HistoryItem) {
               <p class="truncate text-sm font-bold">{{ latestItem.voiceName }}</p>
               <p class="mt-1 text-xs text-white/55">{{ formatTime(latestItem.createdAt) }} · {{ formatSize(latestItem.byteLength) }}</p>
             </div>
-            <button class="rounded-full bg-amber-400 px-4 py-2 text-sm font-black text-zinc-950 transition hover:bg-amber-300" @click="playAudio(active(latestItem) ? null : latestItem)">
-              {{ active(latestItem) ? '暂停' : '播放' }}
-            </button>
+            <div class="flex items-center gap-2">
+              <button class="rounded-full bg-amber-400 px-4 py-2 text-sm font-black text-zinc-950 transition hover:bg-amber-300" @click="playAudio(active(latestItem) ? null : latestItem)">
+                {{ active(latestItem) ? '暂停' : '播放' }}
+              </button>
+              <button class="rounded-full bg-white/10 px-3 py-2 text-sm font-bold text-white/60 transition hover:bg-red-500/40 hover:text-white" @click="removeHistoryItem(latestItem.id)">删除</button>
+            </div>
           </div>
           <p class="mt-4 line-clamp-3 text-sm leading-6 text-white/75">{{ latestItem.text }}</p>
           <p v-if="lastUsage?.text_words" class="mt-4 text-xs font-semibold text-amber-200">计费字符：{{ lastUsage.text_words }}</p>

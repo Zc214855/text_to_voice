@@ -1,6 +1,7 @@
 import { readonly, ref } from 'vue'
 import voices from '../data/voices.json'
 import { countTextUnits } from '../utils/textCleanup'
+import { clear as dbClear, loadAll, remove as dbRemove, save, type StoredItem } from '../utils/db'
 import type { HistoryItem, PopularVoice, SynthesizeParams, TTSConfig, UsageInfo } from './types'
 
 export const MAX_TEXT_LENGTH = 5000
@@ -240,6 +241,29 @@ async function collectAudioBase64(response: Response) {
 }
 
 export function useTTS() {
+  let loaded = false
+
+  async function restoreHistory() {
+    if (loaded) return
+    loaded = true
+    try {
+      const stored = await loadAll()
+      const items: HistoryItem[] = stored.map((s) => ({
+        id: s.id,
+        text: s.text,
+        voice: s.voice,
+        voiceName: s.voiceName,
+        audioUrl: URL.createObjectURL(s.audioBlob),
+        byteLength: s.byteLength,
+        requestId: s.requestId,
+        createdAt: new Date(s.createdAt),
+        controls: s.controls,
+      }))
+      items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      history.value = items
+    } catch { /* IndexedDB unavailable, start empty */ }
+  }
+
   async function refreshConfig() {
     const config = await loadConfig()
     currentResourceId.value = config.resourceId || ''
@@ -325,9 +349,24 @@ export function useTTS() {
       lastUsage.value = usage
       statusText.value = '完成'
 
-      while (history.value.length > 30) {
+      save({
+        id: item.id,
+        text: item.text,
+        voice: item.voice,
+        voiceName: item.voiceName,
+        audioBlob: blob,
+        byteLength: blob.size,
+        requestId: item.requestId,
+        createdAt: item.createdAt.toISOString(),
+        controls: item.controls,
+      }).catch(() => undefined)
+
+      while (history.value.length > 100) {
         const removed = history.value.pop()
-        if (removed) URL.revokeObjectURL(removed.audioUrl)
+        if (removed) {
+          URL.revokeObjectURL(removed.audioUrl)
+          dbRemove(removed.id).catch(() => undefined)
+        }
       }
 
       return item
@@ -398,12 +437,14 @@ export function useTTS() {
     URL.revokeObjectURL(history.value[index].audioUrl)
     history.value.splice(index, 1)
     if (currentPlayingId.value === id) stopAudio()
+    dbRemove(id).catch(() => undefined)
   }
 
   function clearHistory() {
     stopAudio()
     history.value.forEach((item) => URL.revokeObjectURL(item.audioUrl))
     history.value = []
+    dbClear().catch(() => undefined)
   }
 
   return {
@@ -418,6 +459,7 @@ export function useTTS() {
     availableResourceIds: readonly(availableResourceIds),
     lastUsage: readonly(lastUsage),
     refreshConfig,
+    restoreHistory,
     synthesize,
     playAudio,
     stopAudio,
