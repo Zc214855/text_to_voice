@@ -11,18 +11,14 @@ export const EMOTION_LABELS: Record<string, string> = {
   asmr: '低语',
   chat: '对话 / 闲聊',
   coldness: '冷漠',
-  comfort: '安慰鼓励',
   depressed: '沮丧',
   excited: '激动',
   fear: '恐惧',
   happy: '开心',
   hate: '厌恶',
   neutral: '中性',
-  radio: '情感电台',
   sad: '悲伤',
-  storytelling: '讲故事',
   surprised: '惊讶',
-  tender: '温柔',
   warm: '温暖',
 }
 
@@ -57,12 +53,12 @@ async function loadConfig(): Promise<Required<Pick<TTSConfig, 'endpoint'>> & TTS
   }
 
   const config = await response.json() as TTSConfig
-  const resourceId = config.resourceId || config.cluster || config.resourceIds?.[0]
+  const resourceId = config.resourceId || config.resourceIds?.[0]
   const hasApiKeyAuth = Boolean(config.apiKey)
   const hasLegacyAuth = Boolean(config.appId && config.accessToken)
 
   if (!resourceId) {
-    throw new Error('config.json 缺少 resourceId 或 cluster')
+    throw new Error('config.json 缺少 resourceId')
   }
 
   if (!hasApiKeyAuth && !hasLegacyAuth) {
@@ -80,7 +76,7 @@ async function loadConfig(): Promise<Required<Pick<TTSConfig, 'endpoint'>> & TTS
 function buildHeaders(config: TTSConfig, requestId: string) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'X-Api-Resource-Id': config.resourceId || config.cluster || '',
+    'X-Api-Resource-Id': config.resourceId || '',
     'X-Api-Request-Id': requestId,
     'X-Control-Require-Usage-Tokens-Return': 'text_words',
   }
@@ -108,18 +104,24 @@ function buildPayload(params: SynthesizeParams) {
     audioParams.emotion_scale = clamp(Math.round(params.emotionScale), 1, 5)
   }
 
+  const additions: Record<string, unknown> = {}
+
+  if (params.explicitLanguage) {
+    additions.explicit_language = params.explicitLanguage
+  }
+
+  if (params.pitch !== 0) {
+    additions.post_process = { pitch: clamp(Math.round(params.pitch), -12, 12) }
+  }
+
   const reqParams: Record<string, unknown> = {
     text: params.text.trim(),
     speaker: params.voice,
     audio_params: audioParams,
   }
 
-  if (params.pitch !== 0) {
-    reqParams.additions = JSON.stringify({
-      post_process: {
-        pitch: clamp(Math.round(params.pitch), -12, 12),
-      },
-    })
+  if (Object.keys(additions).length > 0) {
+    reqParams.additions = JSON.stringify(additions)
   }
 
   return {
@@ -240,7 +242,7 @@ async function collectAudioBase64(response: Response) {
 export function useTTS() {
   async function refreshConfig() {
     const config = await loadConfig()
-    currentResourceId.value = config.resourceId || config.cluster || ''
+    currentResourceId.value = config.resourceId || ''
     availableResourceIds.value = config.resourceIds || []
     return config
   }
@@ -264,7 +266,7 @@ export function useTTS() {
     statusText.value = '读取配置'
 
     const controller = new AbortController()
-    const timeoutId = window.setTimeout(() => controller.abort(), 60_000)
+    const timeoutId = window.setTimeout(() => controller.abort(), 180_000)
 
     try {
       const requestId = createRequestId()
@@ -315,6 +317,7 @@ export function useTTS() {
           loudness: params.loudness,
           emotion: params.emotion,
           emotionScale: params.emotionScale,
+          explicitLanguage: params.explicitLanguage,
         },
       }
 

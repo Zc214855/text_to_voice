@@ -30,9 +30,11 @@ const pitch = ref(0)
 const loudness = ref(1)
 const emotion = ref('')
 const emotionScale = ref(4)
+const explicitLanguage = ref('')
 const autoPlay = ref(true)
 const selectedResourceId = ref('')
 const cleanupStatus = ref('')
+const configError = ref('')
 
 const resourceVoices = computed(() => {
   if (!selectedResourceId.value) return volcVoices
@@ -40,8 +42,7 @@ const resourceVoices = computed(() => {
 })
 const selectedVoiceInfo = computed(() => resourceVoices.value.find((voice) => voice.id === selectedVoice.value) || resourceVoices.value[0] || volcVoices[0])
 const normalizedText = computed(() => normalizeLineBreaks(text.value))
-const visibleCharCount = computed(() => Array.from(normalizedText.value.replace(/\s/g, '')).length)
-const rawCharCount = computed(() => countTextUnits(normalizedText.value))
+const textLength = computed(() => countTextUnits(normalizedText.value))
 const estimatedBillableCount = computed(() => countTextUnits(normalizedText.value.trim()))
 const textOverflow = computed(() => estimatedBillableCount.value > MAX_TEXT_LENGTH)
 const availableEmotions = computed(() => {
@@ -49,6 +50,26 @@ const availableEmotions = computed(() => {
     value,
     label: EMOTION_LABELS[value] || value,
   }))
+})
+
+const LANGUAGE_OPTIONS: { value: string; label: string }[] = [
+  { value: '', label: '自动（不限）' },
+  { value: 'zh-cn', label: '中文' },
+  { value: 'en', label: '英文' },
+  { value: 'ja', label: '日文' },
+  { value: 'es-mx', label: '墨西哥语' },
+  { value: 'id', label: '印尼语' },
+  { value: 'pt-br', label: '巴葡' },
+]
+
+const voiceSupportsZh = computed(() => selectedVoiceInfo.value.language.includes('中文'))
+const voiceSupportsEn = computed(() => selectedVoiceInfo.value.language.includes('英语'))
+
+const availableLanguages = computed(() => {
+  if (voiceSupportsZh.value && voiceSupportsEn.value) return LANGUAGE_OPTIONS
+  if (voiceSupportsEn.value && !voiceSupportsZh.value) return LANGUAGE_OPTIONS.filter((o) => !o.value || o.value === 'en')
+  if (voiceSupportsZh.value && !voiceSupportsEn.value) return LANGUAGE_OPTIONS.filter((o) => !o.value || o.value === 'zh-cn')
+  return LANGUAGE_OPTIONS
 })
 const groupedVoices = computed(() => {
   return resourceVoices.value.reduce<Record<string, typeof volcVoices>>((groups, voice) => {
@@ -66,7 +87,9 @@ onMounted(() => {
     .then(() => {
       selectedResourceId.value = currentResourceId.value
     })
-    .catch(() => undefined)
+    .catch((err: unknown) => {
+      configError.value = err instanceof Error ? err.message : '配置加载失败'
+    })
 })
 
 watch(currentResourceId, (resourceId) => {
@@ -85,6 +108,9 @@ watch(selectedVoiceInfo, (voice) => {
   if (emotion.value && !voice.emotions.includes(emotion.value)) {
     emotion.value = ''
   }
+  if (voiceSupportsEn.value && !voiceSupportsZh.value) explicitLanguage.value = 'en'
+  else if (voiceSupportsZh.value && !voiceSupportsEn.value) explicitLanguage.value = 'zh-cn'
+  else explicitLanguage.value = ''
 })
 
 function setCleanupStatus(result: ReturnType<typeof cleanupTtsText>) {
@@ -143,6 +169,7 @@ async function handleGenerate() {
     loudness: loudness.value,
     emotion: emotion.value,
     emotionScale: emotionScale.value,
+    explicitLanguage: explicitLanguage.value,
   })
 
   if (item && autoPlay.value) {
@@ -206,9 +233,8 @@ function active(item: HistoryItem) {
               @paste="handlePaste"
             ></textarea>
             <div class="border-t border-zinc-950/10 px-4 py-3">
-              <div class="mb-3 grid grid-cols-3 gap-2 text-xs font-semibold text-zinc-600">
-                <div class="rounded bg-zinc-50 px-2 py-1.5">可见 {{ visibleCharCount }}</div>
-                <div class="rounded bg-zinc-50 px-2 py-1.5">含换行 {{ rawCharCount }}</div>
+              <div class="mb-3 grid grid-cols-2 gap-2 text-xs font-semibold text-zinc-600">
+                <div class="rounded bg-zinc-50 px-2 py-1.5">字符 {{ textLength }}</div>
                 <div class="rounded bg-zinc-50 px-2 py-1.5" :class="textOverflow ? 'text-red-600' : ''">估算计费 {{ estimatedBillableCount }}</div>
               </div>
               <p v-if="textOverflow" class="text-sm font-semibold text-red-600">估算计费字符超出前端限制。</p>
@@ -310,6 +336,19 @@ function active(item: HistoryItem) {
                 <input v-model="autoPlay" type="checkbox" class="h-4 w-4 accent-zinc-950" />
                 生成后播放
               </label>
+
+              <section class="mt-3 rounded-md border border-zinc-950/10 bg-zinc-50 p-2">
+                <label class="text-xs font-bold text-zinc-700">文本语种</label>
+                <select
+                  v-model="explicitLanguage"
+                  class="mt-1 w-full rounded-md border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15"
+                >
+                  <option v-for="lang in availableLanguages" :key="lang.value" :value="lang.value">{{ lang.label }}</option>
+                </select>
+                <p class="mt-1 text-xs font-medium leading-4 text-zinc-500">
+                  指定文本语种可提升合成质量；英语音色请选"英文"。
+                </p>
+              </section>
             </section>
 
             <button
@@ -321,7 +360,7 @@ function active(item: HistoryItem) {
               {{ isGenerating ? '生成中' : '生成配音' }}
             </button>
 
-            <p v-if="errorMsg" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ errorMsg }}</p>
+            <p v-if="configError || errorMsg" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ configError || errorMsg }}</p>
           </aside>
         </section>
       </main>
@@ -376,6 +415,7 @@ function active(item: HistoryItem) {
               <span class="rounded bg-zinc-100 px-2 py-1">{{ item.controls.speechRate.toFixed(1) }}x</span>
               <span class="rounded bg-zinc-100 px-2 py-1">pitch {{ item.controls.pitch }}</span>
               <span v-if="item.controls.emotion" class="rounded bg-zinc-100 px-2 py-1">{{ EMOTION_LABELS[item.controls.emotion] || item.controls.emotion }}</span>
+              <span v-if="item.controls.explicitLanguage" class="rounded bg-zinc-100 px-2 py-1">{{ LANGUAGE_OPTIONS.find(o => o.value === item.controls.explicitLanguage)?.label || item.controls.explicitLanguage }}</span>
               <button class="ml-auto rounded-md px-2 py-1 text-zinc-800 transition hover:bg-zinc-100" @click="downloadAudio(item)">下载</button>
               <button class="rounded-md px-2 py-1 text-red-600 transition hover:bg-red-50" @click="removeHistoryItem(item.id)">删除</button>
             </div>

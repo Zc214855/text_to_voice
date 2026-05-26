@@ -4,7 +4,6 @@ export interface TTSConfig {
   accessToken?: string
   resourceId?: string
   resourceIds?: string[]
-  cluster?: string
   endpoint?: string
 }
 
@@ -16,7 +15,6 @@ export interface PopularVoice {
   model: string
   resourceIds: string[]
   emotions: string[]
-  source: string
 }
 
 export interface TTSControls {
@@ -25,6 +23,7 @@ export interface TTSControls {
   loudness: number
   emotion: string
   emotionScale: number
+  explicitLanguage: string
 }
 
 export interface SynthesizeParams extends TTSControls {
