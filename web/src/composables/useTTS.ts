@@ -1,8 +1,9 @@
 import { readonly, ref } from 'vue'
 import voices from '../data/voices.json'
+import { countTextUnits } from '../utils/textCleanup'
 import type { HistoryItem, PopularVoice, SynthesizeParams, TTSConfig, UsageInfo } from './types'
 
-export const MAX_TEXT_LENGTH = 2000
+export const MAX_TEXT_LENGTH = 5000
 
 export const EMOTION_LABELS: Record<string, string> = {
   affectionate: '深情',
@@ -35,6 +36,8 @@ const statusText = ref('就绪')
 const isGenerating = ref(false)
 const isPlaying = ref(false)
 const currentPlayingId = ref<string | null>(null)
+const currentResourceId = ref('')
+const availableResourceIds = ref<string[]>([])
 const lastUsage = ref<UsageInfo | null>(null)
 
 let audioInstance: HTMLAudioElement | null = null
@@ -54,7 +57,7 @@ async function loadConfig(): Promise<Required<Pick<TTSConfig, 'endpoint'>> & TTS
   }
 
   const config = await response.json() as TTSConfig
-  const resourceId = config.resourceId || config.cluster
+  const resourceId = config.resourceId || config.cluster || config.resourceIds?.[0]
   const hasApiKeyAuth = Boolean(config.apiKey)
   const hasLegacyAuth = Boolean(config.appId && config.accessToken)
 
@@ -69,6 +72,7 @@ async function loadConfig(): Promise<Required<Pick<TTSConfig, 'endpoint'>> & TTS
   return {
     ...config,
     resourceId,
+    resourceIds: config.resourceIds?.length ? config.resourceIds : [resourceId],
     endpoint: config.endpoint || DEFAULT_ENDPOINT,
   }
 }
@@ -111,11 +115,11 @@ function buildPayload(params: SynthesizeParams) {
   }
 
   if (params.pitch !== 0) {
-    reqParams.additions = {
+    reqParams.additions = JSON.stringify({
       post_process: {
         pitch: clamp(Math.round(params.pitch), -12, 12),
       },
-    }
+    })
   }
 
   return {
@@ -234,6 +238,13 @@ async function collectAudioBase64(response: Response) {
 }
 
 export function useTTS() {
+  async function refreshConfig() {
+    const config = await loadConfig()
+    currentResourceId.value = config.resourceId || config.cluster || ''
+    availableResourceIds.value = config.resourceIds || []
+    return config
+  }
+
   async function synthesize(params: SynthesizeParams) {
     const text = params.text.trim()
 
@@ -242,8 +253,8 @@ export function useTTS() {
       return undefined
     }
 
-    if (text.length > MAX_TEXT_LENGTH) {
-      errorMsg.value = `文本不能超过 ${MAX_TEXT_LENGTH} 字`
+    if (countTextUnits(text) > MAX_TEXT_LENGTH) {
+      errorMsg.value = `估算计费字符不能超过 ${MAX_TEXT_LENGTH} 字`
       return undefined
     }
 
@@ -257,7 +268,13 @@ export function useTTS() {
 
     try {
       const requestId = createRequestId()
-      const config = await loadConfig()
+      const config = await refreshConfig()
+      config.resourceId = params.resourceId || config.resourceId
+      currentResourceId.value = config.resourceId || ''
+      const voice = VOLC_VOICES.find((item) => item.id === params.voice)
+      if (voice && !voice.resourceIds.includes(config.resourceId || '')) {
+        throw new Error(`当前配置 ${config.resourceId} 不能调用音色 ${voice.name}，请切换到 ${voice.resourceIds.join(' / ')} 对应服务，或选择当前资源支持的音色`)
+      }
       const headers = buildHeaders(config, requestId)
       const payload = buildPayload({ ...params, text })
 
@@ -394,7 +411,10 @@ export function useTTS() {
     isGenerating: readonly(isGenerating),
     isPlaying: readonly(isPlaying),
     currentPlayingId: readonly(currentPlayingId),
+    currentResourceId: readonly(currentResourceId),
+    availableResourceIds: readonly(availableResourceIds),
     lastUsage: readonly(lastUsage),
+    refreshConfig,
     synthesize,
     playAudio,
     stopAudio,

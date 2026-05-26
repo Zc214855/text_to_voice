@@ -3,6 +3,7 @@ export interface TTSConfig {
   appId?: string
   accessToken?: string
   resourceId?: string
+  resourceIds?: string[]
   cluster?: string
   endpoint?: string
 }
@@ -30,6 +31,7 @@ export interface SynthesizeParams extends TTSControls {
   text: string
   voice: string
   voiceName: string
+  resourceId: string
 }
 
 export interface HistoryItem {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { EMOTION_LABELS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
+import { cleanupTtsText, countTextUnits, normalizeLineBreaks } from '../utils/textCleanup'
 import type { HistoryItem } from '../composables/types'
 
 const {
@@ -11,7 +12,10 @@ const {
   isGenerating,
   isPlaying,
   currentPlayingId,
+  currentResourceId,
+  availableResourceIds,
   lastUsage,
+  refreshConfig,
   synthesize,
   playAudio,
   downloadAudio,
@@ -27,10 +31,19 @@ const loudness = ref(1)
 const emotion = ref('')
 const emotionScale = ref(4)
 const autoPlay = ref(true)
+const selectedResourceId = ref('')
+const cleanupStatus = ref('')
 
-const selectedVoiceInfo = computed(() => volcVoices.find((voice) => voice.id === selectedVoice.value) || volcVoices[0])
-const charCount = computed(() => text.value.length)
-const textOverflow = computed(() => charCount.value > MAX_TEXT_LENGTH)
+const resourceVoices = computed(() => {
+  if (!selectedResourceId.value) return volcVoices
+  return volcVoices.filter((voice) => voice.resourceIds.includes(selectedResourceId.value))
+})
+const selectedVoiceInfo = computed(() => resourceVoices.value.find((voice) => voice.id === selectedVoice.value) || resourceVoices.value[0] || volcVoices[0])
+const normalizedText = computed(() => normalizeLineBreaks(text.value))
+const visibleCharCount = computed(() => Array.from(normalizedText.value.replace(/\s/g, '')).length)
+const rawCharCount = computed(() => countTextUnits(normalizedText.value))
+const estimatedBillableCount = computed(() => countTextUnits(normalizedText.value.trim()))
+const textOverflow = computed(() => estimatedBillableCount.value > MAX_TEXT_LENGTH)
 const availableEmotions = computed(() => {
   return selectedVoiceInfo.value.emotions.map((value) => ({
     value,
@@ -38,7 +51,7 @@ const availableEmotions = computed(() => {
   }))
 })
 const groupedVoices = computed(() => {
-  return volcVoices.reduce<Record<string, typeof volcVoices>>((groups, voice) => {
+  return resourceVoices.value.reduce<Record<string, typeof volcVoices>>((groups, voice) => {
     groups[voice.scene] ||= []
     groups[voice.scene].push(voice)
     return groups
@@ -48,19 +61,83 @@ const groupedVoices = computed(() => {
 const latestItem = computed(() => history.value[0] || null)
 const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value)
 
+onMounted(() => {
+  refreshConfig()
+    .then(() => {
+      selectedResourceId.value = currentResourceId.value
+    })
+    .catch(() => undefined)
+})
+
+watch(currentResourceId, (resourceId) => {
+  if (!selectedResourceId.value && resourceId) {
+    selectedResourceId.value = resourceId
+  }
+})
+
+watch(resourceVoices, (voices) => {
+  if (voices.length > 0 && !voices.some((voice) => voice.id === selectedVoice.value)) {
+    selectedVoice.value = voices[0].id
+  }
+})
+
 watch(selectedVoiceInfo, (voice) => {
   if (emotion.value && !voice.emotions.includes(emotion.value)) {
     emotion.value = ''
   }
 })
 
+function setCleanupStatus(result: ReturnType<typeof cleanupTtsText>) {
+  if (!result.changed) {
+    cleanupStatus.value = ''
+    return
+  }
+
+  const details = [
+    result.trimmedLines ? `修剪 ${result.trimmedLines} 行` : '',
+    result.removedBlankLines ? `压缩空行 ${result.removedBlankLines} 处` : '',
+    result.mergedLines ? `合并断行 ${result.mergedLines} 处` : '',
+  ].filter(Boolean)
+
+  cleanupStatus.value = details.length ? `已整理：${details.join('，')}` : '已整理文本'
+}
+
+function applyTextCleanup() {
+  const result = cleanupTtsText(text.value)
+  text.value = result.text
+  setCleanupStatus(result)
+  return result.text
+}
+
+function handlePaste(event: ClipboardEvent) {
+  const pastedText = event.clipboardData?.getData('text/plain')
+  const target = event.target as HTMLTextAreaElement | null
+
+  if (!pastedText || !target) return
+
+  event.preventDefault()
+  const result = cleanupTtsText(pastedText)
+  const start = target.selectionStart ?? text.value.length
+  const end = target.selectionEnd ?? start
+  text.value = `${text.value.slice(0, start)}${result.text}${text.value.slice(end)}`
+  setCleanupStatus(result)
+
+  window.requestAnimationFrame(() => {
+    const cursor = start + result.text.length
+    target.setSelectionRange(cursor, cursor)
+  })
+}
+
 async function handleGenerate() {
   if (!canGenerate.value) return
 
+  const cleanText = applyTextCleanup()
+
   const item = await synthesize({
-    text: text.value,
+    text: cleanText,
     voice: selectedVoice.value,
     voiceName: selectedVoiceInfo.value.name,
+    resourceId: selectedResourceId.value,
     speechRate: speechRate.value,
     pitch: pitch.value,
     loudness: loudness.value,
@@ -109,17 +186,33 @@ function active(item: HistoryItem) {
 
         <section class="grid flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div class="flex min-h-[440px] flex-col rounded-lg border border-zinc-950/10 bg-white shadow-sm">
-            <div class="flex items-center justify-between border-b border-zinc-950/10 px-4 py-3">
+            <div class="flex items-center justify-between gap-3 border-b border-zinc-950/10 px-4 py-3">
               <label class="text-sm font-bold text-zinc-900">文案</label>
-              <span class="text-xs font-bold" :class="textOverflow ? 'text-red-600' : 'text-zinc-500'">{{ charCount }} / {{ MAX_TEXT_LENGTH }}</span>
+              <div class="flex items-center gap-3">
+                <button
+                  class="rounded-md border border-zinc-950/10 px-2.5 py-1 text-xs font-bold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  :disabled="!text.trim()"
+                  @click="applyTextCleanup"
+                >
+                  整理文本
+                </button>
+                <span class="text-xs font-bold" :class="textOverflow ? 'text-red-600' : 'text-zinc-500'">估算 {{ estimatedBillableCount }} / {{ MAX_TEXT_LENGTH }}</span>
+              </div>
             </div>
             <textarea
               v-model="text"
               class="min-h-[280px] flex-1 resize-none bg-transparent px-5 py-4 text-base leading-8 text-zinc-900 outline-none placeholder:text-zinc-400"
               placeholder="输入要合成的文本"
+              @paste="handlePaste"
             ></textarea>
             <div class="border-t border-zinc-950/10 px-4 py-3">
-              <p v-if="textOverflow" class="text-sm font-semibold text-red-600">文本超出接口限制。</p>
+              <div class="mb-3 grid grid-cols-3 gap-2 text-xs font-semibold text-zinc-600">
+                <div class="rounded bg-zinc-50 px-2 py-1.5">可见 {{ visibleCharCount }}</div>
+                <div class="rounded bg-zinc-50 px-2 py-1.5">含换行 {{ rawCharCount }}</div>
+                <div class="rounded bg-zinc-50 px-2 py-1.5" :class="textOverflow ? 'text-red-600' : ''">估算计费 {{ estimatedBillableCount }}</div>
+              </div>
+              <p v-if="textOverflow" class="text-sm font-semibold text-red-600">估算计费字符超出前端限制。</p>
+              <p v-else-if="cleanupStatus" class="text-sm font-semibold text-emerald-700">{{ cleanupStatus }}</p>
               <p v-else class="text-sm text-zinc-500">
                 当前音色：{{ selectedVoiceInfo.name }} · {{ selectedVoiceInfo.language }} · {{ selectedVoiceInfo.model }}
               </p>
@@ -127,6 +220,17 @@ function active(item: HistoryItem) {
           </div>
 
           <aside class="space-y-4">
+            <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
+              <label class="text-sm font-bold text-zinc-900">服务资源</label>
+              <select
+                v-model="selectedResourceId"
+                class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-500/15"
+              >
+                <option v-for="resourceId in availableResourceIds" :key="resourceId" :value="resourceId">{{ resourceId }}</option>
+              </select>
+              <p class="mt-2 text-xs font-medium leading-5 text-zinc-500">切换服务后，只显示该服务可调用的音色。</p>
+            </section>
+
             <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
               <label class="text-sm font-bold text-zinc-900">音色</label>
               <select
@@ -141,7 +245,8 @@ function active(item: HistoryItem) {
               </select>
               <div class="mt-2 space-y-1 rounded-md bg-zinc-50 p-2 text-xs font-medium leading-5 text-zinc-600">
                 <p class="break-all">{{ selectedVoiceInfo.id }}</p>
-                <p>资源：{{ selectedVoiceInfo.resourceIds.join(' / ') }}</p>
+                <p>当前资源：{{ selectedResourceId || currentResourceId || '读取中' }}</p>
+                <p>音色资源：{{ selectedVoiceInfo.resourceIds.join(' / ') }}</p>
               </div>
             </section>
 

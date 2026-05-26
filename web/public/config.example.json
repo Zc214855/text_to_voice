@@ -1,4 +1,9 @@
 {
   "apiKey": "your-api-key",
-  "resourceId": "seed-tts-2.0"
+  "resourceId": "seed-tts-2.0",
+  "resourceIds": [
+    "seed-tts-2.0",
+    "seed-tts-1.0",
+    "seed-icl-2.0"
+  ]
 }
