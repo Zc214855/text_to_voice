@@ -3,8 +3,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { EMOTION_LABELS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
 import { defaultItemName, useSharedHistory } from '../composables/useSharedHistory'
 import { useEdgeTTS } from '../composables/useEdgeTTS'
+import { useVoicebox } from '../composables/useVoicebox'
 import { cleanupTtsText, countTextUnits, normalizeLineBreaks } from '../utils/textCleanup'
-import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls } from '../composables/types'
+import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls, VoiceboxControls } from '../composables/types'
 
 function detectTextLang(text: string): string {
   const sample = text.replace(/[\s\d\p{P}]/gu, '').slice(0, 200)
@@ -29,6 +30,7 @@ const TEXT_LANG_LABEL: Record<string, string> = { zh: '中文', en: '英文', ja
 
 const volc = useTTS()
 const edge = useEdgeTTS()
+const voicebox = useVoicebox()
 
 const activeEngine = ref<TTSEngine>('volc')
 const text = ref('从前有一只小兔子住在森林边缘。每天傍晚，它都会把星星一样亮的蒲公英种子吹向远方。')
@@ -52,12 +54,17 @@ const edgeRate = ref(0)
 const edgePitch = ref(0)
 const edgeVolume = ref(0)
 
+// Voicebox controls
+const selectedVoiceboxProfile = ref('')
+const voiceboxLanguage = ref('')
+
 const resourceVoices = computed(() => {
   if (!selectedResourceId.value) return volc.volcVoices
   return volc.volcVoices.filter((voice) => voice.resourceIds.includes(selectedResourceId.value))
 })
 const selectedVoiceInfo = computed(() => resourceVoices.value.find((voice) => voice.id === selectedVoice.value) || resourceVoices.value[0] || volc.volcVoices[0])
 const selectedEdgeVoiceInfo = computed(() => edge.edgeVoices.find((v) => v.id === selectedEdgeVoice.value) || edge.edgeVoices[0])
+const selectedVoiceboxProfileInfo = computed(() => voicebox.profiles.value.find((p) => p.id === selectedVoiceboxProfile.value))
 
 const normalizedText = computed(() => normalizeLineBreaks(text.value))
 const textLength = computed(() => countTextUnits(normalizedText.value))
@@ -110,11 +117,22 @@ const groupedEdgeVoices = computed(() => {
 const history = volc.history
 const latestItem = computed(() => history.value[0] || null)
 
-const isGenerating = computed(() => activeEngine.value === 'volc' ? volc.isGenerating.value : edge.isGenerating.value)
-const statusText = computed(() => activeEngine.value === 'volc' ? volc.statusText.value : edge.statusText.value)
-const errorMsg = computed(() => activeEngine.value === 'volc' ? volc.errorMsg.value : edge.errorMsg.value)
+const isGenerating = computed(() => {
+  if (activeEngine.value === 'volc') return volc.isGenerating.value
+  if (activeEngine.value === 'edge') return edge.isGenerating.value
+  return voicebox.isGenerating.value
+})
+const statusText = computed(() => {
+  if (activeEngine.value === 'volc') return volc.statusText.value
+  if (activeEngine.value === 'edge') return edge.statusText.value
+  return voicebox.statusText.value
+})
+const errorMsg = computed(() => {
+  if (activeEngine.value === 'volc') return volc.errorMsg.value
+  if (activeEngine.value === 'edge') return edge.errorMsg.value
+  return voicebox.errorMsg.value
+})
 
-const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value && !edgeLangMismatch.value)
 const detectedLang = computed(() => detectTextLang(normalizedText.value.trim()))
 const edgeLangMismatch = computed(() => {
   if (activeEngine.value !== 'edge' || !detectedLang.value) return false
@@ -122,6 +140,8 @@ const edgeLangMismatch = computed(() => {
   const voiceLang = voiceLocale.startsWith('zh') ? 'zh' : voiceLocale.split('-')[0]
   return voiceLang !== detectedLang.value
 })
+
+const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value && !edgeLangMismatch.value)
 
 onMounted(() => {
   volc.restoreHistory()
@@ -133,6 +153,11 @@ onMounted(() => {
       configError.value = err instanceof Error ? err.message : '配置加载失败'
     })
   edge.checkServer()
+  voicebox.checkServer().then(() => {
+    if (voicebox.profiles.value.length > 0 && !selectedVoiceboxProfile.value) {
+      selectedVoiceboxProfile.value = voicebox.profiles.value[0].id
+    }
+  })
 })
 
 watch(() => volc.currentResourceId.value, (resourceId) => {
@@ -155,6 +180,12 @@ watch(activeEngine, (engine) => {
       const match = edge.edgeVoices.find(v => v.locale.startsWith(prefix))
       if (match) selectedEdgeVoice.value = match.id
     }
+  } else if (engine === 'voicebox') {
+    voicebox.checkServer().then(() => {
+      if (voicebox.profiles.value.length > 0 && !selectedVoiceboxProfile.value) {
+        selectedVoiceboxProfile.value = voicebox.profiles.value[0].id
+      }
+    })
   }
 })
 
@@ -221,7 +252,7 @@ async function handleGenerate() {
       explicitLanguage: explicitLanguage.value,
     })
     if (item && autoPlay.value) await volc.playAudio(item)
-  } else {
+  } else if (activeEngine.value === 'edge') {
     const item = await edge.synthesize({
       text: cleanText,
       voice: selectedEdgeVoice.value,
@@ -231,6 +262,16 @@ async function handleGenerate() {
       volume: edgeVolume.value,
     })
     if (item && autoPlay.value) await edge.playAudio(item)
+  } else {
+    const profile = selectedVoiceboxProfileInfo.value
+    const item = await voicebox.synthesize({
+      text: cleanText,
+      voice: profile?.id || '',
+      voiceName: profile?.name || '未知音色',
+      profileId: profile?.id || '',
+      language: voiceboxLanguage.value,
+    })
+    if (item && autoPlay.value) await voicebox.playAudio(item)
   }
 }
 
@@ -249,11 +290,23 @@ function active(item: HistoryItem) {
 }
 
 function engineLabel(engine: TTSEngine) {
-  return engine === 'volc' ? '云端' : '本地'
+  if (engine === 'volc') return '云端'
+  if (engine === 'edge') return '本地'
+  return 'Vox'
 }
 
-function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is EdgeTTSControls {
-  return 'rate' in controls && !('speechRate' in controls)
+function engineBadgeClass(engine: TTSEngine, dark = false) {
+  if (engine === 'volc') return dark ? 'bg-amber-400 text-zinc-950' : 'bg-amber-100 text-amber-700'
+  if (engine === 'edge') return dark ? 'bg-sky-400 text-zinc-950' : 'bg-sky-100 text-sky-700'
+  return dark ? 'bg-violet-400 text-zinc-950' : 'bg-violet-100 text-violet-700'
+}
+
+function isEdgeControls(controls: TTSControls | EdgeTTSControls | VoiceboxControls): controls is EdgeTTSControls {
+  return 'rate' in controls && !('speechRate' in controls) && !('profileId' in controls)
+}
+
+function isVoiceboxControls(controls: TTSControls | EdgeTTSControls | VoiceboxControls): controls is VoiceboxControls {
+  return 'profileId' in controls
 }
 </script>
 
@@ -263,32 +316,40 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
       <main class="flex min-h-screen flex-col border-zinc-950/10 bg-[#fbfaf7] px-5 py-5 lg:border-r lg:px-10 lg:py-6">
         <header class="mb-4 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">Volcengine TTS &amp; Edge TTS</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">Volcengine &middot; Edge &middot; Voicebox</p>
             <h1 class="mt-1 text-3xl font-black tracking-normal text-zinc-950 md:text-4xl">FairyVoice</h1>
           </div>
           <div class="flex items-center gap-3">
             <div class="inline-flex rounded-full border border-zinc-950/10 bg-white shadow-sm">
               <button
-                class="rounded-l-full px-4 py-2 text-sm font-bold transition"
+                class="rounded-l-full px-3 py-2 text-xs font-bold transition"
                 :class="activeEngine === 'volc' ? 'bg-amber-500 text-white' : 'text-zinc-700 hover:bg-zinc-50'"
                 @click="activeEngine = 'volc'"
               >云端</button>
               <button
-                class="rounded-r-full px-4 py-2 text-sm font-bold transition"
+                class="px-3 py-2 text-xs font-bold transition"
                 :class="activeEngine === 'edge' ? 'bg-sky-500 text-white' : 'text-zinc-700 hover:bg-zinc-50'"
                 @click="activeEngine = 'edge'"
               >本地</button>
+              <button
+                class="rounded-r-full px-3 py-2 text-xs font-bold transition"
+                :class="activeEngine === 'voicebox' ? 'bg-violet-500 text-white' : 'text-zinc-700 hover:bg-zinc-50'"
+                @click="activeEngine = 'voicebox'"
+              >Voicebox</button>
             </div>
-            <div class="flex items-center gap-2 rounded-full border border-zinc-950/10 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm">
+            <div class="flex items-center gap-2 rounded-full border border-zinc-950/10 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 shadow-sm">
               <span class="h-2 w-2 rounded-full" :class="isGenerating ? 'bg-amber-500' : errorMsg ? 'bg-red-500' : 'bg-emerald-500'"></span>
               {{ statusText }}
             </div>
           </div>
         </header>
 
-        <!-- Edge server unavailable warning -->
+        <!-- Service unavailable warnings -->
         <div v-if="activeEngine === 'edge' && !edge.serverAvailable.value" class="mb-4 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-700">
           Edge TTS 本地服务未启动，请先运行 node server/index.js
+        </div>
+        <div v-if="activeEngine === 'voicebox' && !voicebox.serverAvailable.value" class="mb-4 rounded-lg border border-violet-200 bg-violet-50 px-4 py-3 text-sm font-semibold text-violet-700">
+          Voicebox 桌面端未启动，请先打开 Voicebox 应用
         </div>
 
         <section class="grid flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -320,8 +381,11 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
               <p v-else-if="activeEngine === 'volc'" class="text-sm text-zinc-500">
                 当前音色：{{ selectedVoiceInfo.name }} · {{ selectedVoiceInfo.language }} · {{ selectedVoiceInfo.model }}
               </p>
-              <p v-else class="text-sm text-zinc-500">
+              <p v-else-if="activeEngine === 'edge'" class="text-sm text-zinc-500">
                 当前音色：{{ selectedEdgeVoiceInfo.name }} · {{ selectedEdgeVoiceInfo.locale }} · {{ selectedEdgeVoiceInfo.gender }}
+              </p>
+              <p v-else class="text-sm text-zinc-500">
+                当前音色：{{ selectedVoiceboxProfileInfo?.name || '未选择' }}
               </p>
             </div>
           </div>
@@ -368,7 +432,6 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                     </div>
                     <input v-model.number="speechRate" type="range" min="0.5" max="2" step="0.1" class="w-full accent-zinc-950" />
                   </div>
-
                   <div>
                     <div class="mb-1 flex justify-between text-sm font-bold">
                       <label>音调</label>
@@ -376,7 +439,6 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                     </div>
                     <input v-model.number="pitch" type="range" min="-12" max="12" step="1" class="w-full accent-zinc-950" />
                   </div>
-
                   <div>
                     <div class="mb-1 flex justify-between text-sm font-bold">
                       <label>音量</label>
@@ -419,7 +481,6 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                   <input v-model="autoPlay" type="checkbox" class="h-4 w-4 accent-zinc-950" />
                   生成后播放
                 </label>
-
                 <section class="mt-3 rounded-md border border-zinc-950/10 bg-zinc-50 p-2">
                   <label class="text-xs font-bold text-zinc-700">文本语种</label>
                   <select
@@ -428,15 +489,13 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                   >
                     <option v-for="lang in availableLanguages" :key="lang.value" :value="lang.value">{{ lang.label }}</option>
                   </select>
-                  <p class="mt-1 text-xs font-medium leading-4 text-zinc-500">
-                    指定文本语种可提升合成质量；英语音色请选"英文"。
-                  </p>
+                  <p class="mt-1 text-xs font-medium leading-4 text-zinc-500">指定文本语种可提升合成质量；英语音色请选"英文"。</p>
                 </section>
               </section>
             </template>
 
             <!-- Edge engine controls -->
-            <template v-else>
+            <template v-else-if="activeEngine === 'edge'">
               <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
                 <label class="text-sm font-bold text-zinc-900">音色</label>
                 <select
@@ -464,7 +523,6 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                     </div>
                     <input v-model.number="edgeRate" type="range" min="-100" max="200" step="10" class="w-full accent-zinc-950" />
                   </div>
-
                   <div>
                     <div class="mb-1 flex justify-between text-sm font-bold">
                       <label>音调</label>
@@ -472,7 +530,6 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                     </div>
                     <input v-model.number="edgePitch" type="range" min="-50" max="50" step="5" class="w-full accent-zinc-950" />
                   </div>
-
                   <div>
                     <div class="mb-1 flex justify-between text-sm font-bold">
                       <label>音量</label>
@@ -486,7 +543,7 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
               <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
                 <label class="text-sm font-bold text-zinc-900">Edge TTS 说明</label>
                 <p class="mt-2 text-xs font-medium leading-5 text-zinc-500">
-                  本地引擎使用微软 Edge 浏览器的 Read Aloud 接口，免费、无需配置。需启动本地 Node 服务（端口 5174）。<span class="font-bold text-amber-700">注意：文本语言必须和声音语言一致，否则无法合成。</span>
+                  免费、无需配置，需启动 Node 服务（端口 5174）。<span class="font-bold text-amber-700">文本语言必须和声音语言一致。</span>
                 </p>
                 <div v-if="edgeLangMismatch" class="mt-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-700">
                   检测到{{ TEXT_LANG_LABEL[detectedLang] || detectedLang }}文本，请切换到对应声音
@@ -498,9 +555,63 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
               </section>
             </template>
 
+            <!-- Voicebox engine controls -->
+            <template v-else>
+              <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
+                <label class="text-sm font-bold text-zinc-900">音色</label>
+                <select
+                  v-model="selectedVoiceboxProfile"
+                  class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-500/15"
+                >
+                  <option value="" disabled>选择音色</option>
+                  <option v-for="p in voicebox.profiles.value" :key="p.id" :value="p.id">
+                    {{ p.name }} · {{ p.default_engine || p.preset_engine || '未知引擎' }}
+                  </option>
+                </select>
+                <p v-if="voicebox.profiles.value.length === 0 && voicebox.serverAvailable.value" class="mt-2 text-xs font-medium text-zinc-500">
+                  暂无音色，请在 Voicebox 桌面端中添加音色
+                </p>
+              </section>
+
+              <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
+                <label class="text-sm font-bold text-zinc-900">语言</label>
+                <select
+                  v-model="voiceboxLanguage"
+                  class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-500/15"
+                >
+                  <option value="">自动</option>
+                  <option value="zh">中文</option>
+                  <option value="en">英文</option>
+                  <option value="ja">日文</option>
+                  <option value="ko">韩文</option>
+                  <option value="fr">法语</option>
+                  <option value="de">德语</option>
+                  <option value="es">西班牙语</option>
+                </select>
+                <p class="mt-2 text-xs font-medium leading-5 text-zinc-500">
+                  可选指定语言，留空自动检测。七引擎各有语言覆盖差异。
+                </p>
+              </section>
+
+              <section class="rounded-lg border border-zinc-950/10 bg-white p-3 shadow-sm">
+                <label class="text-sm font-bold text-zinc-900">Voicebox 说明</label>
+                <p class="mt-2 text-xs font-medium leading-5 text-zinc-500">
+                  需先安装并打开 <a href="https://github.com/jamiepine/voicebox" target="_blank" class="font-bold text-violet-600 underline">Voicebox 桌面端</a>，它会自动在本地启动 API 服务（端口 17493）。支持 7 个引擎、23 种语言、声音克隆、情感标签，音质远优于 Edge TTS。
+                </p>
+                <label class="mt-3 flex cursor-pointer items-center gap-3 text-sm font-bold text-zinc-800">
+                  <input v-model="autoPlay" type="checkbox" class="h-4 w-4 accent-zinc-950" />
+                  生成后播放
+                </label>
+              </section>
+            </template>
+
             <button
               class="flex w-full items-center justify-center gap-3 rounded-lg px-5 py-3 text-base font-black text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-45"
-              :class="activeEngine === 'volc' ? 'bg-zinc-950 shadow-zinc-950/15 hover:bg-zinc-800' : 'bg-sky-600 shadow-sky-600/15 hover:bg-sky-500'"
+              :class="{
+                'bg-zinc-950 shadow-zinc-950/15 hover:bg-zinc-800': activeEngine === 'volc',
+                'bg-sky-600 shadow-sky-600/15 hover:bg-sky-500': activeEngine === 'edge',
+                'bg-violet-600 shadow-violet-600/15 hover:bg-violet-500': activeEngine === 'voicebox',
+              }"
               :disabled="!canGenerate"
               @click="handleGenerate"
             >
@@ -513,6 +624,7 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
         </section>
       </main>
 
+      <!-- History sidebar -->
       <aside class="flex min-h-screen flex-col bg-[#ece6dc] px-5 py-6 lg:px-6 lg:py-8">
         <div class="mb-5 flex items-center justify-between gap-4">
           <div>
@@ -526,11 +638,12 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
           >清空</button>
         </div>
 
+        <!-- Latest item card -->
         <section v-if="latestItem" class="mb-5 rounded-lg border border-zinc-950/10 bg-zinc-950 p-4 text-white shadow-sm">
           <div class="flex items-center justify-between gap-3">
             <div class="min-w-0">
               <div class="flex items-center gap-2">
-                <span class="rounded px-1.5 py-0.5 text-[10px] font-black" :class="latestItem.engine === 'volc' ? 'bg-amber-400 text-zinc-950' : 'bg-sky-400 text-zinc-950'">{{ engineLabel(latestItem.engine) }}</span>
+                <span class="rounded px-1.5 py-0.5 text-[10px] font-black" :class="engineBadgeClass(latestItem.engine, true)">{{ engineLabel(latestItem.engine) }}</span>
                 <input
                   class="truncate bg-transparent text-sm font-bold outline-none hover:bg-white/10 focus:bg-white/15 rounded px-1 -ml-1 max-w-[200px]"
                   :value="latestItem.name"
@@ -551,6 +664,7 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
           <p v-if="volc.lastUsage.value?.text_words" class="mt-4 text-xs font-semibold text-amber-200">计费字符：{{ volc.lastUsage.value.text_words }}</p>
         </section>
 
+        <!-- History list -->
         <div v-if="history.length" class="space-y-3 overflow-y-auto pr-1">
           <article
             v-for="item in history"
@@ -561,7 +675,7 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
-                  <span class="rounded px-1.5 py-0.5 text-[10px] font-black" :class="item.engine === 'volc' ? 'bg-amber-100 text-amber-700' : 'bg-sky-100 text-sky-700'">{{ engineLabel(item.engine) }}</span>
+                  <span class="rounded px-1.5 py-0.5 text-[10px] font-black" :class="engineBadgeClass(item.engine)">{{ engineLabel(item.engine) }}</span>
                   <input
                     class="truncate bg-transparent text-sm font-black text-zinc-900 outline-none hover:bg-zinc-100 focus:bg-zinc-100 rounded px-1 -ml-1 max-w-[180px]"
                     :value="item.name"
@@ -577,7 +691,11 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
             </div>
             <p class="mt-3 line-clamp-2 text-sm leading-6 text-zinc-600">{{ item.text }}</p>
             <div class="mt-4 flex flex-wrap items-center gap-2 text-xs font-bold text-zinc-500">
-              <template v-if="isEdgeControls(item.controls)">
+              <template v-if="isVoiceboxControls(item.controls)">
+                <span class="rounded bg-zinc-100 px-2 py-1">{{ (item.controls as VoiceboxControls).engine || 'Voicebox' }}</span>
+                <span v-if="(item.controls as VoiceboxControls).language" class="rounded bg-zinc-100 px-2 py-1">{{ (item.controls as VoiceboxControls).language }}</span>
+              </template>
+              <template v-else-if="isEdgeControls(item.controls)">
                 <span class="rounded bg-zinc-100 px-2 py-1">速率 {{ (item.controls as EdgeTTSControls).rate >= 0 ? '+' : '' }}{{ (item.controls as EdgeTTSControls).rate }}%</span>
                 <span class="rounded bg-zinc-100 px-2 py-1">音调 {{ (item.controls as EdgeTTSControls).pitch >= 0 ? '+' : '' }}{{ (item.controls as EdgeTTSControls).pitch }}Hz</span>
               </template>

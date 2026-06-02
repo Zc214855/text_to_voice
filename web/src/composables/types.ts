@@ -1,4 +1,4 @@
-export type TTSEngine = 'volc' | 'edge'
+export type TTSEngine = 'volc' | 'edge' | 'voicebox'
 
 export interface TTSConfig {
   apiKey?: string
@@ -26,6 +26,17 @@ export interface EdgeVoice {
   gender: string
 }
 
+export interface VoiceboxProfile {
+  id: string
+  name: string
+  engine?: string
+  language?: string
+  default_engine?: string
+  preset_engine?: string
+  preset_voice_id?: string
+  voice_type?: string
+}
+
 export interface TTSControls {
   speechRate: number
   pitch: number
@@ -39,6 +50,12 @@ export interface EdgeTTSControls {
   rate: number
   pitch: number
   volume: number
+}
+
+export interface VoiceboxControls {
+  profileId: string
+  language: string
+  engine: string
 }
 
 export interface VolcSynthesizeParams extends TTSControls {
@@ -56,7 +73,14 @@ export interface EdgeSynthesizeParams extends EdgeTTSControls {
   voiceName: string
 }
 
-export type SynthesizeParams = VolcSynthesizeParams | EdgeSynthesizeParams
+export interface VoiceboxSynthesizeParams extends VoiceboxControls {
+  engine: 'voicebox'
+  text: string
+  voice: string
+  voiceName: string
+}
+
+export type SynthesizeParams = VolcSynthesizeParams | EdgeSynthesizeParams | VoiceboxSynthesizeParams
 
 export interface HistoryItem {
   id: string
@@ -69,7 +93,7 @@ export interface HistoryItem {
   byteLength: number
   requestId: string
   createdAt: Date
-  controls: TTSControls | EdgeTTSControls
+  controls: TTSControls | EdgeTTSControls | VoiceboxControls
 }
 
 export interface UsageInfo {

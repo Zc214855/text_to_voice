@@ -44,6 +44,9 @@ export interface StoredItem {
     explicitLanguage?: string
     rate?: number
     volume?: number
+    profileId?: string
+    language?: string
+    engine?: string
   }
 }
 

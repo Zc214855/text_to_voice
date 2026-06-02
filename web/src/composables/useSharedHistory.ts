@@ -1,6 +1,6 @@
 import { readonly, ref } from 'vue'
 import { clear as dbClear, loadAll, remove as dbRemove, save, updateName as dbUpdateName, type StoredItem } from '../utils/db'
-import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls } from './types'
+import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls, VoiceboxControls } from './types'
 
 const history = ref<HistoryItem[]>([])
 const isPlaying = ref(false)
@@ -31,7 +31,7 @@ export function useSharedHistory() {
         byteLength: s.byteLength,
         requestId: s.requestId,
         createdAt: new Date(s.createdAt),
-        controls: s.controls as TTSControls | EdgeTTSControls,
+        controls: s.controls as TTSControls | EdgeTTSControls | VoiceboxControls,
       }))
       items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       history.value = items
