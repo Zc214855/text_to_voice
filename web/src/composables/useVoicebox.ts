@@ -21,7 +21,7 @@ export function useVoicebox() {
         const data = await res.json()
         profiles.value = Array.isArray(data) ? data : []
       } else {
-        const health = await fetch(`${VOICEBOX_API}/docs`)
+        const health = await fetch(`${VOICEBOX_API}/health`)
         serverAvailable.value = health.ok
         profiles.value = []
       }
@@ -29,6 +29,39 @@ export function useVoicebox() {
       serverAvailable.value = false
       profiles.value = []
     }
+  }
+
+  function waitForCompletion(generationId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Voicebox 生成超时'))
+      }, 120_000)
+
+      const evtSource = new EventSource(`${VOICEBOX_API}/generate/${generationId}/status`)
+
+      evtSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          if (data.status === 'completed') {
+            clearTimeout(timeout)
+            evtSource.close()
+            resolve()
+          } else if (data.status === 'failed') {
+            clearTimeout(timeout)
+            evtSource.close()
+            reject(new Error(data.error || 'Voicebox 生成失败'))
+          }
+        } catch {
+          // ignore parse errors on SSE keepalive lines
+        }
+      }
+
+      evtSource.onerror = () => {
+        clearTimeout(timeout)
+        evtSource.close()
+        reject(new Error('Voicebox SSE 连接断开'))
+      }
+    })
   }
 
   async function synthesize(params: { text: string; voice: string; voiceName: string; profileId: string; language: string }) {
@@ -41,10 +74,9 @@ export function useVoicebox() {
 
     isGenerating.value = true
     errorMsg.value = ''
-    statusText.value = '请求 Voicebox'
+    statusText.value = '提交生成任务'
 
     try {
-      // Find the profile to get its default engine
       const profile = profiles.value.find(p => p.id === params.profileId)
       const engine = profile?.default_engine || profile?.preset_engine || null
 
@@ -57,19 +89,38 @@ export function useVoicebox() {
         body.engine = engine
       }
 
-      const response = await fetch(`${VOICEBOX_API}/generate`, {
+      // Step 1: Submit generation task
+      const submitRes = await fetch(`${VOICEBOX_API}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
-        throw new Error(err.error || err.detail || `HTTP ${response.status}`)
+      if (!submitRes.ok) {
+        const err = await submitRes.json().catch(() => ({ error: `HTTP ${submitRes.status}` }))
+        throw new Error(err.error || err.detail || `HTTP ${submitRes.status}`)
       }
 
-      statusText.value = '接收音频'
-      const blob = await response.blob()
+      const submitData = await submitRes.json() as { id: string; status: string }
+      const generationId = submitData.id
+
+      if (!generationId) {
+        throw new Error('Voicebox 未返回任务 ID')
+      }
+
+      // Step 2: Wait for completion
+      statusText.value = 'Voicebox 生成中'
+      await waitForCompletion(generationId)
+
+      // Step 3: Download audio
+      statusText.value = '下载音频'
+      const audioRes = await fetch(`${VOICEBOX_API}/audio/${generationId}`)
+
+      if (!audioRes.ok) {
+        throw new Error(`获取音频失败: HTTP ${audioRes.status}`)
+      }
+
+      const blob = await audioRes.blob()
 
       if (!blob.size) {
         throw new Error('Voicebox 未返回音频数据')
