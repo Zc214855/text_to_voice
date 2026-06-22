@@ -23,6 +23,7 @@ function normalizeLine(line: string) {
   return line
     .replace(/\u3000/g, ' ')
     .replace(/[ \t]+/g, ' ')
+    .trim()
     .replace(LIST_MARKER, '')
     .trim()
 }
