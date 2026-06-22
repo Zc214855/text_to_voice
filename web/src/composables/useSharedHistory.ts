@@ -1,6 +1,6 @@
 import { readonly, ref } from 'vue'
 import { clear as dbClear, loadAll, remove as dbRemove, save, updateName as dbUpdateName, type StoredItem } from '../utils/db'
-import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls, VoiceboxControls } from './types'
+import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls } from './types'
 
 const history = ref<HistoryItem[]>([])
 const isPlaying = ref(false)
@@ -20,19 +20,27 @@ export function useSharedHistory() {
     loaded = true
     try {
       const stored = await loadAll()
-      const items: HistoryItem[] = stored.map((s) => ({
-        id: s.id,
-        engine: (s.engine as TTSEngine) || 'volc',
-        name: s.name || defaultItemName(s.text),
-        text: s.text,
-        voice: s.voice,
-        voiceName: s.voiceName,
-        audioUrl: URL.createObjectURL(s.audioBlob),
-        byteLength: s.byteLength,
-        requestId: s.requestId,
-        createdAt: new Date(s.createdAt),
-        controls: s.controls as TTSControls | EdgeTTSControls | VoiceboxControls,
-      }))
+      const items: HistoryItem[] = stored
+        .filter((s) => {
+          if (s.engine === 'voicebox') {
+            dbRemove(s.id).catch(() => undefined)
+            return false
+          }
+          return true
+        })
+        .map((s) => ({
+          id: s.id,
+          engine: (s.engine as TTSEngine) || 'volc',
+          name: s.name || defaultItemName(s.text),
+          text: s.text,
+          voice: s.voice,
+          voiceName: s.voiceName,
+          audioUrl: URL.createObjectURL(s.audioBlob),
+          byteLength: s.byteLength,
+          requestId: s.requestId,
+          createdAt: new Date(s.createdAt),
+          controls: s.controls as TTSControls | EdgeTTSControls,
+        }))
       items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       history.value = items
     } catch { /* IndexedDB unavailable */ }
