@@ -7,6 +7,18 @@ export interface TTSConfig {
   resourceId?: string
   resourceIds?: string[]
   endpoint?: string
+  /** 用户自复刻的音色列表（声音复刻 2.0） */
+  cloneVoices?: CloneVoice[]
+}
+
+/** 用户自复刻的音色（对应火山引擎声音复刻 2.0 / seed-icl-2.0） */
+export interface CloneVoice {
+  /** 控制台训练后得到的音色 ID，例如 S_xxxxxxxxxxxxxxxx */
+  id: string
+  /** 音色显示名称，例如「我的声音」 */
+  name: string
+  /** 备注说明，例如录制人、适用场景（可选） */
+  description?: string
 }
 
 export interface PopularVoice {

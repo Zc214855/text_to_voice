@@ -4,7 +4,7 @@ import { EMOTION_LABELS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
 import { defaultItemName, useSharedHistory } from '../composables/useSharedHistory'
 import { useEdgeTTS } from '../composables/useEdgeTTS'
 import { cleanupTtsText, countTextUnits, normalizeLineBreaks } from '../utils/textCleanup'
-import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls } from '../composables/types'
+import type { EdgeTTSControls, HistoryItem, PopularVoice, TTSEngine, TTSControls } from '../composables/types'
 
 function detectTextLang(text: string): string {
   const sample = text.replace(/[\s\d\p{P}]/gu, '').slice(0, 200)
@@ -37,7 +37,7 @@ const cleanupStatus = ref('')
 const configError = ref('')
 
 // Volc controls
-const selectedVoice = ref(volc.volcVoices[0].id)
+const selectedVoice = ref(volc.volcVoices.value[0].id)
 const speechRate = ref(1)
 const pitch = ref(0)
 const loudness = ref(1)
@@ -53,10 +53,10 @@ const edgePitch = ref(0)
 const edgeVolume = ref(0)
 
 const resourceVoices = computed(() => {
-  if (!selectedResourceId.value) return volc.volcVoices
-  return volc.volcVoices.filter((voice) => voice.resourceIds.includes(selectedResourceId.value))
+  if (!selectedResourceId.value) return volc.volcVoices.value
+  return volc.volcVoices.value.filter((voice) => voice.resourceIds.includes(selectedResourceId.value))
 })
-const selectedVoiceInfo = computed(() => resourceVoices.value.find((voice) => voice.id === selectedVoice.value) || resourceVoices.value[0] || volc.volcVoices[0])
+const selectedVoiceInfo = computed(() => resourceVoices.value.find((voice) => voice.id === selectedVoice.value) || resourceVoices.value[0] || volc.volcVoices.value[0])
 const selectedEdgeVoiceInfo = computed(() => edge.edgeVoices.find((v) => v.id === selectedEdgeVoice.value) || edge.edgeVoices[0])
 
 const normalizedText = computed(() => normalizeLineBreaks(text.value))
@@ -92,7 +92,7 @@ const availableLanguages = computed(() => {
 })
 
 const groupedVoices = computed(() => {
-  return resourceVoices.value.reduce<Record<string, typeof volc.volcVoices>>((groups, voice) => {
+  return resourceVoices.value.reduce<Record<string, PopularVoice[]>>((groups, voice) => {
     groups[voice.scene] ||= []
     groups[voice.scene].push(voice)
     return groups
@@ -613,5 +613,180 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
         </div>
       </aside>
     </div>
+
+    <!-- API Guide Section -->
+    <footer class="mx-auto w-full max-w-7xl border-t border-zinc-950/10 bg-[#fbfaf7] px-5 py-10 lg:px-10">
+      <h2 class="mb-6 text-2xl font-black text-zinc-950">服务说明与使用指南</h2>
+      <div class="grid gap-6 lg:grid-cols-2">
+
+        <!-- 火山引擎 -->
+        <section class="rounded-xl border border-amber-200 bg-white p-6 shadow-sm">
+          <div class="mb-4 flex items-center gap-3">
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-lg">☁️</span>
+            <div>
+              <h3 class="text-lg font-black text-zinc-950">火山引擎 · 语音合成大模型</h3>
+              <p class="text-xs font-semibold text-amber-600">付费 · 高品质 · 云端 API</p>
+            </div>
+          </div>
+
+          <div class="mb-4 space-y-2 text-sm leading-6 text-zinc-700">
+            <p>字节跳动旗下开放语音平台，提供业界领先的语音合成大模型，音质自然、表现力强，支持情感控制与声音复刻。</p>
+          </div>
+
+          <div class="mb-4 overflow-x-auto">
+            <table class="w-full text-xs font-semibold">
+              <thead>
+                <tr class="border-b border-zinc-200 text-left text-zinc-500">
+                  <th class="pb-2 pr-3">资源 ID</th>
+                  <th class="pb-2 pr-3">说明</th>
+                  <th class="pb-2 pr-3">音色数</th>
+                  <th class="pb-2">特点</th>
+                </tr>
+              </thead>
+              <tbody class="text-zinc-800">
+                <tr class="border-b border-zinc-100">
+                  <td class="py-2 pr-3"><code class="rounded bg-amber-50 px-1.5 py-0.5 text-amber-800">seed-tts-2.0</code></td>
+                  <td class="py-2 pr-3">语音合成 2.0</td>
+                  <td class="py-2 pr-3">16</td>
+                  <td class="py-2">含精品克隆音色，最新模型，推荐首选</td>
+                </tr>
+                <tr class="border-b border-zinc-100">
+                  <td class="py-2 pr-3"><code class="rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-700">seed-tts-1.0</code></td>
+                  <td class="py-2 pr-3">语音合成 1.0</td>
+                  <td class="py-2 pr-3">18</td>
+                  <td class="py-2">经典模型，音色最多，可多音色选择</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3"><code class="rounded bg-violet-50 px-1.5 py-0.5 text-violet-700">seed-icl-2.0</code></td>
+                  <td class="py-2 pr-3">声音复刻 2.0</td>
+                  <td class="py-2 pr-3">—</td>
+                  <td class="py-2">克隆自己的声音，需单独开通并训练音色</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mb-4 rounded-lg bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-800">
+            <p class="mb-1">💰 <strong>计费方式</strong>：按合成字符数计费，前端单次上限 5000 字。</p>
+            <p>💡 新用户通常有免费体验额度，具体价格请以<a href="https://www.volcengine.com/docs/6561/1263507" target="_blank" class="underline">火山引擎官方计费文档</a>为准。</p>
+          </div>
+
+          <div>
+            <h4 class="mb-2 text-sm font-black text-zinc-900">🚀 如何开通</h4>
+            <ol class="list-inside list-decimal space-y-1.5 text-xs font-medium leading-5 text-zinc-700">
+              <li>访问 <a href="https://console.volcengine.com/speech/service" target="_blank" class="font-bold text-amber-700 underline">火山引擎语音服务控制台</a>，注册并登录。</li>
+              <li>在「服务管理」中开通所需的资源（推荐先开通 <code class="rounded bg-amber-50 px-1">seed-tts-2.0</code>）。</li>
+              <li>进入「API Key 管理」，创建一个 API Key 并复制。</li>
+              <li>打开本项目的 <code class="rounded bg-zinc-100 px-1">web/public/config.json</code>，填入你的 API Key 和 Resource ID。</li>
+              <li>重启前端开发服务器，即可使用。</li>
+            </ol>
+          </div>
+
+          <div class="mt-4">
+            <h4 class="mb-2 text-sm font-black text-zinc-900">🎙️ 音色使用说明</h4>
+            <ul class="list-inside list-disc space-y-1.5 text-xs font-medium leading-5 text-zinc-700">
+              <li><strong>官方音色</strong>：内置 20 个 2.0 音色 + 18 个 1.0 多情感音色，下拉框按场景分组，直接选择即可。</li>
+              <li><strong>音色与资源对应</strong>：2.0 音色用 <code class="rounded bg-amber-50 px-1">seed-tts-2.0</code>，1.0 音色用 <code class="rounded bg-zinc-100 px-1">seed-tts-1.0</code>。切换「服务资源」后下拉只显示该资源可用的音色。</li>
+              <li><strong>声音复刻（克隆自己的声音）</strong>：先在控制台「声音复刻」训练音色拿到 ID（形如 <code class="rounded bg-zinc-100 px-1">S_xxxx</code>），再填入 <code class="rounded bg-zinc-100 px-1">config.json</code> 的 <code class="rounded bg-zinc-100 px-1">cloneVoices</code> 数组，刷新页面后在「声音复刻」分组中选择。配置示例：</li>
+            </ul>
+            <pre class="mt-2 overflow-x-auto rounded-md bg-zinc-900 p-3 text-[11px] leading-5 text-zinc-100"><code>"cloneVoices": [
+  { "id": "S_xxxxxxxxxxxxxxxx", "name": "我的声音", "description": "本人录制" },
+  { "id": "S_yyyyyyyyyyyyyyyy", "name": "妈妈的声音", "description": "" }
+]</code></pre>
+            <p class="mt-2 text-[11px] font-medium leading-5 text-zinc-500">💡 复刻音色必须把「服务资源」切到 <code class="rounded bg-violet-50 px-1">seed-icl-2.0</code> 才能调用；填几个音色，列表里就显示几个。</p>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <a href="https://www.volcengine.com/docs/6561/1257544" target="_blank" class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800 transition hover:bg-amber-200">📖 音色列表文档</a>
+            <a href="https://www.volcengine.com/docs/6561/1598757" target="_blank" class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800 transition hover:bg-amber-200">📖 V3 接口文档</a>
+          </div>
+        </section>
+
+        <!-- Edge TTS -->
+        <section class="rounded-xl border border-sky-200 bg-white p-6 shadow-sm">
+          <div class="mb-4 flex items-center gap-3">
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-sky-100 text-lg">🎧</span>
+            <div>
+              <h3 class="text-lg font-black text-zinc-950">Microsoft Edge · 大声朗读</h3>
+              <p class="text-xs font-semibold text-sky-600">免费 · 无需配置 · 本地代理</p>
+            </div>
+          </div>
+
+          <div class="mb-4 space-y-2 text-sm leading-6 text-zinc-700">
+            <p>利用 Edge 浏览器内置的「大声朗读」功能，通过 WebSocket 协议调用微软 Bing 语音合成服务，生成 Neural 高品质语音。</p>
+          </div>
+
+          <div class="mb-4 overflow-x-auto">
+            <table class="w-full text-xs font-semibold">
+              <thead>
+                <tr class="border-b border-zinc-200 text-left text-zinc-500">
+                  <th class="pb-2 pr-3">特性</th>
+                  <th class="pb-2">详情</th>
+                </tr>
+              </thead>
+              <tbody class="text-zinc-800">
+                <tr class="border-b border-zinc-100">
+                  <td class="py-2 pr-3">支持语言</td>
+                  <td class="py-2">中文（普通话/粤语/台湾）、英语、日语、韩语、法语等</td>
+                </tr>
+                <tr class="border-b border-zinc-100">
+                  <td class="py-2 pr-3">语音品质</td>
+                  <td class="py-2">Neural 神经网络语音，自然流畅</td>
+                </tr>
+                <tr class="border-b border-zinc-100">
+                  <td class="py-2 pr-3">参数调节</td>
+                  <td class="py-2">语速（±200%）、音调（±50Hz）、音量（±50%）</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3">限制</td>
+                  <td class="py-2">⚠️ 文本语言必须和所选声音语言一致，否则合成效果差</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mb-4 rounded-lg bg-sky-50 px-4 py-3 text-xs font-semibold leading-5 text-sky-800">
+            <p>💰 <strong>完全免费</strong>，无需注册账号、无需 API Key，无字符数限制。</p>
+            <p class="mt-1">⚠️ 属于非官方接口，大量调用可能被限制频率，请合理使用。</p>
+          </div>
+
+          <div>
+            <h4 class="mb-2 text-sm font-black text-zinc-900">🚀 如何使用</h4>
+            <ol class="list-inside list-decimal space-y-1.5 text-xs font-medium leading-5 text-zinc-700">
+              <li>确保已安装 Node.js。</li>
+              <li>双击项目根目录的 <code class="rounded bg-zinc-100 px-1">start.bat</code>，它会自动启动 Edge TTS 服务器和前端。</li>
+              <li>或手动启动：在 <code class="rounded bg-zinc-100 px-1">web/</code> 目录下运行 <code class="rounded bg-zinc-100 px-1">node server/index.js</code>，再运行 <code class="rounded bg-zinc-100 px-1">npm run dev</code>。</li>
+              <li>在页面中切换到「本地」引擎，选择声音即可使用。</li>
+            </ol>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <a href="https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/list?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4" target="_blank" class="inline-flex items-center gap-1 rounded-md bg-sky-100 px-2.5 py-1 text-xs font-bold text-sky-800 transition hover:bg-sky-200">📖 完整语音列表</a>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 选择建议 -->
+      <div class="mt-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <h3 class="mb-3 text-base font-black text-zinc-950">📌 如何选择？</h3>
+        <div class="grid gap-4 text-xs font-medium leading-6 text-zinc-700 sm:grid-cols-3">
+          <div class="rounded-lg bg-amber-50 px-4 py-3">
+            <p class="mb-1 text-sm font-black text-amber-800">追求最高音质</p>
+            <p>选择「云端」→ <code>seed-tts-2.0</code>，含精品克隆音色，音质自然且支持情感控制。</p>
+          </div>
+          <div class="rounded-lg bg-sky-50 px-4 py-3">
+            <p class="mb-1 text-sm font-black text-sky-800">免费快速使用</p>
+            <p>选择「本地」→ Edge TTS，零配置、零成本，中文 Neural 语音效果也不错。</p>
+          </div>
+          <div class="rounded-lg bg-violet-50 px-4 py-3">
+            <p class="mb-1 text-sm font-black text-violet-800">声音复刻需求</p>
+            <p>在火山引擎控制台上传音频样本完成声音复刻，使用 <code>seed-icl-2.0</code> 资源调用。</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-6 text-center text-xs font-semibold text-zinc-400">FairyVoice 纯净配音舱 · 让每一段文字都有温度</p>
+    </footer>
   </div>
 </template>

@@ -1,8 +1,8 @@
-import { readonly, ref } from 'vue'
+import { computed, readonly, ref } from 'vue'
 import voices from '../data/voices.json'
 import { countTextUnits } from '../utils/textCleanup'
 import { defaultItemName, useSharedHistory } from './useSharedHistory'
-import type { HistoryItem, PopularVoice, TTSConfig, UsageInfo, VolcSynthesizeParams } from './types'
+import type { CloneVoice, HistoryItem, PopularVoice, TTSConfig, UsageInfo, VolcSynthesizeParams } from './types'
 
 export const MAX_TEXT_LENGTH = 5000
 
@@ -26,6 +26,8 @@ export const EMOTION_LABELS: Record<string, string> = {
 export const VOLC_VOICES = voices as PopularVoice[]
 
 const DEFAULT_ENDPOINT = '/volc-api/api/v3/tts/unidirectional'
+/** 声音复刻 2.0 的资源 ID */
+export const CLONE_RESOURCE_ID = 'seed-icl-2.0'
 
 const errorMsg = ref('')
 const statusText = ref('就绪')
@@ -33,6 +35,22 @@ const isGenerating = ref(false)
 const currentResourceId = ref('')
 const availableResourceIds = ref<string[]>([])
 const lastUsage = ref<UsageInfo | null>(null)
+/** 用户自复刻的音色（从 config.json 读取） */
+const cloneVoices = ref<CloneVoice[]>([])
+
+/** 把复刻音色合并进官方音色列表，统一供 UI 使用 */
+const allVoices = computed<PopularVoice[]>(() => {
+  const cloned: PopularVoice[] = cloneVoices.value.map((item) => ({
+    id: item.id,
+    name: item.name,
+    scene: '声音复刻 / 我的音色',
+    language: '中文',
+    model: '声音复刻2.0',
+    resourceIds: [CLONE_RESOURCE_ID],
+    emotions: [],
+  }))
+  return [...VOLC_VOICES, ...cloned]
+})
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
@@ -242,6 +260,7 @@ export function useTTS() {
     const config = await loadConfig()
     currentResourceId.value = config.resourceId || ''
     availableResourceIds.value = config.resourceIds || []
+    cloneVoices.value = config.cloneVoices || []
     return config
   }
 
@@ -271,7 +290,7 @@ export function useTTS() {
       const config = await refreshConfig()
       config.resourceId = params.resourceId || config.resourceId
       currentResourceId.value = config.resourceId || ''
-      const voice = VOLC_VOICES.find((item) => item.id === params.voice)
+      const voice = allVoices.value.find((item) => item.id === params.voice)
       if (voice && !voice.resourceIds.includes(config.resourceId || '')) {
         throw new Error(`当前配置 ${config.resourceId} 不能调用音色 ${voice.name}，请切换到 ${voice.resourceIds.join(' / ')} 对应服务，或选择当前资源支持的音色`)
       }
@@ -341,7 +360,8 @@ export function useTTS() {
   }
 
   return {
-    volcVoices: VOLC_VOICES,
+    volcVoices: allVoices,
+    cloneVoices,
     history: shared.history,
     errorMsg: readonly(errorMsg),
     statusText: readonly(statusText),

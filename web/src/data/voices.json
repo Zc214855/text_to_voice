@@ -176,6 +176,50 @@
     "emotions": []
   },
   {
+    "id": "zh_female_wenroushunv_uranus_bigtts",
+    "name": "温柔淑女 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_gufengshaoyu_uranus_bigtts",
+    "name": "古风少御 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_kailangjiaxi_uranus_bigtts",
+    "name": "开朗佳欣 2.0",
+    "scene": "语音合成2.0 / 通用场景",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_zhubo_bigtts",
+    "name": "电台主播",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
     "id": "zh_male_lengkugege_emo_v2_mars_bigtts",
     "name": "冷酷哥哥（多情感）",
     "scene": "语音合成1.0 / 多情感",

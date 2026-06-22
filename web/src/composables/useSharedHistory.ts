@@ -22,7 +22,7 @@ export function useSharedHistory() {
       const stored = await loadAll()
       const items: HistoryItem[] = stored
         .filter((s) => {
-          if (s.engine === 'voicebox') {
+          if (s.engine !== 'volc' && s.engine !== 'edge') {
             dbRemove(s.id).catch(() => undefined)
             return false
           }
