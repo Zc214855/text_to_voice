@@ -1,6 +1,6 @@
 import { readonly, ref } from 'vue'
 import { clear as dbClear, loadAll, remove as dbRemove, save, updateName as dbUpdateName, type StoredItem } from '../utils/db'
-import type { EdgeTTSControls, HistoryItem, TTSEngine, TTSControls } from './types'
+import type { EdgeTTSControls, HistoryItem, TTSControls } from './types'
 
 const history = ref<HistoryItem[]>([])
 const isPlaying = ref(false)
@@ -30,7 +30,7 @@ export function useSharedHistory() {
         })
         .map((s) => ({
           id: s.id,
-          engine: (s.engine as TTSEngine) || 'volc',
+          engine: s.engine,
           name: s.name || defaultItemName(s.text),
           text: s.text,
           voice: s.voice,

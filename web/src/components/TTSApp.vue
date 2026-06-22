@@ -37,7 +37,7 @@ const cleanupStatus = ref('')
 const configError = ref('')
 
 // Volc controls
-const selectedVoice = ref(volc.volcVoices.value[0].id)
+const selectedVoice = ref(volc.volcVoices.value[0]?.id ?? '')
 const speechRate = ref(1)
 const pitch = ref(0)
 const loudness = ref(1)
@@ -47,7 +47,7 @@ const explicitLanguage = ref('')
 const selectedResourceId = ref('')
 
 // Edge controls
-const selectedEdgeVoice = ref(edge.edgeVoices[0].id)
+const selectedEdgeVoice = ref(edge.edgeVoices[0]?.id ?? '')
 const edgeRate = ref(0)
 const edgePitch = ref(0)
 const edgeVolume = ref(0)

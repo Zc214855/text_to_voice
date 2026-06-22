@@ -7,16 +7,10 @@ const STORE_NAME = 'history'
 function open(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION)
-    req.onupgradeneeded = (event) => {
+    req.onupgradeneeded = () => {
       const db = req.result
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-      }
-      if (event.oldVersion < 2) {
-        const store = (event.target as IDBOpenDBRequest).transaction!.objectStore(STORE_NAME)
-        if (!store.indexNames.contains('engine')) {
-          store.createIndex('engine', 'engine', { unique: false })
-        }
       }
     }
     req.onsuccess = () => resolve(req.result)

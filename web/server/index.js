@@ -1,11 +1,7 @@
 import { WebSocket } from 'ws'
 import express from 'express'
 import crypto from 'crypto'
-import { readFileSync, existsSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 const PORT = 5174
 const HOST = '127.0.0.1'
@@ -17,7 +13,6 @@ const SEC_MS_GEC_VERSION = '1-143.0.3650.75'
 const WIN_EPOCH = 11644473600
 const TICKS_PER_SECOND = 10_000_000
 const WSS_URL = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=${TRUSTED_CLIENT_TOKEN}`
-const VOICES_CACHE = join(__dirname, '..', 'src', 'data', 'edge-voices.json')
 
 function generateSecMsGec() {
   let ticks = Math.floor(Date.now() / 1000) + WIN_EPOCH
@@ -46,7 +41,7 @@ function buildSSML(text, voice, rate, pitch, volume) {
   const pitchStr = formatPitch(pitch)
   const volStr = formatRate(volume)
   const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  const lang = voice.startsWith('zh-HK') ? 'zh-HK' : voice.startsWith('zh-TW') ? 'zh-TW' : voice.startsWith('zh-CN') || voice.startsWith('zh-CN-liaoning') || voice.startsWith('zh-CN-shaanxi') ? 'zh-CN' : voice.split('-').slice(0, 2).join('-')
+  const lang = voice.startsWith('zh-HK') ? 'zh-HK' : voice.startsWith('zh-TW') ? 'zh-TW' : voice.startsWith('zh-CN') ? 'zh-CN' : voice.split('-').slice(0, 2).join('-')
   return `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${lang}'>` +
     `<voice name='${voice}'><prosody pitch='${pitchStr}' rate='${rateStr}' volume='${volStr}'>${escaped}</prosody></voice></speak>`
 }
@@ -181,18 +176,6 @@ app.post('/api/edge-tts/synthesize', async (req, res) => {
   } catch (err) {
     console.error('[Edge TTS Error]', err.message)
     res.status(500).json({ error: err.message })
-  }
-})
-
-app.get('/api/edge-tts/voices', (_req, res) => {
-  try {
-    if (existsSync(VOICES_CACHE)) {
-      const data = JSON.parse(readFileSync(VOICES_CACHE, 'utf8'))
-      return res.json(data)
-    }
-    return res.json([])
-  } catch {
-    return res.json([])
   }
 })
 
