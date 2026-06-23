@@ -1,12 +1,19 @@
 import { WebSocket } from 'ws'
 import express from 'express'
 import crypto from 'crypto'
+import { promises as fsp } from 'fs'
+import { existsSync } from 'fs'
+import { join, extname, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { spawn } from 'child_process'
 
 const app = express()
 const PORT = 5174
 const HOST = '127.0.0.1'
 
-app.use(express.json({ limit: '1mb' }))
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+app.use(express.json({ limit: '60mb' }))
 
 const TRUSTED_CLIENT_TOKEN = '6A5AA1D4EAFF4E9FB37E23D68491D6F4'
 const SEC_MS_GEC_VERSION = '1-143.0.3650.75'
@@ -181,6 +188,227 @@ app.post('/api/edge-tts/synthesize', async (req, res) => {
 
 app.get('/api/edge-tts/health', (_req, res) => {
   res.json({ status: 'ok' })
+})
+
+// ============ 作品库（output 目录文件系统存储）============
+
+// output 目录：server/ 的上两级（项目根目录）
+const OUTPUT_DIR = join(__dirname, '..', '..', 'output')
+const INDEX_FILE = join(OUTPUT_DIR, 'index.json')
+
+// 串行化 index.json 写入，避免并发覆盖
+let indexWriteChain = Promise.resolve()
+function withIndexLock(fn) {
+  const run = indexWriteChain.then(fn, fn)
+  indexWriteChain = run.catch(() => undefined)
+  return run
+}
+
+/** 读取 index.json，返回 items 数组（不存在则返回空数组） */
+async function readIndex() {
+  try {
+    const raw = await fsp.readFile(INDEX_FILE, 'utf8')
+    const data = JSON.parse(raw)
+    return Array.isArray(data.items) ? data.items : []
+  } catch {
+    return []
+  }
+}
+
+/** 写入 index.json（会先把 items 持久化） */
+async function writeIndex(items) {
+  await fsp.mkdir(OUTPUT_DIR, { recursive: true })
+  await fsp.writeFile(INDEX_FILE, JSON.stringify({ items }, null, 2), 'utf8')
+}
+
+/** 清理文件名：去掉 Windows 不允许的字符，截断长度 */
+function sanitizeName(name) {
+  return String(name || '')
+    .replace(/[\\/:*?"<>|\r\n\t]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 30) || 'untitled'
+}
+
+/** 生成不冲突的文件名：已存在则加 (1)(2)... */
+async function resolveUniqueFileName(baseName, ext) {
+  let candidate = `${baseName}${ext}`
+  let i = 1
+  while (existsSync(join(OUTPUT_DIR, candidate))) {
+    candidate = `${baseName}(${i})${ext}`
+    i++
+  }
+  return candidate
+}
+
+// 列表
+app.get('/api/library', async (_req, res) => {
+  try {
+    const items = await readIndex()
+    res.json({ items })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 新建：接收 base64 音频 + 元数据，写 mp3 和 index.json
+app.post('/api/library', async (req, res) => {
+  try {
+    const { name, text, engine, voice, voiceName, controls, duration, byteLength, createdAt, audioBase64 } = req.body
+    if (!audioBase64) return res.status(400).json({ error: '缺少 audioBase64' })
+
+    await withIndexLock(async () => {
+      await fsp.mkdir(OUTPUT_DIR, { recursive: true })
+      const items = await readIndex()
+      const base = `${sanitizeName(name)}_${sanitizeName(voiceName || 'voice')}`
+      const fileName = await resolveUniqueFileName(base, '.mp3')
+      const buf = Buffer.from(audioBase64, 'base64')
+      await fsp.writeFile(join(OUTPUT_DIR, fileName), buf)
+
+      const item = {
+        id: crypto.randomUUID(),
+        fileName,
+        name: name || 'untitled',
+        text: text || '',
+        engine: engine || 'volc',
+        voice: voice || '',
+        voiceName: voiceName || '',
+        byteLength: byteLength || buf.length,
+        duration: duration || 0,
+        controls: controls || {},
+        createdAt: createdAt || new Date().toISOString(),
+      }
+      items.unshift(item)
+      await writeIndex(items)
+      res.json(item)
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 重命名：改 index.json 的 name，同时重命名文件
+app.patch('/api/library/:id/rename', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { name } = req.body
+    if (!name) return res.status(400).json({ error: '缺少 name' })
+
+    await withIndexLock(async () => {
+      const items = await readIndex()
+      const idx = items.findIndex((it) => it.id === id)
+      if (idx === -1) return res.status(404).json({ error: '记录不存在' })
+
+      const item = items[idx]
+      const oldPath = join(OUTPUT_DIR, item.fileName)
+      const base = `${sanitizeName(name)}_${sanitizeName(item.voiceName || 'voice')}`
+      const newFileName = await resolveUniqueFileName(base, '.mp3')
+
+      if (existsSync(oldPath)) {
+        await fsp.rename(oldPath, join(OUTPUT_DIR, newFileName))
+      }
+      item.name = name
+      item.fileName = newFileName
+      items[idx] = item
+      await writeIndex(items)
+      res.json(item)
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 删除单条：删 mp3 + 从 index 移除
+app.delete('/api/library/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    await withIndexLock(async () => {
+      const items = await readIndex()
+      const idx = items.findIndex((it) => it.id === id)
+      if (idx === -1) return res.status(404).json({ error: '记录不存在' })
+      const item = items[idx]
+      const filePath = join(OUTPUT_DIR, item.fileName)
+      if (existsSync(filePath)) {
+        await fsp.unlink(filePath).catch(() => undefined)
+      }
+      items.splice(idx, 1)
+      await writeIndex(items)
+      res.json({ ok: true })
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 清空：删所有 mp3 + 清空 items
+app.delete('/api/library', async (_req, res) => {
+  try {
+    await withIndexLock(async () => {
+      const items = await readIndex()
+      for (const item of items) {
+        const filePath = join(OUTPUT_DIR, item.fileName)
+        if (existsSync(filePath)) {
+          await fsp.unlink(filePath).catch(() => undefined)
+        }
+      }
+      await writeIndex([])
+      res.json({ ok: true })
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 在 Windows 资源管理器中定位文件
+app.post('/api/library/:id/locate', async (req, res) => {
+  try {
+    const { id } = req.params
+    const items = await readIndex()
+    const item = items.find((it) => it.id === id)
+    if (!item) return res.status(404).json({ error: '记录不存在' })
+    const filePath = join(OUTPUT_DIR, item.fileName)
+    if (!existsSync(filePath)) return res.status(404).json({ error: '文件不存在' })
+
+    if (process.platform === 'win32') {
+      spawn('explorer.exe', ['/select,', filePath], { detached: true, stdio: 'ignore' }).unref()
+      return res.json({ ok: true })
+    }
+    res.status(400).json({ error: '当前系统不支持定位功能' })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// 音频流：前端 <audio> 播放用，支持 Range
+app.get('/api/library/audio/:fileName', async (req, res) => {
+  try {
+    const filePath = join(OUTPUT_DIR, req.params.fileName)
+    if (!existsSync(filePath)) return res.status(404).json({ error: '文件不存在' })
+    // 防止路径穿越
+    if (extname(filePath).toLowerCase() !== '.mp3') return res.status(400).json({ error: '非法文件' })
+
+    const stat = await fsp.stat(filePath)
+    const range = req.headers.range
+    if (range) {
+      const match = /bytes=(\d*)-(\d*)/.exec(range)
+      if (match) {
+        const start = match[1] ? parseInt(match[1], 10) : 0
+        const end = match[2] ? parseInt(match[2], 10) : stat.size - 1
+        res.status(206)
+        res.set('Content-Range', `bytes ${start}-${end}/${stat.size}`)
+        res.set('Accept-Ranges', 'bytes')
+        res.set('Content-Length', end - start + 1)
+        res.set('Content-Type', 'audio/mpeg')
+        return fsp.readFile(filePath).then((buf) => res.send(buf.slice(start, end + 1)))
+      }
+    }
+    res.set('Content-Length', stat.size)
+    res.set('Accept-Ranges', 'bytes')
+    res.set('Content-Type', 'audio/mpeg')
+    fsp.readFile(filePath).then((buf) => res.send(buf))
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 app.listen(PORT, HOST, () => {

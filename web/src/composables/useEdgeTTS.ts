@@ -63,7 +63,6 @@ export function useEdgeTTS() {
         throw new Error('Edge TTS 未返回音频数据')
       }
 
-      const audioUrl = URL.createObjectURL(blob)
       const requestId = `edge-${Date.now()}-${Math.random().toString(16).slice(2)}`
 
       const item: HistoryItem = {
@@ -73,10 +72,10 @@ export function useEdgeTTS() {
         text,
         voice: params.voice,
         voiceName: params.voiceName,
-        audioUrl,
+        fileName: '',
         byteLength: blob.size,
         requestId,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         controls: {
           rate: params.rate,
           pitch: params.pitch,
@@ -84,7 +83,8 @@ export function useEdgeTTS() {
         },
       }
 
-      shared.addItem(item, blob)
+      const saved = await shared.addItem(item, blob)
+      if (saved) Object.assign(item, saved)
       statusText.value = '完成'
 
       return item

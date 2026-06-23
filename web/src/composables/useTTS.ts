@@ -318,7 +318,6 @@ export function useTTS() {
 
       statusText.value = '生成音频文件'
       const blob = base64ToBlob(audioBase64, 'audio/mpeg')
-      const audioUrl = URL.createObjectURL(blob)
       const item: HistoryItem = {
         id: requestId,
         engine: 'volc',
@@ -326,10 +325,10 @@ export function useTTS() {
         text,
         voice: params.voice,
         voiceName: params.voiceName,
-        audioUrl,
+        fileName: '',
         byteLength: blob.size,
         requestId,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         controls: {
           speechRate: params.speechRate,
           pitch: params.pitch,
@@ -340,7 +339,8 @@ export function useTTS() {
         },
       }
 
-      shared.addItem(item, blob)
+      const saved = await shared.addItem(item, blob)
+      if (saved) Object.assign(item, saved)
       lastUsage.value = usage
       statusText.value = '完成'
 
@@ -380,5 +380,6 @@ export function useTTS() {
     renameItem: shared.renameItem,
     removeHistoryItem: shared.removeHistoryItem,
     clearHistory: shared.clearHistory,
+    revealInFolder: shared.revealInFolder,
   }
 }

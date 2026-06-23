@@ -77,10 +77,12 @@ export interface HistoryItem {
   text: string
   voice: string
   voiceName: string
-  audioUrl: string
+  /** 后端 output 目录下的文件名 */
+  fileName: string
   byteLength: number
-  requestId: string
-  createdAt: Date
+  duration?: number
+  requestId?: string
+  createdAt: string
   controls: TTSControls | EdgeTTSControls
 }
 

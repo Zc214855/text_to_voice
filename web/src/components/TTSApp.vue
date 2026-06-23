@@ -244,8 +244,8 @@ async function handleGenerate() {
   }
 }
 
-function formatTime(date: Date) {
-  return new Intl.DateTimeFormat('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(date)
+function formatTime(date: string | Date) {
+  return new Intl.DateTimeFormat('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(date))
 }
 
 function formatSize(bytes: number) {
@@ -602,7 +602,7 @@ function isEdgeControls(controls: TTSControls | EdgeTTSControls): controls is Ed
                 <span v-if="(item.controls as TTSControls).emotion" class="rounded bg-zinc-100 px-2 py-1">{{ EMOTION_LABELS[(item.controls as TTSControls).emotion!] || (item.controls as TTSControls).emotion }}</span>
                 <span v-if="(item.controls as TTSControls).explicitLanguage" class="rounded bg-zinc-100 px-2 py-1">{{ LANGUAGE_OPTIONS.find(o => o.value === (item.controls as TTSControls).explicitLanguage!)?.label || (item.controls as TTSControls).explicitLanguage }}</span>
               </template>
-              <button class="ml-auto rounded-md px-2 py-1 text-zinc-800 transition hover:bg-zinc-100" @click="volc.downloadAudio(item)">下载</button>
+              <button class="ml-auto rounded-md px-2 py-1 text-zinc-800 transition hover:bg-zinc-100" @click="volc.revealInFolder(item)">定位</button>
               <button class="rounded-md px-2 py-1 text-red-600 transition hover:bg-red-50" @click="volc.removeHistoryItem(item.id)">删除</button>
             </div>
           </article>

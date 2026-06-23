@@ -13,6 +13,11 @@ const proxy = {
     rewrite: (path: string) => path.replace(/^\/edge-api/, '/api/edge-tts'),
     timeout: 120_000,
   },
+  '/api/library': {
+    target: 'http://127.0.0.1:5174',
+    changeOrigin: true,
+    timeout: 300_000,
+  },
 }
 
 export default defineConfig({
