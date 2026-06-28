@@ -64,3 +64,23 @@
 - 需求缺口：没有长故事自动分段、段落情绪编排、角色台词自动换音色；当前更适合单段/中短篇故事生成。
 - 代码风险：音频保存失败时前端仍可能返回未落盘的 item；自动播放会请求空 `fileName`。
 - 代码风险：`/api/library/audio/:fileName` 使用 `join(OUTPUT_DIR, req.params.fileName)`，只检查 `.mp3` 扩展名，缺少输出目录内路径校验。
+
+## 2026-06-28 阶段 9：漏洞依赖修复
+
+- 执行 `npm audit fix`，Vite 相关高危开发依赖漏洞已由 npm 自动升级修复。
+- `package.json` 中 Vite 版本下限显式提升到 `^6.4.3`。
+
+## 2026-06-28 阶段 10：保存与路径风险修复
+
+- 火山 TTS 与 Edge TTS 在音频生成后必须成功保存到本地作品库，保存失败时返回失败状态，不再播放空 `fileName`。
+- 后端新增 `resolveOutputFile`，限制作品库音频访问、重命名、删除、定位只能使用 `output` 目录下的单个 `.mp3` 文件。
+- `/api/library/audio/:fileName` 对非法文件名返回 HTTP 400。
+
+## 2026-06-28 阶段 11：修复后验证
+
+- `npm test`：通过。
+- `npm run typecheck`：通过。
+- `npm run build`：通过，Vite 版本为 6.4.3。
+- `npm audit`：0 个漏洞。
+- `node --check server/index.js`：通过。
+- 未强制重启 5174 当前运行中的 Node 服务，避免中断用户正在使用的本地服务。

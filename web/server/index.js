@@ -3,7 +3,7 @@ import express from 'express'
 import crypto from 'crypto'
 import { promises as fsp } from 'fs'
 import { existsSync } from 'fs'
-import { join, extname, dirname } from 'path'
+import { basename, dirname, extname, isAbsolute, join, relative, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { spawn } from 'child_process'
 
@@ -193,7 +193,7 @@ app.get('/api/edge-tts/health', (_req, res) => {
 // ============ 作品库（output 目录文件系统存储）============
 
 // output 目录：server/ 的上两级（项目根目录）
-const OUTPUT_DIR = join(__dirname, '..', '..', 'output')
+const OUTPUT_DIR = resolve(__dirname, '..', '..', 'output')
 const INDEX_FILE = join(OUTPUT_DIR, 'index.json')
 
 // 串行化 index.json 写入，避免并发覆盖
@@ -219,6 +219,22 @@ async function readIndex() {
 async function writeIndex(items) {
   await fsp.mkdir(OUTPUT_DIR, { recursive: true })
   await fsp.writeFile(INDEX_FILE, JSON.stringify({ items }, null, 2), 'utf8')
+}
+
+/** 只允许访问 output 根目录下的单个 mp3 文件，避免路径穿越。 */
+function resolveOutputFile(fileName) {
+  const name = String(fileName || '')
+  if (!name || name !== basename(name) || extname(name).toLowerCase() !== '.mp3') {
+    throw new Error('非法文件')
+  }
+
+  const filePath = resolve(OUTPUT_DIR, name)
+  const relativePath = relative(OUTPUT_DIR, filePath)
+  if (!relativePath || relativePath.startsWith('..') || isAbsolute(relativePath)) {
+    throw new Error('非法文件')
+  }
+
+  return filePath
 }
 
 /** 清理文件名：去掉 Windows 不允许的字符，截断长度 */
@@ -300,12 +316,12 @@ app.patch('/api/library/:id/rename', async (req, res) => {
       if (idx === -1) return res.status(404).json({ error: '记录不存在' })
 
       const item = items[idx]
-      const oldPath = join(OUTPUT_DIR, item.fileName)
+      const oldPath = resolveOutputFile(item.fileName)
       const base = `${sanitizeName(name)}_${sanitizeName(item.voiceName || 'voice')}`
       const newFileName = await resolveUniqueFileName(base, '.mp3')
 
       if (existsSync(oldPath)) {
-        await fsp.rename(oldPath, join(OUTPUT_DIR, newFileName))
+        await fsp.rename(oldPath, resolveOutputFile(newFileName))
       }
       item.name = name
       item.fileName = newFileName
@@ -314,6 +330,7 @@ app.patch('/api/library/:id/rename', async (req, res) => {
       res.json(item)
     })
   } catch (err) {
+    if (err.message === '非法文件') return res.status(400).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 })
@@ -327,7 +344,7 @@ app.delete('/api/library/:id', async (req, res) => {
       const idx = items.findIndex((it) => it.id === id)
       if (idx === -1) return res.status(404).json({ error: '记录不存在' })
       const item = items[idx]
-      const filePath = join(OUTPUT_DIR, item.fileName)
+      const filePath = resolveOutputFile(item.fileName)
       if (existsSync(filePath)) {
         await fsp.unlink(filePath).catch(() => undefined)
       }
@@ -346,7 +363,7 @@ app.delete('/api/library', async (_req, res) => {
     await withIndexLock(async () => {
       const items = await readIndex()
       for (const item of items) {
-        const filePath = join(OUTPUT_DIR, item.fileName)
+        const filePath = resolveOutputFile(item.fileName)
         if (existsSync(filePath)) {
           await fsp.unlink(filePath).catch(() => undefined)
         }
@@ -366,7 +383,7 @@ app.post('/api/library/:id/locate', async (req, res) => {
     const items = await readIndex()
     const item = items.find((it) => it.id === id)
     if (!item) return res.status(404).json({ error: '记录不存在' })
-    const filePath = join(OUTPUT_DIR, item.fileName)
+    const filePath = resolveOutputFile(item.fileName)
     if (!existsSync(filePath)) return res.status(404).json({ error: '文件不存在' })
 
     if (process.platform === 'win32') {
@@ -382,10 +399,8 @@ app.post('/api/library/:id/locate', async (req, res) => {
 // 音频流：前端 <audio> 播放用，支持 Range
 app.get('/api/library/audio/:fileName', async (req, res) => {
   try {
-    const filePath = join(OUTPUT_DIR, req.params.fileName)
+    const filePath = resolveOutputFile(req.params.fileName)
     if (!existsSync(filePath)) return res.status(404).json({ error: '文件不存在' })
-    // 防止路径穿越
-    if (extname(filePath).toLowerCase() !== '.mp3') return res.status(400).json({ error: '非法文件' })
 
     const stat = await fsp.stat(filePath)
     const range = req.headers.range
@@ -407,6 +422,7 @@ app.get('/api/library/audio/:fileName', async (req, res) => {
     res.set('Content-Type', 'audio/mpeg')
     fsp.readFile(filePath).then((buf) => res.send(buf))
   } catch (err) {
+    if (err.message === '非法文件') return res.status(400).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 })

@@ -83,8 +83,12 @@ export function useEdgeTTS() {
         },
       }
 
+      statusText.value = '保存音频文件'
       const saved = await shared.addItem(item, blob)
-      if (saved) Object.assign(item, saved)
+      if (!saved) {
+        throw new Error('音频已生成但保存失败，请检查本地服务或 output 目录权限')
+      }
+      Object.assign(item, saved)
       statusText.value = '完成'
 
       return item
