@@ -53,6 +53,26 @@ export interface EdgeTTSControls {
   volume: number
 }
 
+export interface RoleStoryVoiceControls extends TTSControls {
+  role: string
+  voice: string
+  voiceName: string
+  resourceId: string
+}
+
+export interface RoleStoryControls {
+  mode: 'role-story'
+  roles: RoleStoryVoiceControls[]
+  segmentCount: number
+  characterCount: number
+}
+
+export interface RoleStorySegmentInput {
+  role: string
+  text: string
+  characterCount: number
+}
+
 export interface VolcSynthesizeParams extends TTSControls {
   engine: 'volc'
   text: string
@@ -66,6 +86,14 @@ export interface EdgeSynthesizeParams extends EdgeTTSControls {
   text: string
   voice: string
   voiceName: string
+}
+
+export interface RoleStorySynthesizeParams {
+  engine: 'volc'
+  name: string
+  text: string
+  segments: RoleStorySegmentInput[]
+  roleControls: RoleStoryVoiceControls[]
 }
 
 export type SynthesizeParams = VolcSynthesizeParams | EdgeSynthesizeParams
@@ -83,7 +111,7 @@ export interface HistoryItem {
   duration?: number
   requestId?: string
   createdAt: string
-  controls: TTSControls | EdgeTTSControls
+  controls: TTSControls | EdgeTTSControls | RoleStoryControls
 }
 
 export interface UsageInfo {

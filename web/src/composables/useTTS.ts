@@ -2,7 +2,16 @@ import { computed, readonly, ref } from 'vue'
 import voices from '../data/voices.json'
 import { countTextUnits } from '../utils/textCleanup'
 import { defaultItemName, useSharedHistory } from './useSharedHistory'
-import type { CloneVoice, HistoryItem, PopularVoice, TTSConfig, UsageInfo, VolcSynthesizeParams } from './types'
+import type {
+  CloneVoice,
+  HistoryItem,
+  PopularVoice,
+  RoleStorySynthesizeParams,
+  RoleStoryVoiceControls,
+  TTSConfig,
+  UsageInfo,
+  VolcSynthesizeParams,
+} from './types'
 
 export const MAX_TEXT_LENGTH = 5000
 
@@ -28,6 +37,7 @@ export const VOLC_VOICES = voices as PopularVoice[]
 const DEFAULT_ENDPOINT = '/volc-api/api/v3/tts/unidirectional'
 /** 声音复刻 2.0 的资源 ID */
 export const CLONE_RESOURCE_ID = 'seed-icl-2.0'
+type VolcRequestParams = Omit<VolcSynthesizeParams, 'engine'> & { signal?: AbortSignal }
 
 const errorMsg = ref('')
 const statusText = ref('就绪')
@@ -185,6 +195,13 @@ function normalizeErrorMessage(message: string) {
   return message
 }
 
+function assertVoiceResource(voiceList: PopularVoice[], voiceId: string, resourceId: string) {
+  const voice = voiceList.find((item) => item.id === voiceId)
+  if (voice && !voice.resourceIds.includes(resourceId)) {
+    throw new Error(`当前配置 ${resourceId} 不能调用音色 ${voice.name}，请切换到 ${voice.resourceIds.join(' / ')} 对应服务，或选择当前资源支持的音色`)
+  }
+}
+
 async function collectAudioBase64(response: Response) {
   const decoder = new TextDecoder()
   const chunks: string[] = []
@@ -264,6 +281,45 @@ export function useTTS() {
     return config
   }
 
+  async function synthesizeAudioBlob(
+    params: VolcRequestParams,
+    config: Required<Pick<TTSConfig, 'endpoint'>> & TTSConfig,
+  ): Promise<{ requestId: string; usage: UsageInfo | null; blob: Blob }> {
+    const requestId = createRequestId()
+    const requestConfig = {
+      ...config,
+      resourceId: params.resourceId || config.resourceId,
+    }
+    const resourceId = requestConfig.resourceId || ''
+    assertVoiceResource(allVoices.value, params.voice, resourceId)
+
+    const headers = buildHeaders(requestConfig, requestId)
+    const payload = buildPayload(params)
+
+    const response = await fetch(requestConfig.endpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: params.signal,
+    })
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => '')
+      throw new Error(`HTTP ${response.status}${body ? `：${body}` : ''}`)
+    }
+
+    const { audioBase64, usage } = await collectAudioBase64(response)
+    if (!audioBase64) {
+      throw new Error('接口未返回有效音频数据')
+    }
+
+    return {
+      requestId,
+      usage,
+      blob: base64ToBlob(audioBase64, 'audio/mpeg'),
+    }
+  }
+
   async function synthesize(params: Omit<VolcSynthesizeParams, 'engine'>) {
     const text = params.text.trim()
 
@@ -286,38 +342,11 @@ export function useTTS() {
     const timeoutId = window.setTimeout(() => controller.abort(), 180_000)
 
     try {
-      const requestId = createRequestId()
       const config = await refreshConfig()
-      config.resourceId = params.resourceId || config.resourceId
-      currentResourceId.value = config.resourceId || ''
-      const voice = allVoices.value.find((item) => item.id === params.voice)
-      if (voice && !voice.resourceIds.includes(config.resourceId || '')) {
-        throw new Error(`当前配置 ${config.resourceId} 不能调用音色 ${voice.name}，请切换到 ${voice.resourceIds.join(' / ')} 对应服务，或选择当前资源支持的音色`)
-      }
-      const headers = buildHeaders(config, requestId)
-      const payload = buildPayload({ ...params, text })
-
       statusText.value = '请求火山引擎'
-      const response = await fetch(config.endpoint, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      })
-
-      if (!response.ok) {
-        const body = await response.text().catch(() => '')
-        throw new Error(`HTTP ${response.status}${body ? `：${body}` : ''}`)
-      }
-
-      const { audioBase64, usage } = await collectAudioBase64(response)
-
-      if (!audioBase64) {
-        throw new Error('接口未返回有效音频数据')
-      }
-
+      const { blob, requestId, usage } = await synthesizeAudioBlob({ ...params, text, signal: controller.signal }, config)
+      currentResourceId.value = params.resourceId || config.resourceId || ''
       statusText.value = '生成音频文件'
-      const blob = base64ToBlob(audioBase64, 'audio/mpeg')
       const item: HistoryItem = {
         id: requestId,
         engine: 'volc',
@@ -363,6 +392,105 @@ export function useTTS() {
     }
   }
 
+  async function synthesizeRoleStory(params: Omit<RoleStorySynthesizeParams, 'engine'>) {
+    const text = params.text.trim()
+
+    if (!text || params.segments.length === 0) {
+      errorMsg.value = '请输入角色故事文本'
+      return undefined
+    }
+
+    if (countTextUnits(text) > MAX_TEXT_LENGTH) {
+      errorMsg.value = `估算计费字符不能超过 ${MAX_TEXT_LENGTH} 字`
+      return undefined
+    }
+
+    const roleControlMap = new Map(params.roleControls.map((item) => [item.role, item]))
+    if (params.segments.some((segment) => !roleControlMap.has(segment.role))) {
+      errorMsg.value = '角色音色配置不完整'
+      return undefined
+    }
+
+    isGenerating.value = true
+    errorMsg.value = ''
+    lastUsage.value = null
+    statusText.value = '读取配置'
+
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), 180_000)
+
+    try {
+      const config = await refreshConfig()
+      const blobs: Blob[] = []
+      let usageWords = 0
+
+      for (let index = 0; index < params.segments.length; index += 1) {
+        const segment = params.segments[index]
+        const controls = roleControlMap.get(segment.role) as RoleStoryVoiceControls
+        statusText.value = `生成角色片段 ${index + 1} / ${params.segments.length}`
+        const result = await synthesizeAudioBlob({
+          text: segment.text,
+          voice: controls.voice,
+          voiceName: controls.voiceName,
+          resourceId: controls.resourceId,
+          speechRate: controls.speechRate,
+          pitch: controls.pitch,
+          loudness: controls.loudness,
+          emotion: controls.emotion,
+          emotionScale: controls.emotionScale,
+          explicitLanguage: controls.explicitLanguage,
+          signal: controller.signal,
+        }, config)
+        blobs.push(result.blob)
+        usageWords += result.usage?.text_words || segment.characterCount
+      }
+
+      statusText.value = '合成角色故事'
+      const blob = new Blob(blobs, { type: 'audio/mpeg' })
+      const requestId = createRequestId()
+      const item: HistoryItem = {
+        id: requestId,
+        engine: 'volc',
+        name: params.name || defaultItemName(text),
+        text,
+        voice: 'role-story',
+        voiceName: `角色故事 · ${params.roleControls.length} 角色`,
+        fileName: '',
+        byteLength: blob.size,
+        requestId,
+        createdAt: new Date().toISOString(),
+        controls: {
+          mode: 'role-story',
+          roles: params.roleControls,
+          segmentCount: params.segments.length,
+          characterCount: countTextUnits(text),
+        },
+      }
+
+      statusText.value = '保存音频文件'
+      const saved = await shared.addItem(item, blob)
+      if (!saved) {
+        throw new Error('音频已生成但保存失败，请检查本地服务或 output 目录权限')
+      }
+      Object.assign(item, saved)
+      lastUsage.value = { text_words: usageWords }
+      statusText.value = '完成'
+
+      return item
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        errorMsg.value = '请求超时'
+      } else {
+        errorMsg.value = normalizeErrorMessage(error instanceof Error ? error.message : '合成失败')
+      }
+      statusText.value = '失败'
+      return undefined
+    } finally {
+      window.clearTimeout(timeoutId)
+      isGenerating.value = false
+    }
+  }
+
   return {
     volcVoices: allVoices,
     cloneVoices,
@@ -378,6 +506,7 @@ export function useTTS() {
     refreshConfig,
     restoreHistory: shared.restoreHistory,
     synthesize,
+    synthesizeRoleStory,
     playAudio: shared.playAudio,
     stopAudio: shared.stopAudio,
     downloadAudio: shared.downloadAudio,

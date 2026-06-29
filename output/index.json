@@ -1,6 +1,212 @@
 {
   "items": [
     {
+      "id": "11a11ccb-148e-42b5-822a-2d2dcd919708",
+      "fileName": "标题：团团和会变圆的月亮_角色故事 · 7 角色(1).mp3",
+      "name": "标题：团团和会变圆的月亮",
+      "text": "标题：团团和会变圆的月亮\n\n旁白：云竹山谷的夜晚来得很轻，竹叶慢慢安静，天上挂着一弯细细的月亮。\n旁白：团团仰起小脸，轻轻问奶奶。\n团团：月亮是不是少了一块？\n奶奶：月亮没有少，它只是还没有变圆。\n团团：月亮会自己变圆吗？\n奶奶：会呀，慢慢看，你就知道了。\n团团：慢慢来，我听一听。\n旁白：从那天起，团团每天晚上都坐在院子里看月亮。\n旁白：第一晚，月亮细细的，像一片小银叶。\n旁白：第二晚，月亮胖了一点，像一只弯弯的小船。\n旁白：第三晚，月亮更亮了，静静停在蓝色的天空里。\n旁白：栗栗跳到窗台上，好奇地问团团。\n栗栗：你每天都在画什么？\n团团：我在画月亮的成长日记。\n栗栗：月亮也会长大吗？\n团团：奶奶说，月亮会一点一点变圆。\n旁白：团团把小本子递给栗栗。小本子上有细细的月牙，也有弯弯的小船。\n栗栗：原来月亮每天都会有一点点不一样。\n旁白：又过了几天，云竹山谷飘起桂花香。\n妈妈：中秋快到了，我们要准备月饼和桂花茶。\n团团：中秋是什么？\n奶奶：中秋的时候，月亮最圆。大家会坐在一起，吃月饼，看月亮。\n团团：团聚是什么意思？\n奶奶：团聚，就是想念的人坐到一起，一起说话，一起吃饭，一起看同一个月亮。\n旁白：团团想了想，在小本子上画了一个大大的圆。\n旁白：妈妈看见小本子上的大圆，温柔地问团团。\n妈妈：画的是什么？\n团团：这是圆圆的月亮，也是大家坐在一起的样子。\n旁白：中秋那天，天很干净，风很轻，月亮慢慢升起来。\n旁白：它又大又圆，像一盏挂在天上的温柔小灯。\n白鹭：今晚的月亮真亮。\n小鹿：月饼也圆圆的。\n旁白：栗栗凑近小本子，小声问团团。\n栗栗：你的月亮日记可以给我们看吗？\n团团：可以。这是第一天的小月牙，这是半个月亮，这是快圆的月亮，这是今天的大圆月亮。\n小鹿：月亮变圆，原来需要好多天。\n奶奶：很多美好的事情，都不是一下子完成的。月亮慢慢圆，米慢慢蒸熟，桂花慢慢变香，小朋友也慢慢长大。\n团团：中秋的圆，不只是月亮的圆，也是大家在一起的圆。\n旁白：妈妈听了，眼睛弯弯地看着团团。\n妈妈：说得真好。\n旁白：夜深了，客人们一个一个回家，院子里的桂花香还没有散。\n旁白：团团洗漱完，钻进小被窝。月光落在枕头边，像一片安静的小湖。\n妈妈：今天学到了什么？\n团团：月亮每天都会变一点点。等它最圆的时候，大家就一起团聚。\n旁白：妈妈替团团掖好被角，轻轻说。\n妈妈：晚安。\n旁白：团团抱着竹叶书签，也轻轻说。\n团团：晚安。晚安，圆圆的月亮。\n旁白：团团闭上眼睛，心里像住着一个小小的圆月亮。\n旁白：云竹山谷睡着了，月亮也安静地照着每一条回家的路。",
+      "engine": "volc",
+      "voice": "role-story",
+      "voiceName": "角色故事 · 7 角色",
+      "byteLength": 2014050,
+      "duration": 0,
+      "controls": {
+        "mode": "role-story",
+        "roles": [
+          {
+            "role": "旁白",
+            "voice": "zh_female_xueayi_saturn_bigtts",
+            "voiceName": "儿童绘本",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.9,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "团团",
+            "voice": "zh_female_tianxinxiaomei_emo_v2_mars_bigtts",
+            "voiceName": "甜心小美（多情感）",
+            "resourceId": "seed-tts-1.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "奶奶",
+            "voice": "zh_male_dayi_saturn_bigtts",
+            "voiceName": "大壹",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "栗栗",
+            "voice": "zh_female_xiaohe_uranus_bigtts",
+            "voiceName": "小何 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "妈妈",
+            "voice": "zh_female_vv_uranus_bigtts",
+            "voiceName": "Vivi 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "白鹭",
+            "voice": "zh_female_santongyongns_saturn_bigtts",
+            "voiceName": "流畅女声",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "小鹿",
+            "voice": "zh_female_jitangnv_saturn_bigtts",
+            "voiceName": "鸡汤女",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          }
+        ],
+        "segmentCount": 42,
+        "characterCount": 1070
+      },
+      "createdAt": "2026-06-28T16:40:24.404Z"
+    },
+    {
+      "id": "107f61e5-8226-4797-82bb-672940b63bdd",
+      "fileName": "标题：团团和会变圆的月亮_角色故事 · 7 角色.mp3",
+      "name": "标题：团团和会变圆的月亮",
+      "text": "标题：团团和会变圆的月亮\n\n旁白：云竹山谷的夜晚来得很轻，竹叶慢慢安静，天上挂着一弯细细的月亮。\n团团：奶奶，月亮是不是少了一块？\n奶奶：月亮没有少，它只是还没有变圆。\n团团：月亮会自己变圆吗？\n奶奶：会呀，慢慢看，你就知道了。\n团团：慢慢来，我听一听。\n旁白：从那天起，团团每天晚上都坐在院子里看月亮。\n旁白：第一晚，月亮细细的，像一片小银叶。\n旁白：第二晚，月亮胖了一点，像一只弯弯的小船。\n旁白：第三晚，月亮更亮了，静静停在蓝色的天空里。\n栗栗：团团，你每天都在画什么？\n团团：我在画月亮的成长日记。\n栗栗：月亮也会长大吗？\n团团：奶奶说，月亮会一点一点变圆。\n旁白：团团把小本子递给栗栗。小本子上有细细的月牙，也有弯弯的小船。\n栗栗：原来月亮每天都会有一点点不一样。\n旁白：又过了几天，云竹山谷飘起桂花香。\n妈妈：中秋快到了，我们要准备月饼和桂花茶。\n团团：中秋是什么？\n奶奶：中秋的时候，月亮最圆。大家会坐在一起，吃月饼，看月亮。\n团团：团聚是什么意思？\n奶奶：团聚，就是想念的人坐到一起，一起说话，一起吃饭，一起看同一个月亮。\n旁白：团团想了想，在小本子上画了一个大大的圆。\n妈妈：团团画的是什么？\n团团：这是圆圆的月亮，也是大家坐在一起的样子。\n旁白：中秋那天，天很干净，风很轻，月亮慢慢升起来。\n旁白：它又大又圆，像一盏挂在天上的温柔小灯。\n白鹭：今晚的月亮真亮。\n小鹿：月饼也圆圆的。\n栗栗：团团，你的月亮日记可以给我们看吗？\n团团：可以。这是第一天的小月牙，这是半个月亮，这是快圆的月亮，这是今天的大圆月亮。\n小鹿：月亮变圆，原来需要好多天。\n奶奶：很多美好的事情，都不是一下子完成的。月亮慢慢圆，米慢慢蒸熟，桂花慢慢变香，小朋友也慢慢长大。\n团团：中秋的圆，不只是月亮的圆，也是大家在一起的圆。\n妈妈：团团说得真好。\n旁白：夜深了，客人们一个一个回家，院子里的桂花香还没有散。\n旁白：团团洗漱完，钻进小被窝。月光落在枕头边，像一片安静的小湖。\n妈妈：今天学到了什么？\n团团：月亮每天都会变一点点。等它最圆的时候，大家就一起团聚。\n妈妈：晚安，团团。\n团团：晚安，妈妈。晚安，圆圆的月亮。\n旁白：团团闭上眼睛，心里像住着一个小小的圆月亮。\n旁白：云竹山谷睡着了，月亮也安静地照着每一条回家的路。",
+      "engine": "volc",
+      "voice": "role-story",
+      "voiceName": "角色故事 · 7 角色",
+      "byteLength": 1949166,
+      "duration": 0,
+      "controls": {
+        "mode": "role-story",
+        "roles": [
+          {
+            "role": "旁白",
+            "voice": "zh_female_xueayi_saturn_bigtts",
+            "voiceName": "儿童绘本",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.9,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "团团",
+            "voice": "zh_female_xueayi_saturn_bigtts",
+            "voiceName": "儿童绘本",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "奶奶",
+            "voice": "zh_female_wenroushunv_uranus_bigtts",
+            "voiceName": "温柔淑女 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "栗栗",
+            "voice": "zh_female_xueayi_saturn_bigtts",
+            "voiceName": "儿童绘本",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "妈妈",
+            "voice": "zh_female_wenroushunv_uranus_bigtts",
+            "voiceName": "温柔淑女 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "白鹭",
+            "voice": "zh_female_xueayi_saturn_bigtts",
+            "voiceName": "儿童绘本",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "小鹿",
+            "voice": "saturn_zh_female_keainvsheng_tob",
+            "voiceName": "可爱女生",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.95,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          }
+        ],
+        "segmentCount": 38,
+        "characterCount": 957
+      },
+      "createdAt": "2026-06-28T16:26:46.006Z"
+    },
+    {
       "id": "85235f74-6015-47ee-ac46-c0c35797d153",
       "fileName": "《团团和会变圆的月亮》_鸡汤女.mp3",
       "name": "《团团和会变圆的月亮》",
