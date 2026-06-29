@@ -3,7 +3,7 @@ import edgeVoicesData from '../data/edge-voices.json'
 import { defaultItemName, useSharedHistory } from './useSharedHistory'
 import { concatBlobsWithSilence } from './useTTS'
 import { countTextUnits } from '../utils/textCleanup'
-import type { EdgeSynthesizeParams, EdgeVoice, HistoryItem, RoleStoryControls } from './types'
+import type { EdgeVoice, HistoryItem, RoleStoryControls } from './types'
 
 export const EDGE_VOICES = edgeVoicesData as EdgeVoice[]
 
@@ -26,89 +26,37 @@ export function useEdgeTTS() {
     }
   }
 
-  async function synthesize(params: Omit<EdgeSynthesizeParams, 'engine'>) {
-    const text = params.text.trim()
-
-    if (!text) {
-      errorMsg.value = '请输入要合成的文本'
-      return undefined
-    }
-
-    isGenerating.value = true
-    errorMsg.value = ''
-    statusText.value = '请求 Edge TTS'
-
-    try {
-      const body: Record<string, unknown> = {
-        text,
+  async function synthesizeAudioOnly(params: {
+    text: string
+    voice: string
+    rate: number
+    pitch: number
+    volume: number
+    storyMode?: boolean
+    signal?: AbortSignal
+  }): Promise<Blob> {
+    const response = await fetch(EDGE_TTS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: params.text.trim(),
         voice: params.voice,
         rate: params.rate,
         pitch: params.pitch,
         volume: params.volume,
-        storyMode: params.storyMode ?? false,
-      }
+        storyMode: params.storyMode ?? true,
+      }),
+      signal: params.signal,
+    })
 
-      const response = await fetch(EDGE_TTS_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      })
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
-        throw new Error(err.error || `HTTP ${response.status}`)
-      }
-
-      statusText.value = '接收音频'
-      const blob = await response.blob()
-
-      if (!blob.size) {
-        throw new Error('Edge TTS 未返回音频数据')
-      }
-
-      const requestId = `edge-${Date.now()}-${Math.random().toString(16).slice(2)}`
-
-      const item: HistoryItem = {
-        id: requestId,
-        engine: 'edge',
-        name: defaultItemName(text),
-        text,
-        voice: params.voice,
-        voiceName: params.voiceName,
-        fileName: '',
-        byteLength: blob.size,
-        requestId,
-        createdAt: new Date().toISOString(),
-        controls: {
-          rate: params.rate,
-          pitch: params.pitch,
-          volume: params.volume,
-        },
-      }
-
-      statusText.value = '保存音频文件'
-      const saved = await shared.addItem(item, blob)
-      if (!saved) {
-        throw new Error('音频已生成但保存失败，请检查本地服务或 output 目录权限')
-      }
-      Object.assign(item, saved)
-      statusText.value = '完成'
-
-      return item
-    } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : '合成失败'
-      if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
-        errorMsg.value = 'Edge TTS 服务未启动，请先运行 node server/index.js'
-      } else if (msg.includes('未返回音频数据') || msg.includes('超时')) {
-        errorMsg.value = `${msg}，可能是网络不稳定，请再试一次`
-      } else {
-        errorMsg.value = msg
-      }
-      statusText.value = '失败'
-      return undefined
-    } finally {
-      isGenerating.value = false
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
+      throw new Error(err.error || `HTTP ${response.status}`)
     }
+
+    const blob = await response.blob()
+    if (!blob.size) throw new Error('Edge TTS 未返回音频数据')
+    return blob
   }
 
   async function synthesizeRoleStory(params: {
@@ -224,8 +172,8 @@ export function useEdgeTTS() {
     serverAvailable: readonly(serverAvailable),
     restoreHistory: shared.restoreHistory,
     checkServer,
-    synthesize,
     synthesizeRoleStory,
+    synthesizeAudioOnly,
     playAudio: shared.playAudio,
     stopAudio: shared.stopAudio,
     downloadAudio: shared.downloadAudio,

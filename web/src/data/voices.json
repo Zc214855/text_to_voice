@@ -2,8 +2,8 @@
   {
     "id": "zh_female_vv_uranus_bigtts",
     "name": "Vivi 2.0",
-    "scene": "语音合成2.0 / 通用场景",
-    "language": "中文、英语",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文, 日语, 印尼语, 墨西哥西班牙语; 方言：四川、陕西、东北",
     "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
@@ -13,7 +13,7 @@
   {
     "id": "zh_female_xiaohe_uranus_bigtts",
     "name": "小何 2.0",
-    "scene": "语音合成2.0 / 通用场景",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
     "model": "语音合成2.0",
     "resourceIds": [
@@ -24,7 +24,7 @@
   {
     "id": "zh_male_m191_uranus_bigtts",
     "name": "云舟 2.0",
-    "scene": "语音合成2.0 / 通用场景",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
     "model": "语音合成2.0",
     "resourceIds": [
@@ -35,7 +35,7 @@
   {
     "id": "zh_male_taocheng_uranus_bigtts",
     "name": "小天 2.0",
-    "scene": "语音合成2.0 / 通用场景",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
     "model": "语音合成2.0",
     "resourceIds": [
@@ -44,132 +44,440 @@
     "emotions": []
   },
   {
-    "id": "zh_female_xueayi_saturn_bigtts",
-    "name": "儿童绘本",
-    "scene": "精品克隆音色 / 有声阅读",
+    "id": "zh_male_liufei_uranus_bigtts",
+    "name": "刘飞 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_male_dayi_saturn_bigtts",
-    "name": "大壹",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_sophie_uranus_bigtts",
+    "name": "魅力苏菲 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_female_mizai_saturn_bigtts",
-    "name": "黑猫侦探社咪",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_qingxinnvsheng_uranus_bigtts",
+    "name": "清新女声 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_female_jitangnv_saturn_bigtts",
-    "name": "鸡汤女",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_cancan_uranus_bigtts",
+    "name": "知性灿灿 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_female_meilinvyou_saturn_bigtts",
-    "name": "魅力女友",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_sajiaoxuemei_uranus_bigtts",
+    "name": "撒娇学妹 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_female_santongyongns_saturn_bigtts",
-    "name": "流畅女声",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_tianmeixiaoyuan_uranus_bigtts",
+    "name": "甜美小源 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "zh_male_ruyayichen_saturn_bigtts",
-    "name": "儒雅逸辰",
-    "scene": "精品克隆音色 / 视频配音",
+    "id": "zh_female_tianmeitaozi_uranus_bigtts",
+    "name": "甜美桃子 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "saturn_zh_female_keainvsheng_tob",
-    "name": "可爱女生",
-    "scene": "精品克隆音色 / 角色扮演",
+    "id": "zh_female_shuangkuaisisi_uranus_bigtts",
+    "name": "爽快思思 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "saturn_zh_female_tiaopigongzhu_tob",
-    "name": "调皮公主",
-    "scene": "精品克隆音色 / 角色扮演",
+    "id": "zh_female_peiqi_uranus_bigtts",
+    "name": "佩奇猪 2.0",
+    "scene": "语音合成2.0 / 视频配音",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "saturn_zh_male_shuanglangshaonian_tob",
-    "name": "爽朗少年",
-    "scene": "精品克隆音色 / 角色扮演",
+    "id": "zh_female_linjianvhai_uranus_bigtts",
+    "name": "邻家女孩 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "saturn_zh_male_tiancaitongzhuo_tob",
-    "name": "天才同桌",
-    "scene": "精品克隆音色 / 角色扮演",
+    "id": "zh_male_shaonianzixin_uranus_bigtts",
+    "name": "少年梓辛 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
     "emotions": []
   },
   {
-    "id": "saturn_zh_female_cancan_tob",
-    "name": "知性灿灿",
-    "scene": "精品克隆音色 / 角色扮演",
+    "id": "zh_male_sunwukong_uranus_bigtts",
+    "name": "猴哥 2.0",
+    "scene": "语音合成2.0 / 视频配音",
     "language": "中文",
-    "model": "精品克隆",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_yingyujiaoxue_uranus_bigtts",
+    "name": "Tina老师 2.0",
+    "scene": "语音合成2.0 / 教育",
+    "language": "中文, 英式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_kefunvsheng_uranus_bigtts",
+    "name": "暖阳女声 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_xiaoxue_uranus_bigtts",
+    "name": "儿童绘本 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_dayi_uranus_bigtts",
+    "name": "大壹 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_mizai_uranus_bigtts",
+    "name": "黑猫侦探社咪仔 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_jitangnv_uranus_bigtts",
+    "name": "鸡汤女 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_meilinvyou_uranus_bigtts",
+    "name": "魅力女友 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_liuchangnv_uranus_bigtts",
+    "name": "流畅女声 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_ruyayichen_uranus_bigtts",
+    "name": "儒雅逸辰 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wenroumama_uranus_bigtts",
+    "name": "温柔妈妈 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_jieshuoxiaoming_uranus_bigtts",
+    "name": "解说小明 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_tvbnv_uranus_bigtts",
+    "name": "TVB女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yizhipiannan_uranus_bigtts",
+    "name": "译制片男声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qiaopinv_uranus_bigtts",
+    "name": "俏皮女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_zhishuaiyingzi_uranus_bigtts",
+    "name": "直率英子 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_linjiananhai_uranus_bigtts",
+    "name": "邻家男孩 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_silang_uranus_bigtts",
+    "name": "四郎 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_ruyaqingnian_uranus_bigtts",
+    "name": "儒雅青年 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_qingcang_uranus_bigtts",
+    "name": "擎苍 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_xionger_uranus_bigtts",
+    "name": "熊二 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_yingtaowanzi_uranus_bigtts",
+    "name": "樱桃丸子 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_wennuanahu_uranus_bigtts",
+    "name": "温暖阿虎 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_naiqimengwa_uranus_bigtts",
+    "name": "奶气萌娃 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_popo_uranus_bigtts",
+    "name": "婆婆 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_gaolengyujie_uranus_bigtts",
+    "name": "高冷御姐 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_aojiaobazong_uranus_bigtts",
+    "name": "傲娇霸总 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_lanyinmianbao_uranus_bigtts",
+    "name": "懒音面包 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_fanjuanqingnian_uranus_bigtts",
+    "name": "反卷青年 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
     "resourceIds": [
       "seed-tts-2.0"
     ],
@@ -178,7 +486,7 @@
   {
     "id": "zh_female_wenroushunv_uranus_bigtts",
     "name": "温柔淑女 2.0",
-    "scene": "语音合成2.0 / 通用场景",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
     "model": "语音合成2.0",
     "resourceIds": [
@@ -198,9 +506,9 @@
     "emotions": []
   },
   {
-    "id": "zh_female_kailangjiaxi_uranus_bigtts",
-    "name": "开朗佳欣 2.0",
-    "scene": "语音合成2.0 / 通用场景",
+    "id": "zh_male_huolixiaoge_uranus_bigtts",
+    "name": "活力小哥 2.0",
+    "scene": "语音合成2.0 / 通用",
     "language": "中文",
     "model": "语音合成2.0",
     "resourceIds": [
@@ -209,9 +517,2671 @@
     "emotions": []
   },
   {
-    "id": "zh_male_zhubo_bigtts",
-    "name": "电台主播",
-    "scene": "语音合成1.0 / 有声阅读",
+    "id": "zh_male_baqiqingshu_uranus_bigtts",
+    "name": "霸气青叔 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_xuanyijieshuo_uranus_bigtts",
+    "name": "悬疑解说 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_mengyatou_uranus_bigtts",
+    "name": "萌丫头 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_tiexinnvsheng_uranus_bigtts",
+    "name": "贴心女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_jitangmei_uranus_bigtts",
+    "name": "鸡汤妹 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_cixingjieshuonan_uranus_bigtts",
+    "name": "磁性解说男 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_liangsangmengzai_uranus_bigtts",
+    "name": "亮嗓萌仔 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_kailangjiejie_uranus_bigtts",
+    "name": "开朗姐姐 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_gaolengchenwen_uranus_bigtts",
+    "name": "高冷沉稳 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_shenyeboke_uranus_bigtts",
+    "name": "深夜播客 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_lubanqihao_uranus_bigtts",
+    "name": "鲁班七号 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_jiaochuannv_uranus_bigtts",
+    "name": "娇喘女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_linxiao_uranus_bigtts",
+    "name": "林潇 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_lingling_uranus_bigtts",
+    "name": "玲玲姐姐 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_chunribu_uranus_bigtts",
+    "name": "春日部姐姐 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_tangseng_uranus_bigtts",
+    "name": "唐僧 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_zhuangzhou_uranus_bigtts",
+    "name": "庄周 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_kailangdidi_uranus_bigtts",
+    "name": "开朗弟弟 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_zhubajie_uranus_bigtts",
+    "name": "猪八戒 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_ganmaodianyin_uranus_bigtts",
+    "name": "感冒电音姐姐 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_chanmeinv_uranus_bigtts",
+    "name": "谄媚女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_nvleishen_uranus_bigtts",
+    "name": "女雷神 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qinqienv_uranus_bigtts",
+    "name": "亲切女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_kuailexiaodong_uranus_bigtts",
+    "name": "快乐小东 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_kailangxuezhang_uranus_bigtts",
+    "name": "开朗学长 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_youyoujunzi_uranus_bigtts",
+    "name": "悠悠君子 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wenjingmaomao_uranus_bigtts",
+    "name": "文静毛毛 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_zhixingnv_uranus_bigtts",
+    "name": "知性女声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_qingshuangnanda_uranus_bigtts",
+    "name": "清爽男大 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yuanboxiaoshu_uranus_bigtts",
+    "name": "渊博小叔 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yangguangqingnian_uranus_bigtts",
+    "name": "阳光青年 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qingchezizi_uranus_bigtts",
+    "name": "清澈梓梓 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_tianmeiyueyue_uranus_bigtts",
+    "name": "甜美悦悦 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_xinlingjitang_uranus_bigtts",
+    "name": "心灵鸡汤 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_wenrouxiaoge_uranus_bigtts",
+    "name": "温柔小哥 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_roumeinvyou_uranus_bigtts",
+    "name": "柔美女友 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_dongfanghaoran_uranus_bigtts",
+    "name": "东方浩然 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wenrouxiaoya_uranus_bigtts",
+    "name": "温柔小雅 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_tiancaitongsheng_uranus_bigtts",
+    "name": "天才童声 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wuzetian_uranus_bigtts",
+    "name": "武则天 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_gujie_uranus_bigtts",
+    "name": "顾姐 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_guanggaojieshuo_uranus_bigtts",
+    "name": "广告解说 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_shaoergushi_uranus_bigtts",
+    "name": "少儿故事 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_female_charlie_tob",
+    "name": "Charlie 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_ethan_tob",
+    "name": "Ethan 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "澳式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_alastor_tob",
+    "name": "Alastor 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "英式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_chucky_tob",
+    "name": "Chucky 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_noah_tob",
+    "name": "Noah 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_jigsaw_tob",
+    "name": "Jigsaw 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_clown_man_tob",
+    "name": "Clown Man 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_cartoon_chef_tob",
+    "name": "Cartoon Chef 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_frosty_man_tob",
+    "name": "Frosty Man 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_the_grinch_tob",
+    "name": "The Grinch 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_kevin_mccallister_tob",
+    "name": "Kevin McCallister 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_michael_tob",
+    "name": "Michael 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_big_boogie_tob",
+    "name": "Big Boogie 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_xavier_tob",
+    "name": "Xavier 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_en_male_zayne_tob",
+    "name": "Zayne 2.0",
+    "scene": "语音合成2.0 / 多语种",
+    "language": "美式英语",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_aojiaonvyou_tob",
+    "name": "Tsundere Girlfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_aomanjiaosheng_tob",
+    "name": "Arrogant Soft Voice 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_xiemeinvwang_tob",
+    "name": "Wicked Queen 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_bingjiaojiejie_tob",
+    "name": "Yandere Sister 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_bingjiaomengmei_tob",
+    "name": "Yandere Cute Girl 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_bingruoshaonv_tob",
+    "name": "Frail Young Lady 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_chengshuwenrou_tob",
+    "name": "Mature & Gentle 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_chengshujiejie_tob",
+    "name": "Mature Sister 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_chunzhenshaonv_tob",
+    "name": "Innocent Maiden 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_chunchenvsheng_tob",
+    "name": "Pure Girl 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wumeikeren_tob",
+    "name": "Charming Beauty 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_guaiqiaokeer_tob",
+    "name": "Obedient Keer 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_heainainai_tob",
+    "name": "Kind Grandma 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_huopodiaoman_tob",
+    "name": "Lively & Mischievous 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_huoponvhai_tob",
+    "name": "Lively Girl 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_jiaohannvwang_tob",
+    "name": "Playful Queen 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_jiaoruoluoli_tob",
+    "name": "Delicate Lolita 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_jiaxiaozi_tob",
+    "name": "Tomboy 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_jinglingxiangdao_tob",
+    "name": "Elf Guide 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_kailangtingting_tob",
+    "name": "Cheerful Tingting 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_kaixinxiaohong_tob",
+    "name": "Joyful Xiaohong 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_keainvsheng_tob",
+    "name": "Cute Girl 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_lingdongxinxin_tob",
+    "name": "Vivacious Xinxin 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_linjuayi_tob",
+    "name": "Neighbor Auntie 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tianmeijiaoqiao_tob",
+    "name": "Sweet & Pretty 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qinglenggaoya_tob",
+    "name": "Aloof & Elegant 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_lixingyuanzi_tob",
+    "name": "Rational Yuanzi 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_xingganmeihuo_tob",
+    "name": "Sexy & Alluring 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_nuanxinqianqian_tob",
+    "name": "Warm-Hearted Qianqian 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_nuanxinxuejie_tob",
+    "name": "Warm-Hearted Senior 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qingtianmeimei_tob",
+    "name": "Sweet Berry 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qingtiantaotao_tob",
+    "name": "Sweet Taotao 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qingxixiaoxue_tob",
+    "name": "Clear Xiaoxue 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qingxinshaonv_tob",
+    "name": "Smitten Maiden 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_rouguhunshi_tob",
+    "name": "Soft-Bone Spirit Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_ruanmengtangtang_tob",
+    "name": "Soft-Sweet Tangtang 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_ruanmengtuanzi_tob",
+    "name": "Soft-Sweet Tuanzi 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tianmeihuopo_tob",
+    "name": "Sweet & Lively 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tianmeixiaoju_tob",
+    "name": "Sweet Little Orange 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tianmeixiaoyu_tob",
+    "name": "Sweet Xiaoyu 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tiaopigongzhu_tob",
+    "name": "Mischievous Princess 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tiexinnvyou_tob",
+    "name": "Caring Girlfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wenrounvshen_tob",
+    "name": "Gentle Goddess 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wenrouwenya_tob",
+    "name": "Gentle & Refined 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_zhixinjiejie_tob",
+    "name": "Confidante Sister 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wumeiyujie_tob",
+    "name": "Charming Big Sister 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_yuanqitianmei_tob",
+    "name": "Energetic Sweet Girl 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_xiemeiyujie_tob",
+    "name": "Wicked Big Sister 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_xingganyujie_tob",
+    "name": "Sexy Big Sister 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_xiuliqianqian_tob",
+    "name": "Pretty Qianqian 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tiexinguimi_tob",
+    "name": "Caring Bestie 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_tiexinmeimei_tob",
+    "name": "Caring Little Sister 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wenroubaiyueguang_tob",
+    "name": "Gentle First Love 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_chuliannvyou_tob",
+    "name": "First-Love Girlfriend 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_zhixingwenwan_tob",
+    "name": "Intellectual & Gentle 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_aoqilingren_tob",
+    "name": "Proud & Overbearing 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_anrenqinzhu_tob",
+    "name": "Dark-Blade Lord 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_aojiaogongzi_tob",
+    "name": "Tsundere Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_aojiaojingying_tob",
+    "name": "Tsundere Elite 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_aomanqingnian_tob",
+    "name": "Arrogant Young Man 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_aomanshaoye_tob",
+    "name": "Arrogant Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhenbiandiyu_tob",
+    "name": "Pillow Whisper 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_badaoshaoye_tob",
+    "name": "Domineering Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_badaozongcai_tob",
+    "name": "Domineering CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingjiaobailian_tob",
+    "name": "Yandere White Lotus 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingjiaodidi_tob",
+    "name": "Yandere Little Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingjiaogege_tob",
+    "name": "Yandere Big Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingjiaonanyou_tob",
+    "name": "Yandere Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingjiaoshaonian_tob",
+    "name": "Yandere Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingruogongzi_tob",
+    "name": "Frail Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bingruoshaonian_tob",
+    "name": "Frail Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_bujiqingnian_tob",
+    "name": "Unrestrained Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chunhoudiyin_tob",
+    "name": "Rich Bass 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_paoxiaoxiaoge_tob",
+    "name": "Roaring Brother 2.0",
+    "scene": "语音合成2.0 / 视频配音",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_yangyang_tob",
+    "name": "Yangyang 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chanruoshaoye_tob",
+    "name": "Weak Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chengshuzongcai_tob",
+    "name": "Mature CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chenwenmingzai_tob",
+    "name": "Steady Mingzai 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingyisugan_tob",
+    "name": "Elegant ASMR 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chunzhenxuedi_tob",
+    "name": "Innocent Junior 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_cixingnansang_tob",
+    "name": "Magnetic Male Voice 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_cujingnansheng_tob",
+    "name": "Jealous Boy 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_cujingnanyou_tob",
+    "name": "Jealous Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_diyinchenyu_tob",
+    "name": "Brooding Bass 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_fengfashaonian_tob",
+    "name": "High-Spirited Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_ruyagongzi_tob",
+    "name": "Elegant Young Master 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_fuheigongzi_tob",
+    "name": "Scheming Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_ganjingshaonian_tob",
+    "name": "Clean-Cut Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_gaolengzongcai_tob",
+    "name": "Cool CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_guaogongzi_tob",
+    "name": "Aloof Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_gugaogongzi_tob",
+    "name": "Lonely Noble 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_guiyishenmi_tob",
+    "name": "Eerie & Mysterious 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_guzhibingjiao_tob",
+    "name": "Stubborn Yandere 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_hanhoudunshi_tob",
+    "name": "Honest & Sturdy 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_huoliqingnian_tob",
+    "name": "Energetic Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_huoponanyou_tob",
+    "name": "Lively Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_huoposhuanglang_tob",
+    "name": "Lively & Hearty 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_huzishushu_tob",
+    "name": "Bearded Uncle 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_jijiazhineng_tob",
+    "name": "Mecha AI 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_jingyingqingnian_tob",
+    "name": "Elite Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_junyigongzi_tob",
+    "name": "Handsome Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_kailangqingkuai_tob",
+    "name": "Cheerful & Brisk 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_kailangqingnian_tob",
+    "name": "Cheerful Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lanyincaohunshi_tob",
+    "name": "Blue Silvergrass Spirit Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengaozongcai_tob",
+    "name": "Cold-Proud CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengdanshuli_tob",
+    "name": "Cold & Distant 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengjungaozhi_tob",
+    "name": "Stern Genius 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengjunshangsi_tob",
+    "name": "Stern Boss 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengkugege_tob",
+    "name": "Cool Big Brother 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lenglianxiongzhang_tob",
+    "name": "Cold-Faced Big Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lenglianxueba_tob",
+    "name": "Cold-Faced Top Student 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengmonanyou_tob",
+    "name": "Indifferent Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lengmoxiongzhang_tob",
+    "name": "Indifferent Big Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lingyunqingnian_tob",
+    "name": "Soaring Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qinglengjingui_tob",
+    "name": "Cool & Noble 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_lvchaxiaoge_tob",
+    "name": "Manipulative Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_mengdongqingnian_tob",
+    "name": "Naive Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_menyoupingxiaoge_tob",
+    "name": "Closed-Off Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_xiaozhangxiaoge_tob",
+    "name": "Cocky Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_nianrennanyou_tob",
+    "name": "Clingy Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_neiliancaijun_tob",
+    "name": "Reserved Talent 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_nuanxintitie_tob",
+    "name": "Warm & Thoughtful 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_pianpiangongzi_tob",
+    "name": "Graceful Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_chenwenyouya_tob",
+    "name": "Steady & Elegant 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingsexiaosheng_tob",
+    "name": "Bashful Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingseqingnian_tob",
+    "name": "Bashful Young Man 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingshuangshaonian_tob",
+    "name": "Fresh Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingxinbobo_tob",
+    "name": "Fresh Bobo 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qinqieqingnian_tob",
+    "name": "Friendly Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qinqiexiaozhuo_tob",
+    "name": "Friendly Xiaozhuo 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qinglangwenrun_tob",
+    "name": "Clear & Warm 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_rexueshaonian_tob",
+    "name": "Hot-Blooded Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_ruyacaijun_tob",
+    "name": "Elegant Talent 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_ruyajunzi_tob",
+    "name": "Elegant Gentleman 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_ruyazongcai_tob",
+    "name": "Elegant CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_sajiaonansheng_tob",
+    "name": "Coquettish Boy 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_sajiaonanyou_tob",
+    "name": "Coquettish Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_sajiaonianren_tob",
+    "name": "Coquettish & Clingy 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_satuoqingnian_tob",
+    "name": "Carefree Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shaonianjiangjun_tob",
+    "name": "Young General 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shenchenzongcai_tob",
+    "name": "Profound CEO 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_jilingxiaohuo_tob",
+    "name": "Clever Lad 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shenmifashi_tob",
+    "name": "Mysterious Mage 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shuaizhenxiaohuo_tob",
+    "name": "Frank Lad 2.0",
+    "scene": "语音合成2.0 / 通用",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shuanglangxiaoyang_tob",
+    "name": "Hearty Xiaoyang 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_dichenqianquan_tob",
+    "name": "Deep & Lingering 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_siwenqingnian_tob",
+    "name": "Refined Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_tianxinanyou_tob",
+    "name": "Sweet Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_tiexinnanyou_tob",
+    "name": "Caring Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenrounantongzhuo_tob",
+    "name": "Gentle Male Deskmate 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenrounanyou_tob",
+    "name": "Gentle Boyfriend 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenrouxuezhang_tob",
+    "name": "Gentle Senior 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenrunxuezhe_tob",
+    "name": "Mild Scholar 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenshunshaonian_tob",
+    "name": "Docile Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_guayanxiaoge_tob",
+    "name": "Taciturn Brother 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_xiaohouye_tob",
+    "name": "Young Marquis 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_naiqixiaosheng_tob",
+    "name": "Milky Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_xiaosasuixing_tob",
+    "name": "Casual & Free 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wenrouneilian_tob",
+    "name": "Gentle & Reserved 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_xuebanantongzhuo_tob",
+    "name": "Top-Student Male Deskmate 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_xuebatongzhuo_tob",
+    "name": "Top-Student Deskmate 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_yangguangyangyang_tob",
+    "name": "Sunny Yangyang 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_wennuanshaonian_tob",
+    "name": "Warm Youth 2.0",
+    "scene": "语音合成2.0 / 有声阅读",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_yiqishaonian_tob",
+    "name": "Spirited Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_younidashu_tob",
+    "name": "Greasy Uncle 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_youmodaye_tob",
+    "name": "Humorous Grandpa 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_youmoshushu_tob",
+    "name": "Humorous Uncle 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_youroubangzhu_tob",
+    "name": "Hesitant Gang Leader 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_yourougongzi_tob",
+    "name": "Hesitant Young Master 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_yuanqishaonian_tob",
+    "name": "Vibrant Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhangjianjunzi_tob",
+    "name": "Swordsman Gentleman 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhangjianxiake_tob",
+    "name": "Sword-Wielding Hero 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhengzhiqingnian_tob",
+    "name": "Upright Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhishuaiqingnian_tob",
+    "name": "Frank Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zhongerqingnian_tob",
+    "name": "Chuunibyou Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zifuqingnian_tob",
+    "name": "Conceited Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_zixinqingnian_tob",
+    "name": "Confident Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_tiancaitongzhuo_tob",
+    "name": "Genius Deskmate 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_qingxinmumu_tob",
+    "name": "Fresh Mumu 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_wenwanshanshan_tob",
+    "name": "Gentle Shanshan 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_reqingaina_tob",
+    "name": "Warm Aina 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_male_shuanglangshaonian_tob",
+    "name": "Hearty Youth 2.0",
+    "scene": "语音合成2.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_uranus_zh_female_qingyingduoduo_tob",
+    "name": "Light Duoduo 2.0",
+    "scene": "语音合成2.0 / 客服",
+    "language": "中文",
+    "model": "语音合成2.0",
+    "resourceIds": [
+      "seed-tts-2.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_cancan_mars_bigtts",
+    "name": "灿灿",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文；美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_vv_mars_bigtts",
+    "name": "Vivi",
+    "scene": "语音合成1.0 / 通用",
     "language": "中文",
     "model": "语音合成1.0",
     "resourceIds": [
@@ -220,8 +3190,217 @@
     "emotions": []
   },
   {
-    "id": "zh_male_lengkugege_emo_v2_mars_bigtts",
-    "name": "冷酷哥哥（多情感）",
+    "id": "zh_female_shuangkuaisisi_moon_bigtts",
+    "name": "爽快思思",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文；美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_wennuanahu_moon_bigtts",
+    "name": "温暖阿虎",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文；美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_shaonianzixin_moon_bigtts",
+    "name": "少年梓辛",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文；美式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qingxinnvsheng_mars_bigtts",
+    "name": "清新女声",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_zhixingnvsheng_mars_bigtts",
+    "name": "知性女声",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_qingshuangnanda_mars_bigtts",
+    "name": "清爽男大",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_linjianvhai_moon_bigtts",
+    "name": "邻家女孩",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yuanboxiaoshu_moon_bigtts",
+    "name": "渊博小叔",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yangguangqingnian_moon_bigtts",
+    "name": "阳光青年",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_tianmeixiaoyuan_moon_bigtts",
+    "name": "甜美小源",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_tianmeiyueyue_moon_bigtts",
+    "name": "甜美悦悦",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qingchezizi_moon_bigtts",
+    "name": "清澈梓梓",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_kailangjiejie_moon_bigtts",
+    "name": "开朗姐姐",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_linjiananhai_moon_bigtts",
+    "name": "邻家男孩",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_xinlingjitang_moon_bigtts",
+    "name": "心灵鸡汤",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_xudong_conversation_wvae_bigtts",
+    "name": "快乐小东",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_qinqienvsheng_moon_bigtts",
+    "name": "亲切女声",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wenrouxiaoya_moon_bigtts",
+    "name": "温柔小雅",
+    "scene": "语音合成1.0 / 通用",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_yingyujiaoyu_mars_bigtts",
+    "name": "Tina老师",
+    "scene": "语音合成1.0 / 教育",
+    "language": "中文；英式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_shuangkuaisisi_emo_v2_mars_bigtts",
+    "name": "爽快思思（多情感）",
     "scene": "语音合成1.0 / 多情感",
     "language": "中文",
     "model": "语音合成1.0",
@@ -229,19 +3408,18 @@
       "seed-tts-1.0"
     ],
     "emotions": [
-      "angry",
-      "coldness",
-      "fear",
       "happy",
-      "hate",
-      "neutral",
       "sad",
-      "depressed"
+      "angry",
+      "surprised",
+      "excited",
+      "coldness",
+      "neutral"
     ]
   },
   {
-    "id": "zh_female_tianxinxiaomei_emo_v2_mars_bigtts",
-    "name": "甜心小美（多情感）",
+    "id": "zh_female_roumeinvyou_emo_v2_mars_bigtts",
+    "name": "柔美女友（多情感）",
     "scene": "语音合成1.0 / 多情感",
     "language": "中文",
     "model": "语音合成1.0",
@@ -249,9 +3427,14 @@
       "seed-tts-1.0"
     ],
     "emotions": [
+      "happy",
       "sad",
+      "angry",
+      "surprised",
       "fear",
       "hate",
+      "excited",
+      "coldness",
       "neutral"
     ]
   },
@@ -277,6 +3460,26 @@
     ]
   },
   {
+    "id": "zh_male_lengkugege_emo_v2_mars_bigtts",
+    "name": "冷酷哥哥（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "angry",
+      "coldness",
+      "fear",
+      "happy",
+      "hate",
+      "neutral",
+      "sad",
+      "depressed"
+    ]
+  },
+  {
     "id": "zh_male_aojiaobazong_emo_v2_mars_bigtts",
     "name": "傲娇霸总（多情感）",
     "scene": "语音合成1.0 / 多情感",
@@ -290,74 +3493,6 @@
       "happy",
       "angry",
       "hate"
-    ]
-  },
-  {
-    "id": "zh_male_guangzhoudege_emo_mars_bigtts",
-    "name": "广州德哥（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "angry",
-      "fear",
-      "neutral"
-    ]
-  },
-  {
-    "id": "zh_male_jingqiangkanye_emo_mars_bigtts",
-    "name": "京腔侃爷（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "happy",
-      "angry",
-      "surprised",
-      "hate",
-      "neutral"
-    ]
-  },
-  {
-    "id": "zh_female_linjuayi_emo_v2_mars_bigtts",
-    "name": "邻居阿姨（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "neutral",
-      "angry",
-      "coldness",
-      "depressed",
-      "surprised"
-    ]
-  },
-  {
-    "id": "zh_male_yourougongzi_emo_v2_mars_bigtts",
-    "name": "优柔公子（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "happy",
-      "angry",
-      "fear",
-      "hate",
-      "excited",
-      "neutral",
-      "depressed"
     ]
   },
   {
@@ -398,45 +3533,6 @@
     ]
   },
   {
-    "id": "zh_male_beijingxiaoye_emo_v2_mars_bigtts",
-    "name": "北京小爷（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "angry",
-      "surprised",
-      "fear",
-      "excited",
-      "coldness",
-      "neutral"
-    ]
-  },
-  {
-    "id": "zh_female_roumeinvyou_emo_v2_mars_bigtts",
-    "name": "柔美女友（多情感）",
-    "scene": "语音合成1.0 / 多情感",
-    "language": "中文",
-    "model": "语音合成1.0",
-    "resourceIds": [
-      "seed-tts-1.0"
-    ],
-    "emotions": [
-      "happy",
-      "sad",
-      "angry",
-      "surprised",
-      "fear",
-      "hate",
-      "excited",
-      "coldness",
-      "neutral"
-    ]
-  },
-  {
     "id": "zh_male_yangguangqingnian_emo_v2_mars_bigtts",
     "name": "阳光青年（多情感）",
     "scene": "语音合成1.0 / 多情感",
@@ -456,8 +3552,77 @@
     ]
   },
   {
-    "id": "zh_female_meilinvyou_emo_v2_mars_bigtts",
-    "name": "魅力女友（多情感）",
+    "id": "zh_male_yourougongzi_emo_v2_mars_bigtts",
+    "name": "优柔公子（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "happy",
+      "angry",
+      "fear",
+      "hate",
+      "excited",
+      "neutral",
+      "depressed"
+    ]
+  },
+  {
+    "id": "zh_male_beijingxiaoye_emo_v2_mars_bigtts",
+    "name": "北京小爷（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "北京口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "angry",
+      "surprised",
+      "fear",
+      "excited",
+      "coldness",
+      "neutral"
+    ]
+  },
+  {
+    "id": "zh_male_guangzhoudege_emo_mars_bigtts",
+    "name": "广州德哥（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "广东/广州口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "angry",
+      "fear",
+      "neutral"
+    ]
+  },
+  {
+    "id": "zh_male_jingqiangkanye_emo_mars_bigtts",
+    "name": "京腔侃爷（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "北京口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "happy",
+      "angry",
+      "surprised",
+      "hate",
+      "neutral"
+    ]
+  },
+  {
+    "id": "zh_female_tianxinxiaomei_emo_v2_mars_bigtts",
+    "name": "甜心小美（多情感）",
     "scene": "语音合成1.0 / 多情感",
     "language": "中文",
     "model": "语音合成1.0",
@@ -467,33 +3632,54 @@
     "emotions": [
       "sad",
       "fear",
+      "hate",
       "neutral"
     ]
   },
   {
-    "id": "zh_female_shuangkuaisisi_emo_v2_mars_bigtts",
-    "name": "爽快思思（多情感）",
+    "id": "zh_female_linjuayi_emo_v2_mars_bigtts",
+    "name": "邻居阿姨（多情感）",
     "scene": "语音合成1.0 / 多情感",
-    "language": "中文、英式英语",
+    "language": "中文",
     "model": "语音合成1.0",
     "resourceIds": [
       "seed-tts-1.0"
     ],
     "emotions": [
-      "happy",
-      "sad",
+      "neutral",
       "angry",
-      "surprised",
-      "excited",
       "coldness",
-      "neutral"
+      "depressed",
+      "surprised"
+    ]
+  },
+  {
+    "id": "zh_male_shenyeboke_emo_v2_mars_bigtts",
+    "name": "深夜播客（多情感）",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "surprised",
+      "sad",
+      "neutral",
+      "hate",
+      "happy",
+      "fear",
+      "excited",
+      "depressed",
+      "coldness",
+      "angry"
     ]
   },
   {
     "id": "en_female_candice_emo_v2_mars_bigtts",
-    "name": "Candice（多情感）",
-    "scene": "语音合成1.0 / 多情感英语",
-    "language": "美式英语",
+    "name": "Candice",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英文",
     "model": "语音合成1.0",
     "resourceIds": [
       "seed-tts-1.0"
@@ -501,7 +3687,7 @@
     "emotions": [
       "affectionate",
       "angry",
-      "asmr",
+      "ASMR",
       "chat",
       "excited",
       "happy",
@@ -511,9 +3697,9 @@
   },
   {
     "id": "en_female_skye_emo_v2_mars_bigtts",
-    "name": "Serena（多情感）",
-    "scene": "语音合成1.0 / 多情感英语",
-    "language": "美式英语",
+    "name": "Serena",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英文",
     "model": "语音合成1.0",
     "resourceIds": [
       "seed-tts-1.0"
@@ -521,7 +3707,7 @@
     "emotions": [
       "affectionate",
       "angry",
-      "asmr",
+      "ASMR",
       "chat",
       "excited",
       "happy",
@@ -532,9 +3718,9 @@
   },
   {
     "id": "en_male_glen_emo_v2_mars_bigtts",
-    "name": "Glen（多情感）",
-    "scene": "语音合成1.0 / 多情感英语",
-    "language": "美式英语",
+    "name": "Glen",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英文",
     "model": "语音合成1.0",
     "resourceIds": [
       "seed-tts-1.0"
@@ -542,7 +3728,7 @@
     "emotions": [
       "affectionate",
       "angry",
-      "asmr",
+      "ASMR",
       "chat",
       "excited",
       "happy",
@@ -550,5 +3736,400 @@
       "sad",
       "warm"
     ]
+  },
+  {
+    "id": "en_male_sylus_emo_v2_mars_bigtts",
+    "name": "Sylus",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "affectionate",
+      "angry",
+      "ASMR",
+      "authoritative",
+      "chat",
+      "excited",
+      "happy",
+      "neutral",
+      "sad",
+      "warm"
+    ]
+  },
+  {
+    "id": "en_male_corey_emo_v2_mars_bigtts",
+    "name": "Corey",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "angry",
+      "ASMR",
+      "authoritative",
+      "chat",
+      "affectionate",
+      "excited",
+      "happy",
+      "neutral",
+      "sad",
+      "warm"
+    ]
+  },
+  {
+    "id": "en_female_nadia_tips_emo_v2_mars_bigtts",
+    "name": "Nadia",
+    "scene": "语音合成1.0 / 多情感",
+    "language": "英式英语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": [
+      "affectionate",
+      "angry",
+      "ASMR",
+      "chat",
+      "excited",
+      "happy",
+      "neutral",
+      "sad",
+      "warm"
+    ]
+  },
+  {
+    "id": "zh_female_wanwanxiaohe_moon_bigtts",
+    "name": "湾湾小何",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "台湾普通话",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_jingqiangkanye_moon_bigtts",
+    "name": "京腔侃爷",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "北京口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_beijingxiaoye_moon_bigtts",
+    "name": "北京小爷",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "北京口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_daimengchuanmei_moon_bigtts",
+    "name": "呆萌川妹",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "四川口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_yuzhouzixuan_moon_bigtts",
+    "name": "豫州子轩",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "河南口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_guangxiyuanzhou_moon_bigtts",
+    "name": "广西远舟",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "广西口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_guozhoudege_moon_bigtts",
+    "name": "广州德哥",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "广东口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_wanqudashu_moon_bigtts",
+    "name": "湾区大叔",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "广东口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_haoyuxiaoge_moon_bigtts",
+    "name": "浩宇小哥",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "青岛口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_meituojieer_moon_bigtts",
+    "name": "妹坨洁儿",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "长沙口音",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_yueyunv_mars_bigtts",
+    "name": "粤语小溏",
+    "scene": "语音合成1.0 / 趣味口音",
+    "language": "粤语",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_naiqimengwa_mars_bigtts",
+    "name": "奶气萌娃",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_popo_mars_bigtts",
+    "name": "婆婆",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_gaolengyujie_moon_bigtts",
+    "name": "高冷御姐",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_aojiaobazong_moon_bigtts",
+    "name": "傲娇霸总",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_meilinvyou_moon_bigtts",
+    "name": "魅力女友",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_sajiaonvyou_moon_bigtts",
+    "name": "柔美女友",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_yuanqinvyou_moon_bigtts",
+    "name": "撒娇学妹",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_dongfanghaoran_moon_bigtts",
+    "name": "东方浩然",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_shenyeboke_moon_bigtts",
+    "name": "深夜播客",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_zh_female_bingruoshaonv_tob",
+    "name": "病弱少女",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_zh_female_huoponvhai_tob",
+    "name": "活泼女孩",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_zh_female_heainainai_tob",
+    "name": "和蔼奶奶",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "ICL_zh_female_linjuayi_tob",
+    "name": "邻居阿姨",
+    "scene": "语音合成1.0 / 角色扮演",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_zhubajie_mars_bigtts",
+    "name": "猪八戒",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_tangseng_mars_bigtts",
+    "name": "唐僧",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_lubanqihao_mars_bigtts",
+    "name": "鲁班七号",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_jiyejizi2_mars_bigtts",
+    "name": "春日部姐姐",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_female_leidian_mars_bigtts",
+    "name": "女雷神",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
+  },
+  {
+    "id": "zh_male_zhuangzhou_mars_bigtts",
+    "name": "庄周",
+    "scene": "语音合成1.0 / IP仿音",
+    "language": "中文",
+    "model": "语音合成1.0",
+    "resourceIds": [
+      "seed-tts-1.0"
+    ],
+    "emotions": []
   }
 ]

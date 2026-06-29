@@ -1,4 +1,4 @@
-export type TTSEngine = 'volc' | 'edge'
+export type TTSEngine = 'volc' | 'edge' | 'mixed'
 
 export interface TTSConfig {
   apiKey?: string
@@ -56,6 +56,7 @@ export interface EdgeTTSControls {
 
 export interface RoleStoryVoiceControls extends TTSControls {
   role: string
+  engine?: TTSEngine
   voice: string
   voiceName: string
   resourceId: string
@@ -80,13 +81,6 @@ export interface VolcSynthesizeParams extends TTSControls {
   voice: string
   voiceName: string
   resourceId: string
-}
-
-export interface EdgeSynthesizeParams extends EdgeTTSControls {
-  engine: 'edge'
-  text: string
-  voice: string
-  voiceName: string
 }
 
 export interface RoleStorySynthesizeParams {

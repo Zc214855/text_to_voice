@@ -1,3 +1,62 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "fd1aff55-0ca1-4218-9ff4-80bd653d1c05",
+      "fileName": "标题：小兔和星星_云端角色故事 · 3 角色.wav",
+      "name": "标题：小兔和星星",
+      "text": "标题：小兔和星星\n\n旁白：月亮慢慢升起来，森林边的小窗亮着一小点暖光。\n旁白：小兔把耳朵贴在枕头上，小声问妈妈。\n小兔：星星为什么会眨眼睛？\n妈妈：因为它们在很远很远的地方，轻轻给你说晚安。\n旁白：小兔笑了，把被角拉到下巴下面。\n小兔：那我也给星星说晚安。\n旁白：窗外的风慢慢小了，星星一闪一闪，像把梦轻轻送进屋里。",
+      "engine": "volc",
+      "voice": "role-story",
+      "voiceName": "云端角色故事 · 3 角色",
+      "byteLength": 4508972,
+      "duration": 0,
+      "controls": {
+        "mode": "role-story",
+        "roles": [
+          {
+            "role": "旁白",
+            "engine": "volc",
+            "voice": "zh_female_xiaoxue_uranus_bigtts",
+            "voiceName": "儿童绘本 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.85,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "小兔",
+            "engine": "volc",
+            "voice": "zh_female_xiaohe_uranus_bigtts",
+            "voiceName": "小何 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.85,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          },
+          {
+            "role": "妈妈",
+            "engine": "volc",
+            "voice": "zh_female_xiaoxue_uranus_bigtts",
+            "voiceName": "儿童绘本 2.0",
+            "resourceId": "seed-tts-2.0",
+            "speechRate": 0.92,
+            "pitch": 0,
+            "loudness": 1,
+            "emotion": "",
+            "emotionScale": 4,
+            "explicitLanguage": "zh-cn"
+          }
+        ],
+        "segmentCount": 7,
+        "characterCount": 129
+      },
+      "createdAt": "2026-06-29T16:39:01.243Z"
+    }
+  ]
 }

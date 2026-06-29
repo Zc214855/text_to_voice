@@ -134,10 +134,11 @@ export function useSharedHistory() {
   }
 
   async function renameItem(id: string, name: string) {
+    let oldItem: HistoryItem | null = null
     try {
       const idx = history.value.findIndex((it) => it.id === id)
       if (idx === -1) return
-      const oldItem = { ...history.value[idx] }
+      oldItem = { ...history.value[idx] }
       // 乐观更新
       history.value[idx] = { ...history.value[idx], name }
       const res = await fetch(`${LIBRARY_API}/${encodeURIComponent(id)}/rename`, {
@@ -154,7 +155,7 @@ export function useSharedHistory() {
     } catch {
       // fetch 本身异常（网络不通等），用 oldItem 回滚
       const idx = history.value.findIndex((it) => it.id === id)
-      if (idx !== -1) history.value[idx] = oldItem
+      if (idx !== -1 && oldItem) history.value[idx] = oldItem
     }
   }
 

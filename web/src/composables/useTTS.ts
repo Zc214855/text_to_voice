@@ -38,6 +38,7 @@ const DEFAULT_ENDPOINT = '/volc-api/api/v3/tts/unidirectional'
 /** 声音复刻 2.0 的资源 ID */
 export const CLONE_RESOURCE_ID = 'seed-icl-2.0'
 type VolcRequestParams = Omit<VolcSynthesizeParams, 'engine'> & { signal?: AbortSignal }
+export type ResolvedTTSConfig = Required<Pick<TTSConfig, 'endpoint'>> & TTSConfig
 
 const errorMsg = ref('')
 const statusText = ref('就绪')
@@ -70,7 +71,7 @@ function createRequestId() {
   return crypto.randomUUID ? crypto.randomUUID() : `tts-${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-async function loadConfig(): Promise<Required<Pick<TTSConfig, 'endpoint'>> & TTSConfig> {
+async function loadConfig(): Promise<ResolvedTTSConfig> {
   const response = await fetch(`/config.json?t=${Date.now()}`)
   if (!response.ok) {
     throw new Error('无法读取 public/config.json')
@@ -395,7 +396,7 @@ export function useTTS() {
 
   async function synthesizeAudioBlob(
     params: VolcRequestParams,
-    config: Required<Pick<TTSConfig, 'endpoint'>> & TTSConfig,
+    config: ResolvedTTSConfig,
   ): Promise<{ requestId: string; usage: UsageInfo | null; blob: Blob }> {
     const requestId = createRequestId()
     const requestConfig = {
@@ -432,76 +433,11 @@ export function useTTS() {
     }
   }
 
-  async function synthesize(params: Omit<VolcSynthesizeParams, 'engine'>) {
-    const text = params.text.trim()
-
-    if (!text) {
-      errorMsg.value = '请输入要合成的文本'
-      return undefined
-    }
-
-    if (countTextUnits(text) > MAX_TEXT_LENGTH) {
-      errorMsg.value = `估算计费字符不能超过 ${MAX_TEXT_LENGTH} 字`
-      return undefined
-    }
-
-    isGenerating.value = true
-    errorMsg.value = ''
-    lastUsage.value = null
-    statusText.value = '读取配置'
-
-    const controller = new AbortController()
-    const timeoutId = window.setTimeout(() => controller.abort(), 180_000)
-
-    try {
-      const config = await refreshConfig()
-      statusText.value = '请求火山引擎'
-      const { blob, requestId, usage } = await synthesizeAudioBlob({ ...params, text, signal: controller.signal }, config)
-      currentResourceId.value = params.resourceId || config.resourceId || ''
-      statusText.value = '生成音频文件'
-      const item: HistoryItem = {
-        id: requestId,
-        engine: 'volc',
-        name: defaultItemName(text),
-        text,
-        voice: params.voice,
-        voiceName: params.voiceName,
-        fileName: '',
-        byteLength: blob.size,
-        requestId,
-        createdAt: new Date().toISOString(),
-        controls: {
-          speechRate: params.speechRate,
-          pitch: params.pitch,
-          loudness: params.loudness,
-          emotion: params.emotion,
-          emotionScale: params.emotionScale,
-          explicitLanguage: params.explicitLanguage,
-        },
-      }
-
-      statusText.value = '保存音频文件'
-      const saved = await shared.addItem(item, blob)
-      if (!saved) {
-        throw new Error('音频已生成但保存失败，请检查本地服务或 output 目录权限')
-      }
-      Object.assign(item, saved)
-      lastUsage.value = usage
-      statusText.value = '完成'
-
-      return item
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        errorMsg.value = '请求超时'
-      } else {
-        errorMsg.value = normalizeErrorMessage(error instanceof Error ? error.message : '合成失败')
-      }
-      statusText.value = '失败'
-      return undefined
-    } finally {
-      window.clearTimeout(timeoutId)
-      isGenerating.value = false
-    }
+  async function synthesizeAudioOnly(
+    params: VolcRequestParams,
+    config?: ResolvedTTSConfig,
+  ): Promise<{ requestId: string; usage: UsageInfo | null; blob: Blob }> {
+    return synthesizeAudioBlob(params, config || await refreshConfig())
   }
 
   async function synthesizeRoleStory(params: Omit<RoleStorySynthesizeParams, 'engine'>) {
@@ -631,8 +567,8 @@ export function useTTS() {
     lastUsage: readonly(lastUsage),
     refreshConfig,
     restoreHistory: shared.restoreHistory,
-    synthesize,
     synthesizeRoleStory,
+    synthesizeAudioOnly,
     playAudio: shared.playAudio,
     stopAudio: shared.stopAudio,
     downloadAudio: shared.downloadAudio,

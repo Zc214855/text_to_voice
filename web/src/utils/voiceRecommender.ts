@@ -366,6 +366,126 @@ function toneToEmotion(tone: string, voice: PopularVoice): { emotion: string; em
   return { emotion: '', emotionScale: 4 }
 }
 
+/** 将角色描述映射为可直接传给火山 TTS 的控制参数。 */
+export function descriptorToSpeechParams(descriptor: VoiceDescriptor, voice: PopularVoice) {
+  const emotion = toneToEmotion(descriptor.tone, voice)
+  return {
+    speechRate: speedToRate(descriptor.speed),
+    pitch: toneToPitch(descriptor.tone),
+    loudness: 1,
+    emotion: emotion.emotion,
+    emotionScale: emotion.emotionScale,
+  }
+}
+
+/** 按角色描述对火山音色完整排序，供跨引擎推荐器展示所有候选。 */
+export function recommendVoicesByDescriptor(descriptor: VoiceDescriptor, voices: PopularVoice[]): ScoredVoice[] {
+  if (voices.length === 0) return []
+
+  const scores = voices.map((voice) => {
+    const reasons: string[] = []
+    let score = 0
+
+    // 性别匹配
+    if (descriptor.gender) {
+      if (descriptor.gender.includes('女') && voice.id.includes('_female_')) {
+        score += 30
+        reasons.push('性别匹配')
+      } else if (descriptor.gender.includes('男') && voice.id.includes('_male_')) {
+        score += 30
+        reasons.push('性别匹配')
+      } else if (descriptor.gender === '不限') {
+        score += 15
+        reasons.push('性别不限')
+      } else {
+        score -= 8
+      }
+    }
+
+    // 年龄段匹配
+    if (descriptor.ageGroup) {
+      const ageKeyMap: Record<string, string[]> = {
+        幼童: ['儿童', '绘本', '可爱', '调皮', '甜心', '小', '萌娃', '公主', '少年', '同桌', '天才'],
+        少年: ['少年', '爽朗', '调皮', '同桌', '天才', '小'],
+        成年: ['淑女', '知性', '开朗', '儒雅', '流畅', '主播', '逸辰', '灿灿', '绘本', '妈妈'],
+        老年: ['阿姨', '奶奶', '婆婆', '灿灿', '知性', '主播', '慈祥'],
+      }
+      const ageKeys = ageKeyMap[descriptor.ageGroup] || []
+      for (const kw of ageKeys) {
+        if (voice.name.includes(kw)) {
+          score += 25
+          reasons.push('年龄匹配')
+          break
+        }
+      }
+    }
+
+    // 语气匹配：对描述词中的每个特征词分别匹配，累加得分。
+    if (descriptor.tone) {
+      const toneMap: Record<string, string[]> = {
+        温柔: ['温柔', '淑女', '柔和', '流畅', '妈妈', '绘本'],
+        活泼: ['调皮', '爽朗', '开朗', '甜心', '俏皮'],
+        沉稳: ['知性', '儒雅', '逸辰', '主播', '大壹', '稳重'],
+        朗读: ['绘本', '主播', '流畅'],
+        可爱: ['可爱', '甜心', '公主', '萌娃'],
+        冷静: ['冷酷', '高冷'],
+        慈祥: ['阿姨', '奶奶', '婆婆', '灿灿', '知性', '绘本'],
+        日常: ['温柔', '开朗', '流畅', '淑女', '妈妈'],
+        好奇: ['可爱', '调皮', '小', '萌娃'],
+        俏皮: ['调皮', '公主', '可爱', '俏皮'],
+        安静: ['温柔', '绘本', '柔和', '晓梦'],
+      }
+      let toneScore = 0
+      const toneParts = descriptor.tone.split(/[，,、\s]+/).filter(Boolean)
+      for (const part of toneParts) {
+        let matched = false
+        for (const [toneKey, keywords] of Object.entries(toneMap)) {
+          if (part === toneKey || toneKey.includes(part) || part.includes(toneKey)) {
+            for (const kw of keywords) {
+              if (voice.name.includes(kw)) {
+                toneScore += 12
+                matched = true
+                break
+              }
+            }
+            if (matched) break
+          }
+        }
+        if (!matched && part.length >= 2 && voice.name.includes(part)) {
+          toneScore += 6
+        }
+      }
+      if (toneScore > 0) reasons.push('语气匹配')
+      score += Math.min(toneScore, 30)
+    }
+
+    // 模型质量与睡前故事偏好
+    if (voice.model === '精品克隆') {
+      score += 15
+      reasons.push('精品音质')
+    } else if (voice.model === '语音合成2.0') {
+      score += 12
+      reasons.push('2.0模型')
+    } else if (voice.emotions.length > 0) {
+      score += 5
+      reasons.push('支持情感')
+    }
+
+    if (descriptor.tone.includes('朗读') && voice.scene.includes('有声阅读')) {
+      score += 12
+      reasons.push('有声阅读')
+    }
+    if ((descriptor.ageGroup === '幼童' || descriptor.ageGroup === '少年') && voice.scene.includes('角色扮演')) {
+      score += 10
+      reasons.push('角色扮演')
+    }
+
+    return { voice, score, reasons: [...new Set(reasons)] }
+  })
+
+  return scores.sort((a, b) => b.score - a.score)
+}
+
 /**
  * 根据 LLM 产出的角色特征描述，从音色库中匹配最佳音色和参数。
  *
@@ -387,88 +507,11 @@ export function mapDescriptorToVoice(
     throw new Error('音色列表为空，无法匹配')
   }
 
-  const scores = voices.map((voice) => {
-    let score = 0
-
-    // 性别匹配
-    if (descriptor.gender) {
-      if (descriptor.gender.includes('女') && voice.id.includes('_female_')) score += 30
-      else if (descriptor.gender.includes('男') && voice.id.includes('_male_')) score += 30
-      else if (descriptor.gender === '不限') score += 15
-    }
-
-    // 年龄段匹配
-    if (descriptor.ageGroup) {
-      const ageKeyMap: Record<string, string[]> = {
-        幼童: ['儿童', '可爱', '调皮', '甜心', '小', '公主', '少年', '同桌', '天才'],
-        少年: ['少年', '爽朗', '调皮', '同桌', '天才', '小'],
-        成年: ['淑女', '知性', '开朗', '儒雅', '流畅', '主播', '逸辰', '灿灿', '绘本'],
-        老年: ['阿姨', '灿灿', '知性', '主播'],
-      }
-      const ageKeys = ageKeyMap[descriptor.ageGroup] || []
-      for (const kw of ageKeys) {
-        if (voice.name.includes(kw)) { score += 25; break }
-      }
-    }
-
-    // 语气匹配：对描述词中的每个特征词分别匹配，累加得分
-    if (descriptor.tone) {
-      const toneMap: Record<string, string[]> = {
-        温柔: ['温柔', '淑女', '柔和', '流畅'],
-        活泼: ['调皮', '爽朗', '开朗', '甜心'],
-        沉稳: ['知性', '儒雅', '逸辰', '主播', '大壹'],
-        朗读: ['绘本', '主播', '流畅'],
-        可爱: ['可爱', '甜心', '公主'],
-        冷静: ['冷酷', '高冷'],
-        慈祥: ['阿姨', '灿灿', '知性', '绘本'],
-        日常: ['温柔', '开朗', '流畅', '淑女'],
-        好奇: ['可爱', '调皮', '小'],
-        俏皮: ['调皮', '公主', '可爱'],
-        安静: ['温柔', '绘本', '柔和'],
-      }
-      let toneScore = 0
-      const toneParts = descriptor.tone.split(/[，,、\s]+/).filter(Boolean)
-      for (const part of toneParts) {
-        let matched = false
-        for (const [toneKey, keywords] of Object.entries(toneMap)) {
-          if (part === toneKey || toneKey.includes(part) || part.includes(toneKey)) {
-            for (const kw of keywords) {
-              if (voice.name.includes(kw)) { toneScore += 12; matched = true; break }
-            }
-            if (matched) break
-          }
-        }
-        // 没有精确匹配到语气关键词时，检查音色名是否包含描述词
-        if (!matched && part.length >= 2) {
-          if (voice.name.includes(part)) toneScore += 6
-        }
-      }
-      score += Math.min(toneScore, 30)
-    }
-
-    // 模型质量
-    if (voice.model === '精品克隆') score += 15
-    else if (voice.model === '语音合成2.0') score += 10
-    else if (voice.emotions.length > 0) score += 5
-
-    // 场景偏好：有声阅读场景的旁白类音色加分
-    if (descriptor.tone.includes('朗读') && voice.scene.includes('有声阅读')) score += 10
-    if ((descriptor.ageGroup === '幼童' || descriptor.ageGroup === '少年') && voice.scene.includes('角色扮演')) score += 10
-
-    return { voice, score }
-  })
-
-  scores.sort((a, b) => b.score - a.score)
-  const best = scores[0]!
-
-  const emotion = toneToEmotion(descriptor.tone, best.voice)
+  const best = recommendVoicesByDescriptor(descriptor, voices)[0]!
+  const params = descriptorToSpeechParams(descriptor, best.voice)
 
   return {
     voice: best.voice,
-    speechRate: speedToRate(descriptor.speed),
-    pitch: toneToPitch(descriptor.tone),
-    loudness: 1,
-    emotion: emotion.emotion,
-    emotionScale: emotion.emotionScale,
+    ...params,
   }
 }
