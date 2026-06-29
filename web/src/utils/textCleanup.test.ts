@@ -22,4 +22,17 @@ describe('textCleanup', () => {
   it('keeps title lines separate from preceding text', () => {
     expect(cleanupTtsText('序言\n第一章 星光').text).toBe('序言\n第一章 星光')
   })
+
+  it('does not merge lines inside [角色音色] block', () => {
+    const input = '标题：团团\n\n[角色音色]\n旁白：女声、成年、温柔朗读、偏慢\n团团：不限、幼童、安静好奇、偏慢\n[/角色音色]'
+
+    const result = cleanupTtsText(input)
+
+    // 角色音色块内的两行不应该被合并成一行
+    expect(result.text).toContain('旁白：女声、成年、温柔朗读、偏慢')
+    expect(result.text).toContain('团团：不限、幼童、安静好奇、偏慢')
+    // 确认两行仍然独立存在（没有被 join 成一行）
+    const metaBlock = result.text.slice(result.text.indexOf('[角色音色]'), result.text.indexOf('[/角色音色]'))
+    expect(metaBlock.split('\n').length).toBeGreaterThanOrEqual(3)
+  })
 })

@@ -51,6 +51,7 @@ export interface EdgeTTSControls {
   rate: number
   pitch: number
   volume: number
+  storyMode?: boolean
 }
 
 export interface RoleStoryVoiceControls extends TTSControls {
@@ -95,8 +96,6 @@ export interface RoleStorySynthesizeParams {
   segments: RoleStorySegmentInput[]
   roleControls: RoleStoryVoiceControls[]
 }
-
-export type SynthesizeParams = VolcSynthesizeParams | EdgeSynthesizeParams
 
 export interface HistoryItem {
   id: string

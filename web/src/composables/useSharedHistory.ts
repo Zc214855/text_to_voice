@@ -34,8 +34,13 @@ export function defaultItemName(text: string): string {
 }
 
 export function useSharedHistory() {
+  let restoring = false
+
   /** 拉取后端列表，并执行一次性 IndexedDB 迁移 */
   async function restoreHistory() {
+    if (restoring) return
+    restoring = true
+
     // 1. 先拉后端现有数据
     try {
       const res = await fetch(LIBRARY_API)
@@ -88,30 +93,36 @@ export function useSharedHistory() {
     } catch (err) {
       console.error('迁移过程异常，IndexedDB 数据保留：', err)
     }
+    restoring = false
   }
 
   /** 新增：item 包含元数据，blob 是音频。内部转 base64 POST 给后端 */
   async function addItem(
     item: Omit<HistoryItem, 'fileName'> & { fileName?: string },
     blob: Blob,
+    contentType?: string,
   ): Promise<HistoryItem | null> {
     try {
       const audioBase64 = await blobToBase64(blob)
+      const body: Record<string, unknown> = {
+        name: item.name,
+        text: item.text,
+        engine: item.engine,
+        voice: item.voice,
+        voiceName: item.voiceName,
+        controls: item.controls,
+        duration: item.duration || 0,
+        byteLength: item.byteLength || blob.size,
+        createdAt: item.createdAt,
+        audioBase64,
+      }
+      if (contentType && contentType.trim()) {
+        body.contentType = contentType
+      }
       const res = await fetch(LIBRARY_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: item.name,
-          text: item.text,
-          engine: item.engine,
-          voice: item.voice,
-          voiceName: item.voiceName,
-          controls: item.controls,
-          duration: item.duration || 0,
-          byteLength: item.byteLength || blob.size,
-          createdAt: item.createdAt,
-          audioBase64,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('保存失败')
       const saved: HistoryItem = await res.json()
@@ -124,17 +135,26 @@ export function useSharedHistory() {
 
   async function renameItem(id: string, name: string) {
     try {
+      const idx = history.value.findIndex((it) => it.id === id)
+      if (idx === -1) return
+      const oldItem = { ...history.value[idx] }
+      // 乐观更新
+      history.value[idx] = { ...history.value[idx], name }
       const res = await fetch(`${LIBRARY_API}/${encodeURIComponent(id)}/rename`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       })
-      if (!res.ok) return
+      if (!res.ok) {
+        history.value[idx] = oldItem  // 回滚
+        return
+      }
       const updated: HistoryItem = await res.json()
-      const idx = history.value.findIndex((it) => it.id === id)
-      if (idx !== -1) history.value[idx] = { ...history.value[idx], ...updated }
+      history.value[idx] = { ...history.value[idx], ...updated }
     } catch {
-      // ignore
+      // fetch 本身异常（网络不通等），用 oldItem 回滚
+      const idx = history.value.findIndex((it) => it.id === id)
+      if (idx !== -1) history.value[idx] = oldItem
     }
   }
 

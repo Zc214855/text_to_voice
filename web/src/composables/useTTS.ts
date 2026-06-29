@@ -167,6 +167,106 @@ function base64ToBlob(base64: string, mimeType: string) {
   return new Blob([bytes], { type: mimeType })
 }
 
+/** 将 AudioBuffer 编码为 16-bit PCM WAV Blob */
+export function audioBufferToWav(buffer: AudioBuffer): Blob {
+  const numChannels = buffer.numberOfChannels
+  const sampleRate = buffer.sampleRate
+  const length = buffer.length
+  const bytesPerSample = 2
+  const dataSize = length * numChannels * bytesPerSample
+
+  const header = new ArrayBuffer(44)
+  const view = new DataView(header)
+
+  function writeStr(offset: number, str: string) {
+    for (let i = 0; i < str.length; i += 1) view.setUint8(offset + i, str.charCodeAt(i))
+  }
+
+  writeStr(0, 'RIFF')
+  view.setUint32(4, 36 + dataSize, true)
+  writeStr(8, 'WAVE')
+  writeStr(12, 'fmt ')
+  view.setUint32(16, 16, true)
+  view.setUint16(20, 1, true)
+  view.setUint16(22, numChannels, true)
+  view.setUint32(24, sampleRate, true)
+  view.setUint32(28, sampleRate * numChannels * bytesPerSample, true)
+  view.setUint16(32, numChannels * bytesPerSample, true)
+  view.setUint16(34, bytesPerSample * 8, true)
+  writeStr(36, 'data')
+  view.setUint32(40, dataSize, true)
+
+  const data = new Uint8Array(44 + dataSize)
+  new Uint8Array(header).forEach((byte, i) => { data[i] = byte })
+
+  let offset = 44
+  for (let i = 0; i < length; i += 1) {
+    for (let ch = 0; ch < numChannels; ch += 1) {
+      const sample = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]))
+      const int16 = sample < 0 ? sample * 0x8000 : sample * 0x7FFF
+      data[offset] = int16 & 0xFF
+      data[offset + 1] = (int16 >> 8) & 0xFF
+      offset += 2
+    }
+  }
+
+  return new Blob([data], { type: 'audio/wav' })
+}
+
+/** 将多个音频 Blob 用静音间隔拼接为单个 WAV Blob */
+export async function concatBlobsWithSilence(blobs: Blob[], silenceMs: number): Promise<Blob> {
+  const audioCtx = new AudioContext()
+  const buffers: AudioBuffer[] = []
+
+  try {
+    for (const blob of blobs) {
+      const arrayBuffer = await blob.arrayBuffer()
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer)
+      buffers.push(audioBuffer)
+    }
+
+    if (buffers.length === 0) {
+      throw new Error('没有可拼接的音频片段')
+    }
+
+    const sampleRate = buffers[0].sampleRate
+    const silenceLength = Math.ceil(sampleRate * silenceMs / 1000)
+    const channels = Math.max(...buffers.map((b) => b.numberOfChannels))
+
+    let totalLength = 0
+    for (const buffer of buffers) {
+      totalLength += buffer.length + silenceLength
+    }
+    totalLength -= silenceLength
+
+    const offlineCtx = new OfflineAudioContext(channels, totalLength, sampleRate)
+    let timeOffset = 0
+
+    for (const buffer of buffers) {
+      const source = offlineCtx.createBufferSource()
+      // 如果声道数不匹配，创建一个临时 buffer
+      if (buffer.numberOfChannels === channels) {
+        source.buffer = buffer
+      } else {
+        const converted = offlineCtx.createBuffer(channels, buffer.length, sampleRate)
+        for (let ch = 0; ch < channels; ch += 1) {
+          const srcCh = Math.min(ch, buffer.numberOfChannels - 1)
+          converted.copyToChannel(buffer.getChannelData(srcCh), ch)
+        }
+        source.buffer = converted
+      }
+      source.connect(offlineCtx.destination)
+      source.start(timeOffset / sampleRate)
+      timeOffset += buffer.length + silenceLength
+    }
+
+    const rendered = await offlineCtx.startRendering()
+    return audioBufferToWav(rendered)
+  } finally {
+    audioCtx.close()
+  }
+}
+
 function parseResponseObject(rawLine: string) {
   const line = rawLine.trim()
   if (!line) return null
@@ -183,11 +283,18 @@ function parseResponseObject(rawLine: string) {
 }
 
 function normalizeErrorMessage(message: string) {
+  // 如果消息已包含角色名前缀（来自 synthesizeRoleStory 的循环），保留原始细节不转换
+  if (message.startsWith('角色「')) {
+    return message
+  }
   if (message.includes('requested resource not granted')) {
     return '服务实例处于暂停或未授权状态，请在火山引擎控制台恢复实例或检查 Resource ID'
   }
   if (message.includes('speaker permission denied')) {
     return '当前 Resource ID 未授权该音色，请切换音色或检查实例权限'
+  }
+  if (message.includes('resource ID is mismatched') || message.includes('mismatched with speaker')) {
+    return '音色与资源 ID 不匹配：该音色不属于当前选中的服务资源，请在角色面板切换到该音色对应的资源'
   }
   if (message.includes('TTSExceededTextLimit')) {
     return `文本超过 ${MAX_TEXT_LENGTH} 字限制`
@@ -197,8 +304,13 @@ function normalizeErrorMessage(message: string) {
 
 function assertVoiceResource(voiceList: PopularVoice[], voiceId: string, resourceId: string) {
   const voice = voiceList.find((item) => item.id === voiceId)
-  if (voice && !voice.resourceIds.includes(resourceId)) {
-    throw new Error(`当前配置 ${resourceId} 不能调用音色 ${voice.name}，请切换到 ${voice.resourceIds.join(' / ')} 对应服务，或选择当前资源支持的音色`)
+  if (!voice) {
+    throw new Error(`音色 ID「${voiceId}」无效或不在列表中，请重新选择音色`)
+  }
+  if (!voice.resourceIds.includes(resourceId)) {
+    throw new Error(
+      `音色「${voice.name}」属于资源 ${voice.resourceIds.join('/')}，但当前使用的是「${resourceId}」。请在「服务资源」下拉框切换到 ${voice.resourceIds.join(' 或 ')}，或为该角色换一个属于 ${resourceId} 的音色`
+    )
   }
 }
 
@@ -406,8 +518,10 @@ export function useTTS() {
     }
 
     const roleControlMap = new Map(params.roleControls.map((item) => [item.role, item]))
-    if (params.segments.some((segment) => !roleControlMap.has(segment.role))) {
-      errorMsg.value = '角色音色配置不完整'
+    const missingRoles = params.segments.filter((segment) => !roleControlMap.has(segment.role)).map((s) => s.role)
+    if (missingRoles.length > 0) {
+      const unique = [...new Set(missingRoles)]
+      errorMsg.value = `角色音色配置不完整：缺少 ${unique.join('、')}`
       return undefined
     }
 
@@ -428,25 +542,37 @@ export function useTTS() {
         const segment = params.segments[index]
         const controls = roleControlMap.get(segment.role) as RoleStoryVoiceControls
         statusText.value = `生成角色片段 ${index + 1} / ${params.segments.length}`
-        const result = await synthesizeAudioBlob({
-          text: segment.text,
-          voice: controls.voice,
-          voiceName: controls.voiceName,
-          resourceId: controls.resourceId,
-          speechRate: controls.speechRate,
-          pitch: controls.pitch,
-          loudness: controls.loudness,
-          emotion: controls.emotion,
-          emotionScale: controls.emotionScale,
-          explicitLanguage: controls.explicitLanguage,
-          signal: controller.signal,
-        }, config)
-        blobs.push(result.blob)
-        usageWords += result.usage?.text_words || segment.characterCount
+        try {
+          const result = await synthesizeAudioBlob({
+            text: segment.text,
+            voice: controls.voice,
+            voiceName: controls.voiceName,
+            resourceId: controls.resourceId,
+            speechRate: controls.speechRate,
+            pitch: controls.pitch,
+            loudness: controls.loudness,
+            emotion: controls.emotion,
+            emotionScale: controls.emotionScale,
+            explicitLanguage: controls.explicitLanguage,
+            signal: controller.signal,
+          }, config)
+          blobs.push(result.blob)
+          usageWords += result.usage?.text_words ?? segment.characterCount
+        } catch (error) {
+          const reason = error instanceof Error ? error.message : '合成失败'
+          // 如果错误已经包含角色/音色细节（来自 assertVoiceResource），直接抛出
+          // 否则补充角色名、音色名、资源 ID，方便定位是哪个角色配置错了
+          if (reason.includes('音色') || reason.includes('Resource')) {
+            throw new Error(`角色「${segment.role}」：${reason}`)
+          }
+          throw new Error(
+            `角色「${segment.role}」合成失败（音色：${controls.voiceName || controls.voice}，资源：${controls.resourceId || config.resourceId}）：${reason}`
+          )
+        }
       }
 
       statusText.value = '合成角色故事'
-      const blob = new Blob(blobs, { type: 'audio/mpeg' })
+      const blob = await concatBlobsWithSilence(blobs, 400)
       const requestId = createRequestId()
       const item: HistoryItem = {
         id: requestId,
@@ -468,7 +594,7 @@ export function useTTS() {
       }
 
       statusText.value = '保存音频文件'
-      const saved = await shared.addItem(item, blob)
+      const saved = await shared.addItem(item, blob, 'audio/wav')
       if (!saved) {
         throw new Error('音频已生成但保存失败，请检查本地服务或 output 目录权限')
       }

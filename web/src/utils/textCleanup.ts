@@ -50,11 +50,19 @@ export function cleanupTtsText(input: string): TextCleanupResult {
   let mergedLines = 0
   let blankPending = false
 
+  // [角色音色] 块内部的行不做断行合并，避免把音色元数据粘成一行
+  let inVoiceMetaBlock = false
+
   for (const rawLine of lines) {
     const line = normalizeLine(rawLine)
 
     if (line !== rawLine) {
       trimmedLines += 1
+    }
+
+    // 检测 [角色音色] 块边界
+    if (line === '[角色音色]') {
+      inVoiceMetaBlock = true
     }
 
     if (!line) {
@@ -72,11 +80,18 @@ export function cleanupTtsText(input: string): TextCleanupResult {
     }
 
     const previous = outputLines[outputLines.length - 1] || ''
-    if (previous && shouldMergeLine(previous, line)) {
+    // 角色音色块内部不合并断行
+    const shouldMerge = !inVoiceMetaBlock && previous !== '' && shouldMergeLine(previous, line)
+    if (previous && shouldMerge) {
       outputLines[outputLines.length - 1] = joinBrokenLine(previous, line)
       mergedLines += 1
     } else {
       outputLines.push(line)
+    }
+
+    // 检测 [角色音色] 块结束
+    if (line === '[/角色音色]') {
+      inVoiceMetaBlock = false
     }
   }
 

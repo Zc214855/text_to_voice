@@ -211,11 +211,11 @@
   {
     "id": "zh_male_zhubo_bigtts",
     "name": "电台主播",
-    "scene": "语音合成2.0 / 有声阅读",
+    "scene": "语音合成1.0 / 有声阅读",
     "language": "中文",
-    "model": "语音合成2.0",
+    "model": "语音合成1.0",
     "resourceIds": [
-      "seed-tts-2.0"
+      "seed-tts-1.0"
     ],
     "emotions": []
   },

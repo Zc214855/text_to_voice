@@ -4,7 +4,8 @@ import { EMOTION_LABELS, MAX_TEXT_LENGTH, useTTS } from '../composables/useTTS'
 import { defaultItemName, useSharedHistory } from '../composables/useSharedHistory'
 import { useEdgeTTS } from '../composables/useEdgeTTS'
 import { cleanupTtsText, countTextUnits, normalizeLineBreaks } from '../utils/textCleanup'
-import { parseRoleScript } from '../utils/roleScript'
+import { parseRoleScript, parseVoiceMeta } from '../utils/roleScript'
+import { getRoleSpeechParams, mapDescriptorToVoice, recommendVoices } from '../utils/voiceRecommender'
 import type { EdgeTTSControls, HistoryItem, PopularVoice, RoleStoryControls, RoleStoryVoiceControls, TTSEngine, TTSControls } from '../composables/types'
 
 function detectTextLang(text: string): string {
@@ -48,6 +49,8 @@ const emotionScale = ref(4)
 const explicitLanguage = ref('')
 const selectedResourceId = ref('')
 const roleControls = ref<RoleStoryVoiceControls[]>([])
+/** 每个角色的推荐信息（角色名 → 推荐理由列表） */
+const roleRecommendations = ref<Record<string, string[]>>({})
 
 // Edge controls
 const selectedEdgeVoice = ref(edge.edgeVoices[0]?.id ?? '')
@@ -102,7 +105,16 @@ const groupedVoices = computed(() => {
   }, {})
 })
 
-const roleScript = computed(() => parseRoleScript(normalizedText.value.trim()))
+/** 一次 parseVoiceMeta，共享给 roleScript 和 syncRoleControls */
+const voiceMetaResult = computed(() => parseVoiceMeta(normalizedText.value.trim()))
+
+const roleScript = computed(() => {
+  const result = voiceMetaResult.value
+  return parseRoleScript(result ? result.storyText : normalizedText.value.trim())
+})
+
+/** 从 [角色音色] 块解析出的元数据（无块时为 null） */
+const parsedVoiceMeta = computed(() => voiceMetaResult.value?.metas || null)
 const roleAvailableVoices = computed(() => {
   const resourceIds = volc.availableResourceIds.value
   if (resourceIds.length === 0) return volc.volcVoices.value
@@ -142,7 +154,7 @@ const errorMsg = computed(() => {
 
 const detectedLang = computed(() => detectTextLang(normalizedText.value.trim()))
 const edgeLangMismatch = computed(() => {
-  if (activeEngine.value !== 'edge' || !detectedLang.value) return false
+  if (activeEngine.value !== 'edge' || !detectedLang.value || !selectedEdgeVoiceInfo.value) return false
   const voiceLocale = selectedEdgeVoiceInfo.value.locale
   const voiceLang = voiceLocale.startsWith('zh') ? 'zh' : voiceLocale.split('-')[0]
   return voiceLang !== detectedLang.value
@@ -150,12 +162,11 @@ const edgeLangMismatch = computed(() => {
 
 const roleStoryReady = computed(() => {
   if (generationMode.value !== 'role') return true
-  return activeEngine.value === 'volc' &&
-    roleScript.value.segments.length > 0 &&
+  return roleScript.value.segments.length > 0 &&
     roleScript.value.roles.every((role) => roleControls.value.some((control) => control.role === role && control.voice))
 })
 
-const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value && !edgeLangMismatch.value && roleStoryReady.value)
+const canGenerate = computed(() => Boolean(text.value.trim()) && !textOverflow.value && !isGenerating.value && (activeEngine.value !== 'edge' || edge.serverAvailable.value) && !edgeLangMismatch.value && roleStoryReady.value)
 
 onMounted(() => {
   volc.restoreHistory()
@@ -181,12 +192,9 @@ watch(resourceVoices, (voices) => {
   }
 })
 
-watch(activeEngine, (engine) => {
-  if (engine === 'edge' && generationMode.value === 'role') {
-    generationMode.value = 'single'
-  }
-  if (engine === 'edge') {
-    const lang = detectedLang.value
+  watch(activeEngine, (engine) => {
+    if (engine === 'edge') {
+      const lang = detectedLang.value
     if (lang) {
       const prefix = lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : lang === 'ko' ? 'ko-KR' : 'en-US'
       const match = edge.edgeVoices.find(v => v.locale.startsWith(prefix))
@@ -205,52 +213,52 @@ watch(selectedVoiceInfo, (voice) => {
 })
 
 watch([
-  () => roleScript.value.roles.join('\u0000'),
-  () => roleAvailableVoices.value.map((voice) => voice.id).join('\u0000'),
-], syncRoleControls, { immediate: true })
+	  () => roleScript.value.roles.join('\u0000'),
+	  () => roleAvailableVoices.value.map((voice) => voice.id).join('\u0000'),
+	  activeEngine,
+	], syncRoleControls, { immediate: true })
 
 function setGenerationMode(mode: 'single' | 'role') {
   generationMode.value = mode
-  if (mode === 'role') {
-    activeEngine.value = 'volc'
-  }
 }
 
 function findRoleVoice(names: string[]) {
-  const voices = roleAvailableVoices.value.length > 0 ? roleAvailableVoices.value : volc.volcVoices.value
-  return names.map((name) => voices.find((voice) => voice.name === name)).find(Boolean) || voices[0]
-}
+	const voices = roleAvailableVoices.value.length > 0 ? roleAvailableVoices.value : volc.volcVoices.value
+	  return names.map((name) => voices.find((voice) => voice.name === name)).find(Boolean) || voices[0]
+	}
 
-function createRoleControl(role: string): RoleStoryVoiceControls {
-  const isVillain = /狼|怪|魔|坏|反派|巫/.test(role)
-  const isMother = /妈妈|母亲|奶奶|外婆|老师|阿姨/.test(role)
-  const isMale = /爸爸|父亲|爷爷|外公|男孩|哥哥|弟弟|王子/.test(role)
-  const isChild = /小|兔|猫|狗|熊|鸟|鹿|孩子|宝宝|公主/.test(role)
-  const names = isVillain
-    ? ['冷酷哥哥（多情感）', '云舟 2.0']
-    : isMother
-      ? ['温柔淑女 2.0', '儿童绘本']
-      : isMale
-        ? ['爽朗少年', '儒雅逸辰', '云舟 2.0']
-        : isChild
-          ? ['可爱女生', '调皮公主', '爽朗少年']
-          : ['儿童绘本', '温柔淑女 2.0']
-  const voice = findRoleVoice(names)
-  const emotion = isVillain && voice?.emotions.includes('coldness') ? 'coldness' : ''
+	/** 使用推荐引擎为角色获取推荐音色列表（前 N 个作为备选） */
+	function getRoleVoiceRecommendations(role: string) {
+	  const voices = roleAvailableVoices.value.length > 0 ? roleAvailableVoices.value : volc.volcVoices.value
+	  return recommendVoices(role, voices)
+	}
 
-  return {
-    role,
-    voice: voice?.id || '',
-    voiceName: voice?.name || '',
-    resourceId: voice?.resourceIds[0] || selectedResourceId.value,
-    speechRate: role === '旁白' ? 0.9 : 0.95,
-    pitch: isVillain ? -1 : 0,
-    loudness: 1,
-    emotion,
-    emotionScale: emotion ? 2 : 4,
-    explicitLanguage: 'zh-cn',
-  }
-}
+	/** 推荐引擎 + 原有兼容：获取角色首选音色 */
+	function findRecommendedVoice(role: string): PopularVoice | undefined {
+	  const ranked = getRoleVoiceRecommendations(role)
+	  return ranked[0]?.voice
+	}
+
+	function createRoleControl(role: string): RoleStoryVoiceControls {
+	  const voice = findRecommendedVoice(role)
+	  const params = getRoleSpeechParams(role)
+
+	  // 验证情绪参数：仅当音色支持该情绪时才传递
+	  const validEmotion = params.emotion && voice?.emotions.includes(params.emotion) ? params.emotion : ''
+
+	  return {
+	    role,
+	    voice: voice?.id || '',
+	    voiceName: voice?.name || '',
+	    resourceId: voice?.resourceIds[0] || selectedResourceId.value,
+	    speechRate: params.speechRate,
+	    pitch: params.pitch,
+	    loudness: params.loudness,
+	    emotion: validEmotion,
+	    emotionScale: validEmotion ? params.emotionScale : 4,
+	    explicitLanguage: 'zh-cn',
+	  }
+	}
 
 function normalizeRoleControl(control: RoleStoryVoiceControls) {
   const voice = roleAvailableVoices.value.find((item) => item.id === control.voice)
@@ -263,13 +271,142 @@ function normalizeRoleControl(control: RoleStoryVoiceControls) {
   }
 }
 
-function syncRoleControls() {
-  const existing = new Map(roleControls.value.map((control) => [control.role, control]))
-  roleControls.value = roleScript.value.roles.map((role) => {
-    const current = existing.get(role)
-    return current ? normalizeRoleControl(current) : createRoleControl(role)
-  })
+/** Edge 音色名 → ID 查找 */
+function findEdgeVoiceByName(name: string) {
+  return edge.edgeVoices.find((v) => v.name.includes(name))
 }
+
+/** Edge 引擎的角色音色推荐（一次分类，返回 voiceId + 参数） */
+function getEdgeRoleConfig(role: string): { voiceId: string; rate: number; pitch: number; volume: number } {
+  if (edge.edgeVoices.length === 0) {
+    return { voiceId: '', rate: -15, pitch: 0, volume: 0 }
+  }
+
+  const isNarrator = role === '旁白'
+  const isElder = /奶奶|爷爷|外婆|外公/.test(role)
+  const isParent = /妈妈|爸爸|父亲|母亲|老师|阿姨/.test(role)
+  const isChild = /小|兔|猫|狗|熊|鸟|鹿|孩子|宝宝|公主|团团|栗栗/.test(role)
+  const isMale = /爸爸|父亲|爷爷|外公|男孩|哥哥|弟弟|王子/.test(role)
+
+  if (isNarrator) {
+    return {
+      voiceId: findEdgeVoiceByName('晓梦')?.id || edge.edgeVoices[0].id,
+      rate: -25, pitch: -5, volume: -5,
+    }
+  }
+  if (isChild) {
+    return {
+      voiceId: findEdgeVoiceByName('晓双')?.id || edge.edgeVoices[0].id,
+      rate: -10, pitch: 0, volume: 0,
+    }
+  }
+  if (isElder && !isMale) {
+    return {
+      voiceId: findEdgeVoiceByName('晓秋')?.id || edge.edgeVoices[0].id,
+      rate: -30, pitch: -10, volume: -5,
+    }
+  }
+  if (isElder && isMale) {
+    return {
+      voiceId: findEdgeVoiceByName('云泽')?.id || edge.edgeVoices[0].id,
+      rate: -30, pitch: -10, volume: -5,
+    }
+  }
+  if (isParent && !isMale) {
+    return {
+      voiceId: findEdgeVoiceByName('晓萱')?.id || edge.edgeVoices[0].id,
+      rate: -15, pitch: -5, volume: -3,
+    }
+  }
+  if (isParent && isMale) {
+    return {
+      voiceId: findEdgeVoiceByName('云泽')?.id || edge.edgeVoices[0].id,
+      rate: -20, pitch: -5, volume: -3,
+    }
+  }
+  return { voiceId: edge.edgeVoices[0].id, rate: -15, pitch: 0, volume: 0 }
+}
+
+function syncRoleControls() {
+	  const existing = new Map(roleControls.value.map((control) => [control.role, control]))
+	  const meta = parsedVoiceMeta.value
+	  const isEdge = activeEngine.value === 'edge'
+
+	  roleControls.value = roleScript.value.roles.map((role) => {
+	    const current = existing.get(role)
+
+	    // Edge 引擎：使用 Edge 音色和参数
+	    if (isEdge) {
+	      if (current?.voice) {
+	        const v = edge.edgeVoices.find((item) => item.id === current.voice)
+	        return {
+	          ...current,
+	          voiceName: v?.name || current.voiceName,
+	          resourceId: current.resourceId || '',
+	          emotion: '',
+	        }
+	      }
+	      const config = getEdgeRoleConfig(role)
+	      const v = edge.edgeVoices.find((item) => item.id === config.voiceId)
+	      return {
+	        role,
+	        voice: config.voiceId,
+	        voiceName: v?.name || '',
+	        resourceId: '',
+	        speechRate: 1 + config.rate / 100,
+	        pitch: config.pitch,
+	        loudness: 1 + config.volume / 100,
+	        emotion: '',
+	        emotionScale: 4,
+	        explicitLanguage: 'zh-cn',
+	      }
+	    }
+
+	    // Volcano 引擎：优先使用 LLM 音色元数据
+	    const roleMeta = meta?.find((m) => m.role === role)
+	    if (roleMeta && !current?.voice) {
+	      const voices = roleAvailableVoices.value.length > 0 ? roleAvailableVoices.value : volc.volcVoices.value
+	      const mapped = mapDescriptorToVoice(roleMeta.descriptor, voices)
+	      return {
+	        role,
+	        voice: mapped.voice.id,
+	        voiceName: mapped.voice.name,
+	        resourceId: mapped.voice.resourceIds[0] || selectedResourceId.value,
+	        speechRate: mapped.speechRate,
+	        pitch: mapped.pitch,
+	        loudness: mapped.loudness,
+	        emotion: mapped.emotion,
+	        emotionScale: mapped.emotionScale,
+	        explicitLanguage: 'zh-cn',
+	      }
+	    }
+
+	    return current ? normalizeRoleControl(current) : createRoleControl(role)
+	  })
+
+	  // 生成推荐信息
+	  const recs: Record<string, string[]> = {}
+	  for (const role of roleScript.value.roles) {
+	    if (isEdge) {
+	      const config = getEdgeRoleConfig(role)
+	      const isNarrator = role === '旁白'
+	      const isChild = /团团|栗栗|小/.test(role)
+	      if (isNarrator) recs[role] = ['Edge: 晓梦·甜美']
+	      else if (isChild) recs[role] = ['Edge: 晓双·儿童']
+	      else recs[role] = [`Edge: ${config.rate}%语速`]
+	    } else {
+	      const roleMeta = meta?.find((m) => m.role === role)
+	      if (roleMeta) {
+	      const label = `AI: ${roleMeta.descriptor.tone || roleMeta.descriptor.ageGroup || '自动推荐'}`
+	      recs[role] = [label.length > 40 ? `${label.slice(0, 37)}...` : label]
+	    } else {
+	        const ranked = getRoleVoiceRecommendations(role)
+	        recs[role] = ranked.slice(0, 2).flatMap((r) => r.reasons.slice(0, 1))
+	      }
+	    }
+	  }
+	  roleRecommendations.value = recs
+	}
 
 function updateRoleVoice(control: RoleStoryVoiceControls) {
   const voice = roleAvailableVoices.value.find((item) => item.id === control.voice)
@@ -279,6 +416,13 @@ function updateRoleVoice(control: RoleStoryVoiceControls) {
   if (control.emotion && !voice.emotions.includes(control.emotion)) {
     control.emotion = ''
   }
+}
+
+/** Edge 角色面板的音色切换 */
+function updateEdgeRoleVoice(control: RoleStoryVoiceControls) {
+  const voice = edge.edgeVoices.find((item) => item.id === control.voice)
+  if (!voice) return
+  control.voiceName = voice.name
 }
 
 function roleEmotionOptions(control: RoleStoryVoiceControls) {
@@ -328,6 +472,7 @@ function handlePaste(event: ClipboardEvent) {
 
 async function handleGenerate() {
   if (!canGenerate.value) return
+  configError.value = ''
   const cleanText = generationMode.value === 'role' ? normalizeLineBreaks(text.value).trim() : applyTextCleanup()
 
   if (activeEngine.value === 'volc' && generationMode.value === 'role') {
@@ -339,6 +484,22 @@ async function handleGenerate() {
       roleControls: roleControls.value.map((control) => ({ ...control })),
     })
     if (item && autoPlay.value) await volc.playAudio(item)
+  } else if (activeEngine.value === 'edge' && generationMode.value === 'role') {
+    const parsed = parseRoleScript(cleanText)
+    const item = await edge.synthesizeRoleStory({
+      text: cleanText,
+      name: defaultItemName(cleanText),
+      segments: parsed.segments.map((s) => ({ role: s.role, text: s.text })),
+      roleControls: roleControls.value.map((c) => ({
+        role: c.role,
+        voice: c.voice,
+        voiceName: c.voiceName,
+        rate: Math.round((c.speechRate - 1) * 100),
+        pitch: c.pitch,
+        volume: Math.round((c.loudness - 1) * 100),
+      })),
+    })
+    if (item && autoPlay.value) await edge.playAudio(item)
   } else if (activeEngine.value === 'volc') {
     const item = await volc.synthesize({
       text: cleanText,
@@ -357,7 +518,7 @@ async function handleGenerate() {
     const item = await edge.synthesize({
       text: cleanText,
       voice: selectedEdgeVoice.value,
-      voiceName: selectedEdgeVoiceInfo.value.name,
+      voiceName: selectedEdgeVoiceInfo.value?.name || '',
       rate: edgeRate.value,
       pitch: edgePitch.value,
       volume: edgeVolume.value,
@@ -483,7 +644,7 @@ function isEdgeControls(controls: HistoryItem['controls']): controls is EdgeTTSC
                 角色故事将按角色表逐段生成，并保存为一个作品。
               </p>
               <p v-else-if="activeEngine === 'edge'" class="text-sm text-zinc-500">
-                当前音色：{{ selectedEdgeVoiceInfo.name }} · {{ selectedEdgeVoiceInfo.locale }} · {{ selectedEdgeVoiceInfo.gender }}
+                当前音色：{{ selectedEdgeVoiceInfo?.name || '未选择' }} · {{ selectedEdgeVoiceInfo?.locale || '' }} · {{ selectedEdgeVoiceInfo?.gender || '' }}
               </p>
             </div>
           </div>
@@ -600,21 +761,42 @@ function isEdgeControls(controls: HistoryItem['controls']): controls is EdgeTTSC
                     <span class="text-xs font-black text-amber-700">{{ roleScript.roles.length }} 角色 / {{ roleScript.segments.length }} 段</span>
                   </div>
                   <div class="mt-3 space-y-4">
+                    <div v-if="activeEngine === 'edge' && !edge.serverAvailable.value" class="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm font-semibold text-red-700">
+                      Edge TTS 服务未启动，请先运行 <code class="rounded bg-red-100 px-1 font-mono">node server/index.js</code>
+                    </div>
                     <div v-for="control in roleControls" :key="control.role" class="border-t border-zinc-950/10 pt-3 first:border-t-0 first:pt-0">
                       <div class="mb-2 flex items-center justify-between gap-2">
-                        <span class="text-sm font-black text-zinc-950">{{ control.role }}</span>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-black text-zinc-950">{{ control.role }}</span>
+                          <span
+                            v-if="roleRecommendations[control.role]?.length"
+                            class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700"
+                            :title="roleRecommendations[control.role].join(' / ')"
+                          >
+                            {{ roleRecommendations[control.role][0] }}
+                          </span>
+                        </div>
                         <span class="rounded bg-amber-50 px-2 py-1 text-[11px] font-bold text-amber-700">{{ roleSegmentCount(control.role) }} 段</span>
                       </div>
                       <select
                         v-model="control.voice"
                         class="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-500/15"
-                        @change="updateRoleVoice(control)"
+                        @change="activeEngine === 'edge' ? updateEdgeRoleVoice(control) : updateRoleVoice(control)"
                       >
-                        <optgroup v-for="(voices, scene) in groupedRoleVoices" :key="scene" :label="scene">
-                          <option v-for="voice in voices" :key="voice.id" :value="voice.id">
-                            {{ voice.name }} · {{ voice.model }}
-                          </option>
-                        </optgroup>
+                        <template v-if="activeEngine === 'edge'">
+                          <optgroup v-for="(voices, locale) in groupedEdgeVoices" :key="locale" :label="locale">
+                            <option v-for="voice in voices" :key="voice.id" :value="voice.id">
+                              {{ voice.name }} · {{ voice.gender }}
+                            </option>
+                          </optgroup>
+                        </template>
+                        <template v-else>
+                          <optgroup v-for="(voices, scene) in groupedRoleVoices" :key="scene" :label="scene">
+                            <option v-for="voice in voices" :key="voice.id" :value="voice.id">
+                              {{ voice.name }} · {{ voice.model }}
+                            </option>
+                          </optgroup>
+                        </template>
                       </select>
                       <div class="mt-3 grid grid-cols-3 gap-2">
                         <label class="text-[11px] font-bold text-zinc-600">
@@ -630,7 +812,7 @@ function isEdgeControls(controls: HistoryItem['controls']): controls is EdgeTTSC
                           <input v-model.number="control.loudness" type="range" min="0.5" max="2" step="0.1" class="mt-1 w-full accent-zinc-950" />
                         </label>
                       </div>
-                      <div class="mt-2 grid grid-cols-[1fr_72px] gap-2">
+                      <div v-if="activeEngine === 'volc'" class="mt-2 grid grid-cols-[1fr_72px] gap-2">
                         <select
                           v-model="control.emotion"
                           :disabled="roleEmotionOptions(control).length === 0"
@@ -688,8 +870,8 @@ function isEdgeControls(controls: HistoryItem['controls']): controls is EdgeTTSC
                   </optgroup>
                 </select>
                 <div class="mt-2 space-y-1 rounded-md bg-zinc-50 p-2 text-xs font-medium leading-5 text-zinc-600">
-                  <p class="break-all">{{ selectedEdgeVoiceInfo.id }}</p>
-                  <p>语言：{{ selectedEdgeVoiceInfo.locale }} · {{ selectedEdgeVoiceInfo.gender }}</p>
+                  <p class="break-all">{{ selectedEdgeVoiceInfo?.id || '' }}</p>
+                  <p>语言：{{ selectedEdgeVoiceInfo?.locale || '' }} · {{ selectedEdgeVoiceInfo?.gender || '' }}</p>
                 </div>
               </section>
 
@@ -747,7 +929,8 @@ function isEdgeControls(controls: HistoryItem['controls']): controls is EdgeTTSC
               {{ isGenerating ? '生成中' : '生成配音' }}
             </button>
 
-            <p v-if="configError || errorMsg" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ configError || errorMsg }}</p>
+            <p v-if="configError" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ configError }}</p>
+            <p v-if="errorMsg && errorMsg !== configError" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ errorMsg }}</p>
           </aside>
         </section>
       </main>

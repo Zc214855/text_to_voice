@@ -43,17 +43,33 @@ function formatPitch(val) {
   return (val >= 0 ? '+' : '') + val + 'Hz'
 }
 
-function buildSSML(text, voice, rate, pitch, volume) {
-  const rateStr = formatRate(rate)
-  const pitchStr = formatPitch(pitch)
-  const volStr = formatRate(volume)
-  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  const lang = voice.startsWith('zh-HK') ? 'zh-HK' : voice.startsWith('zh-TW') ? 'zh-TW' : voice.startsWith('zh-CN') ? 'zh-CN' : voice.split('-').slice(0, 2).join('-')
+function buildSSML(text, voice, { rate = 0, pitch = 0, volume = 0, storyMode = false } = {}) {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+  // 故事模式：在句号、问号、感叹号后插入自然停顿
+  let content = escaped
+  if (storyMode) {
+    content = escaped
+      .replace(/([。！？])(?=\S)/g, '$1<break time="350ms"/>')
+      .replace(/([，；：])(?=\S)/g, '$1<break time="150ms"/>')
+  }
+
+  const lang = voice.startsWith('zh-HK') ? 'zh-HK'
+    : voice.startsWith('zh-TW') ? 'zh-TW'
+    : voice.startsWith('zh-CN') ? 'zh-CN'
+    : voice.split('-').slice(0, 2).join('-')
+
   return `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${lang}'>` +
-    `<voice name='${voice}'><prosody pitch='${pitchStr}' rate='${rateStr}' volume='${volStr}'>${escaped}</prosody></voice></speak>`
+    `<voice name='${voice}'>` +
+    `<prosody pitch='${formatPitch(pitch)}' rate='${formatRate(rate)}' volume='${formatRate(volume)}'>` +
+    `${content}` +
+    `</prosody></voice></speak>`
 }
 
-function synthesizeEdge(text, voice, { rate = 0, pitch = 0, volume = 0 } = {}) {
+function synthesizeEdge(text, voice, { rate = 0, pitch = 0, volume = 0, storyMode = false } = {}) {
   return new Promise((resolve, reject) => {
     const reqId = crypto.randomUUID()
     const secMsGec = generateSecMsGec()
@@ -91,7 +107,7 @@ function synthesizeEdge(text, voice, { rate = 0, pitch = 0, volume = 0 } = {}) {
         `{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"true"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}\r\n`
       ws.send(configMsg)
 
-      const ssml = buildSSML(text, voice, rate, pitch, volume)
+      const ssml = buildSSML(text, voice, { rate, pitch, volume, storyMode })
       const ssmlMsg =
         `X-RequestId:${reqId}\r\n` +
         `Content-Type:application/ssml+xml\r\n` +
@@ -172,11 +188,11 @@ async function synthesizeWithRetry(text, voice, opts, maxRetries = 2) {
 
 app.post('/api/edge-tts/synthesize', async (req, res) => {
   try {
-    const { text, voice, rate, pitch, volume } = req.body
+    const { text, voice, rate, pitch, volume, storyMode } = req.body
     if (!text || !voice) {
       return res.status(400).json({ error: '需要 text 和 voice 参数' })
     }
-    const audio = await synthesizeWithRetry(text, voice, { rate, pitch, volume })
+    const audio = await synthesizeWithRetry(text, voice, { rate, pitch, volume, storyMode })
     res.set('Content-Type', 'audio/mpeg')
     res.set('Content-Length', audio.length)
     res.send(audio)
@@ -221,10 +237,17 @@ async function writeIndex(items) {
   await fsp.writeFile(INDEX_FILE, JSON.stringify({ items }, null, 2), 'utf8')
 }
 
-/** 只允许访问 output 根目录下的单个 mp3 文件，避免路径穿越。 */
+/** 根据 contentType 返回文件扩展名 */
+function contentTypeToExt(contentType) {
+  if (contentType === 'audio/wav') return '.wav'
+  return '.mp3'
+}
+
+/** 只允许访问 output 根目录下的单个 mp3/wav 文件，避免路径穿越。 */
 function resolveOutputFile(fileName) {
   const name = String(fileName || '')
-  if (!name || name !== basename(name) || extname(name).toLowerCase() !== '.mp3') {
+  const ext = extname(name).toLowerCase()
+  if (!name || name !== basename(name) || (ext !== '.mp3' && ext !== '.wav')) {
     throw new Error('非法文件')
   }
 
@@ -267,17 +290,18 @@ app.get('/api/library', async (_req, res) => {
   }
 })
 
-// 新建：接收 base64 音频 + 元数据，写 mp3 和 index.json
+// 新建：接收 base64 音频 + 元数据，写音频文件到 output 和 index.json
 app.post('/api/library', async (req, res) => {
   try {
-    const { name, text, engine, voice, voiceName, controls, duration, byteLength, createdAt, audioBase64 } = req.body
+    const { name, text, engine, voice, voiceName, controls, duration, byteLength, createdAt, audioBase64, contentType } = req.body
     if (!audioBase64) return res.status(400).json({ error: '缺少 audioBase64' })
 
     await withIndexLock(async () => {
       await fsp.mkdir(OUTPUT_DIR, { recursive: true })
       const items = await readIndex()
+      const ext = contentTypeToExt(contentType)
       const base = `${sanitizeName(name)}_${sanitizeName(voiceName || 'voice')}`
-      const fileName = await resolveUniqueFileName(base, '.mp3')
+      const fileName = await resolveUniqueFileName(base, ext)
       const buf = Buffer.from(audioBase64, 'base64')
       await fsp.writeFile(join(OUTPUT_DIR, fileName), buf)
 
@@ -318,7 +342,8 @@ app.patch('/api/library/:id/rename', async (req, res) => {
       const item = items[idx]
       const oldPath = resolveOutputFile(item.fileName)
       const base = `${sanitizeName(name)}_${sanitizeName(item.voiceName || 'voice')}`
-      const newFileName = await resolveUniqueFileName(base, '.mp3')
+      const ext = extname(item.fileName) || '.mp3'
+      const newFileName = await resolveUniqueFileName(base, ext)
 
       if (existsSync(oldPath)) {
         await fsp.rename(oldPath, resolveOutputFile(newFileName))
@@ -402,6 +427,9 @@ app.get('/api/library/audio/:fileName', async (req, res) => {
     const filePath = resolveOutputFile(req.params.fileName)
     if (!existsSync(filePath)) return res.status(404).json({ error: '文件不存在' })
 
+    const ext = extname(filePath).toLowerCase()
+    const mimeType = ext === '.wav' ? 'audio/wav' : 'audio/mpeg'
+
     const stat = await fsp.stat(filePath)
     const range = req.headers.range
     if (range) {
@@ -413,13 +441,13 @@ app.get('/api/library/audio/:fileName', async (req, res) => {
         res.set('Content-Range', `bytes ${start}-${end}/${stat.size}`)
         res.set('Accept-Ranges', 'bytes')
         res.set('Content-Length', end - start + 1)
-        res.set('Content-Type', 'audio/mpeg')
+        res.set('Content-Type', mimeType)
         return fsp.readFile(filePath).then((buf) => res.send(buf.slice(start, end + 1)))
       }
     }
     res.set('Content-Length', stat.size)
     res.set('Accept-Ranges', 'bytes')
-    res.set('Content-Type', 'audio/mpeg')
+    res.set('Content-Type', mimeType)
     fsp.readFile(filePath).then((buf) => res.send(buf))
   } catch (err) {
     if (err.message === '非法文件') return res.status(400).json({ error: err.message })
